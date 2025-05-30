@@ -1,0 +1,44 @@
+{
+  "SiteHeader": {
+    "title": "墨香书法展",
+    "galleryLink": "画廊",
+    "artistLink": "关于艺术家"
+  },
+  "HomePage": {
+    "title": "墨香：现代书法的气息",
+    "subtitle": "在线体验这位融合传统与现代的书法家的独特艺术世界。感受每件作品中细腻的情感和强劲的笔力。",
+    "viewGallery": "查看作品",
+    "aboutArtist": "关于艺术家",
+    "featuredWork": "精选作品"
+  },
+  "SiteFooter": {
+    "copyright": "现代书法家姓名. All Rights Reserved."
+  },
+  "LanguageSwitcher": {
+    "korean": "한국어",
+    "english": "English",
+    "japanese": "日本語",
+    "chinese": "中文"
+  },
+  "Gallery": {
+    "title": "作品画廊",
+    "subtitle": "欣赏书法家的多样作品",
+    "viewDetails": "查看详情",
+    "year": "年",
+    "medium": "材料"
+  },
+  "Artist": {
+    "title": "关于艺术家",
+    "name": "艺术家姓名",
+    "artistStatement": "艺术家笔记",
+    "biography": "简历"
+  },
+  "ArtworkDetail": {
+    "backToGallery": "返回画廊",
+    "year": "创作年份",
+    "medium": "材料",
+    "dimensions": "尺寸",
+    "description": "作品描述",
+    "artistNote": "艺术家笔记"
+  }
+} 

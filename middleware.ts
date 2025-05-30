@@ -6,11 +6,11 @@ export default createMiddleware({
   locales,
   // 기본 언어 (한국어)
   defaultLocale,
-  // 기본 언어일 때 URL에 언어 코드를 표시하지 않음
-  localePrefix: 'as-needed'
+  // 항상 locale prefix를 사용 (더 명확한 라우팅을 위해)
+  localePrefix: 'always'
 })
 
 export const config = {
-  // 모든 경로에 미들웨어 적용 (API, static files 제외)
+  // 모든 경로에 미들웨어 적용 (API, static files, Next.js internals 제외)
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 } 

@@ -11,11 +11,8 @@ export function SiteHeader() {
   const t = useTranslations("SiteHeader")
   const locale = useLocale()
   
-  // locale이 기본 언어(ko)인 경우 경로에서 제거
+  // 모든 링크에 locale을 포함
   const getLocalizedPath = (path: string) => {
-    if (locale === 'ko') {
-      return path
-    }
     return `/${locale}${path}`
   }
 

@@ -28,24 +28,17 @@ export default function LocaleLayout({
   const messages = useMessages()
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-neutral-50 font-sans antialiased",
-          fontSans.variable,
-          // fontSerif.variable
-        )}
-      >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-            <div className="relative flex min-h-dvh flex-col bg-background">
-              <SiteHeader />
-              <main className="flex-1">{children}</main>
-              <SiteFooter />
-            </div>
-          </ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <div className={cn(
+          "relative flex min-h-dvh flex-col bg-background min-h-screen bg-neutral-50 font-sans antialiased",
+          fontSans.variable
+        )}>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </div>
+      </ThemeProvider>
+    </NextIntlClientProvider>
   )
 }

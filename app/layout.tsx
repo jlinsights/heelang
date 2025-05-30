@@ -21,9 +21,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    // The lang attribute will be set in app/[locale]/layout.tsx
-    <html className={inter.className} suppressHydrationWarning>
-      <body>{children}</body>
+    <html suppressHydrationWarning>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }

@@ -6,15 +6,16 @@ import { artworksData } from "@/lib/artworks"
 import { Button } from "@/components/ui/button"
 
 interface ArtworkPageProps {
-  params: {
+  params: Promise<{
     slug: string
     locale: string
-  }
+  }>
 }
 
-export default function ArtworkPage({ params }: ArtworkPageProps) {
+export default async function ArtworkPage({ params }: ArtworkPageProps) {
+  const { slug, locale } = await params
   const t = useTranslations('ArtworkDetail')
-  const artwork = artworksData.find(work => work.slug === params.slug)
+  const artwork = artworksData.find(work => work.slug === slug)
 
   if (!artwork) {
     notFound()

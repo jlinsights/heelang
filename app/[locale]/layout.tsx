@@ -1,5 +1,6 @@
 import type React from "react"
-import { NextIntlClientProvider, useMessages } from "next-intl"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
 import { Mona_Sans as FontSans } from "next/font/google"
 // import { Playfair_Display } from 'next/font/google' // 예시 세리프 폰트
 import { cn } from "@/lib/utils"
@@ -18,14 +19,16 @@ const fontSans = FontSans({
 // metadata는 여기서도 정의할 수 있지만, getTranslations를 사용해야 할 수 있습니다.
 // export const metadata = { ... }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: Readonly<{
   children: React.ReactNode
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }>) {
-  const messages = useMessages()
+  // Next.js 15에서는 params를 await해야 합니다
+  const { locale } = await params
+  const messages = await getMessages()
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>

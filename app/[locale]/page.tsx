@@ -4,9 +4,22 @@ import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { artworksData } from "@/lib/artworks"
 
-export default function HomePage() {
+interface HomePageProps {
+  params: Promise<{ locale: string }>
+}
+
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params
   const t = useTranslations('HomePage')
   const featuredArtwork = artworksData[0] || null // Select a featured artwork
+
+  // 기본 언어(ko)는 URL에 포함하지 않음
+  const getLocalizedPath = (path: string) => {
+    if (locale === 'ko') {
+      return path
+    }
+    return `/${locale}${path}`
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-24">
@@ -19,10 +32,10 @@ export default function HomePage() {
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Button asChild size="lg">
-            <Link href="/gallery">{t('viewGallery')}</Link>
+            <Link href={getLocalizedPath("/gallery")}>{t('viewGallery')}</Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/artist">{t('aboutArtist')}</Link>
+            <Link href={getLocalizedPath("/artist")}>{t('aboutArtist')}</Link>
           </Button>
         </div>
       </section>
@@ -33,10 +46,10 @@ export default function HomePage() {
             {t('featuredWork')}
           </h2>
           <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-            <Link href={`/gallery/${featuredArtwork.slug}`}>
+            <Link href={getLocalizedPath(`/gallery/${featuredArtwork.slug}`)}>
               <div className="aspect-[16/10] relative w-full">
                 <Image
-                  src={`/placeholder.svg?width=1200&height=750&query=${encodeURIComponent(featuredArtwork.imageUrlQuery)}`}
+                  src={`/placeholder.svg?width=1200&height=750&query=${encodeURIComponent(featuredArtwork.imageUrlQuery || featuredArtwork.title)}`}
                   alt={featuredArtwork.title}
                   fill
                   className="object-cover transition-transform duration-300 hover:scale-105"

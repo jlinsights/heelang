@@ -3,8 +3,21 @@ import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { artworksData } from "@/lib/artworks"
 
-export default function GalleryPage() {
+interface GalleryPageProps {
+  params: Promise<{ locale: string }>
+}
+
+export default async function GalleryPage({ params }: GalleryPageProps) {
+  const { locale } = await params
   const t = useTranslations('Gallery')
+
+  // 기본 언어(ko)는 URL에 포함하지 않음
+  const getLocalizedPath = (path: string) => {
+    if (locale === 'ko') {
+      return path
+    }
+    return `/${locale}${path}`
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-24">
@@ -20,7 +33,7 @@ export default function GalleryPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {artworksData.map((artwork) => (
           <div key={artwork.id} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:scale-105">
-            <Link href={`/gallery/${artwork.slug}`}>
+            <Link href={getLocalizedPath(`/gallery/${artwork.slug}`)}>
               <div className="aspect-[4/3] relative">
                 <Image
                   src={`/placeholder.svg?width=600&height=450&query=${encodeURIComponent(artwork.imageUrlQuery || artwork.title)}`}

@@ -21,12 +21,20 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     notFound()
   }
 
+  // 기본 언어(ko)는 URL에 포함하지 않음
+  const getLocalizedPath = (path: string) => {
+    if (locale === 'ko') {
+      return path
+    }
+    return `/${locale}${path}`
+  }
+
   return (
     <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-24">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <Button asChild variant="outline">
-            <Link href="/gallery">{t('backToGallery')}</Link>
+            <Link href={getLocalizedPath("/gallery")}>{t('backToGallery')}</Link>
           </Button>
         </div>
         

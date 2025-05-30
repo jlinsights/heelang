@@ -6,8 +6,8 @@ export default createMiddleware({
   locales,
   // 기본 언어 (한국어)
   defaultLocale,
-  // 항상 locale prefix를 사용 (더 명확한 라우팅을 위해)
-  localePrefix: 'always'
+  // 기본 언어일 때 URL에 언어 코드를 표시하지 않음
+  localePrefix: 'as-needed'
 })
 
 export const config = {

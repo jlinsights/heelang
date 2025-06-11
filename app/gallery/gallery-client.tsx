@@ -62,11 +62,14 @@ export default function GalleryClient() {
           break
         case 'ArrowUp':
           event.preventDefault()
-          setFocusedIndex(prev => Math.max(0, prev - 4)) // 4 columns in xl
+          // 동적으로 열 수 계산 (모바일: 2열, 태블릿: 3열, 데스크톱: 4열)
+          const cols = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : 2
+          setFocusedIndex(prev => Math.max(0, prev - cols))
           break
         case 'ArrowDown':
           event.preventDefault()
-          setFocusedIndex(prev => Math.min(currentArtworks.length - 1, prev + 4))
+          const colsDown = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : 2
+          setFocusedIndex(prev => Math.min(currentArtworks.length - 1, prev + colsDown))
           break
         case 'Enter':
         case ' ':
@@ -162,8 +165,8 @@ export default function GalleryClient() {
         <main className="pt-16">
           {/* Header */}
           <div className="bg-stone-50 dark:bg-slate-900 border-b border-border/20">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-16">
-              <div className="flex items-center justify-between">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div className="space-y-4">
                   <Button asChild variant="ghost" size="sm">
                     <Link href="/">
@@ -172,16 +175,16 @@ export default function GalleryClient() {
                     </Link>
                   </Button>
                   <div>
-                    <h1 className="font-display text-4xl lg:text-5xl text-ink mb-2">
+                    <h1 className="font-display text-3xl lg:text-4xl xl:text-5xl text-ink mb-2">
                       Gallery
                     </h1>
-                    <p className="text-ink-light text-lg">
+                    <p className="text-ink-light text-base lg:text-lg">
                       총 {filteredArtworks.length}점의 작품 (페이지 {currentPage} / {totalPages})
                     </p>
                   </div>
                 </div>
                 
-                <div className="hidden md:block">
+                <div className="w-full md:w-auto">
                   <SearchFilter 
                     artworks={artworksData}
                     onFilteredResults={handleFilteredResults}
@@ -193,7 +196,7 @@ export default function GalleryClient() {
 
           {/* Gallery Grid */}
           <FadeInContainer delay={0.3}>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-16">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
               {/* Skip link for accessibility */}
               <a 
                 href="#pagination" 
@@ -204,7 +207,7 @@ export default function GalleryClient() {
               
               <div 
                 ref={gridRef}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
                 role="grid"
                 aria-label={`갤러리 작품 목록, ${currentArtworks.length}개 작품`}
               >
@@ -227,8 +230,8 @@ export default function GalleryClient() {
                         onMouseEnter={() => setFocusedIndex(index)}
                         onMouseLeave={() => setFocusedIndex(-1)}
                       >
-                        <article className="space-y-4">
-                          <div className="relative aspect-[4/5] bg-stone-100 dark:bg-slate-700 overflow-hidden rounded-lg">
+                        <article className="space-y-3">
+                          <div className="relative aspect-[3/4] bg-stone-100 dark:bg-slate-700 overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
                             <GalleryThumbnail
                               src={artwork.imageUrl}
                               alt={`${artwork.title} - 공경순 작가의 ${artwork.year}년 서예 작품`}
@@ -236,19 +239,19 @@ export default function GalleryClient() {
                             />
                           </div>
                           <div className="space-y-2">
-                            <h3 className="font-display text-lg text-ink group-hover:text-ink/70 transition-colors line-clamp-2">
+                            <h3 className="font-display text-base lg:text-lg text-ink group-hover:text-ink/70 transition-colors line-clamp-2">
                               {artwork.title}
                             </h3>
-                            <div className="space-y-1" aria-label="작품 정보">
-                              <p className="text-sm text-ink-light">
+                            <div className="space-y-0.5" aria-label="작품 정보">
+                              <p className="text-xs lg:text-sm text-ink-light">
                                 <span className="sr-only">제작년도: </span>
                                 {artwork.year}
                               </p>
-                              <p className="text-sm text-ink-light">
+                              <p className="text-xs lg:text-sm text-ink-light line-clamp-1">
                                 <span className="sr-only">재료: </span>
                                 {artwork.medium}
                               </p>
-                              <p className="text-sm text-ink-light">
+                              <p className="text-xs lg:text-sm text-ink-light line-clamp-1">
                                 <span className="sr-only">크기: </span>
                                 {artwork.dimensions}
                               </p>

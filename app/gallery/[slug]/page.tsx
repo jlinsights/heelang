@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Logo } from '@/components/logo'
 import { artworksData } from '@/lib/artworks'
 import { Button } from '@/components/ui/button'
@@ -142,7 +142,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
                 Exhibition
               </Link>
-              <ThemeToggle />
+              <SimpleThemeToggle />
             </div>
           </div>
         </div>

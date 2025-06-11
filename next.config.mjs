@@ -13,7 +13,7 @@ const nextConfig = {
   },
   output: 'export',
   trailingSlash: true,
-  distDir: '.next',
+  distDir: 'out',
   experimental: {
     optimizeCss: false,
   },

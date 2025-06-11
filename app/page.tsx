@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-// import { ThemeToggle } from '@/components/theme-toggle'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Logo } from '@/components/logo'
 import { artworksData } from '@/lib/artworks'
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,12 @@ import {
 } from '@/components/animations'
 
 export default function HomePage() {
-  const featuredArtworks = artworksData.slice(0, 3)
+  // 특정 작품들을 Featured Works로 선택: 길, 평범함 속의 진실, 호흡
+  const featuredArtworks = [
+    artworksData.find(artwork => artwork.slug === 'way'),
+    artworksData.find(artwork => artwork.slug === 'truth-within-the-ordinary'),
+    artworksData.find(artwork => artwork.slug === 'breath')
+  ].filter((artwork): artwork is NonNullable<typeof artwork> => artwork !== undefined)
 
   return (
     <PageTransition>
@@ -42,7 +47,7 @@ export default function HomePage() {
                     Exhibition
                   </Link>
                   {/* <PWAInstallButton /> */}
-                  {/* <ThemeToggle /> */}
+                  <SimpleThemeToggle />
                 </div>
               </div>
             </div>

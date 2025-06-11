@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, User, Award } from 'lucide-react'
@@ -22,7 +22,7 @@ export default function ArtistsPage() {
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">
                 Exhibition
               </Link>
-              <ThemeToggle />
+              <SimpleThemeToggle />
             </div>
           </div>
         </div>

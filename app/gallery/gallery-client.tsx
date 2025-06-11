@@ -6,6 +6,7 @@ import { Logo } from '@/components/logo'
 import { artworksData } from '@/lib/artworks'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 
 const ARTWORKS_PER_PAGE = 8
 
@@ -71,6 +72,7 @@ export default function GalleryClient() {
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
                 Exhibition
               </Link>
+              <SimpleThemeToggle />
             </div>
           </div>
         </div>

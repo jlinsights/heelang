@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { OptimizedImage } from '@/components/optimized-image'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Logo } from '@/components/logo'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Clock, Phone, Mail, User } from 'lucide-react'
@@ -67,7 +67,7 @@ export default function ExhibitionPage() {
               <Link href="/exhibition" className="text-ink font-medium">
                 Exhibition
               </Link>
-              <ThemeToggle />
+              <SimpleThemeToggle />
             </div>
           </div>
         </div>

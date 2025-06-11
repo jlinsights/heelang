@@ -1,12 +1,7 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "outputDirectory": ".next",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": "out",
   "framework": "nextjs",
-  "regions": ["icn1"],
-  "functions": {
-    "app/[locale]/page.tsx": {
-      "maxDuration": 30
-    }
-  }
+  "regions": ["icn1"]
 } 

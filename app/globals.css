@@ -2,75 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 220.9 39.3% 11%; /* Dark blue-gray, sophisticated */
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 225.9 10.1% 40.2%; /* Softer gray for muted text */
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%; /* Lighter border */
-    --input: 220 13% 91%;
-    --ring: 220.9 39.3% 11%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* Custom colors for ink/paper theme */
+    --ink: 222.2 47.4% 11.2%;
+    --ink-light: 215.4 16.3% 46.9%;
+    --paper: 0 0% 100%;
+    --paper-warm: 30 40% 98%;
   }
+
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 210 20% 98%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Custom colors for dark mode */
+    --ink: 210 40% 98%;
+    --ink-light: 215 20.2% 65.1%;
+    --paper: 222.2 84% 4.9%;
+    --paper-warm: 217.2 32.6% 17.5%;
   }
 }
 
@@ -80,29 +80,118 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  /* Add a generic serif font stack for headings if not using a specific font import */
-  .font-serif {
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   }
 }
 
-/* Basic prose styling for markdown content if needed */
-.prose {
-  @apply text-neutral-700;
+@layer utilities {
+  /* Typography */
+  .font-display {
+    font-family: 'Crimson Text', serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Colors */
+  .text-ink {
+    color: hsl(var(--ink));
+  }
+
+  .text-ink-light {
+    color: hsl(var(--ink-light));
+  }
+
+  .bg-paper {
+    background-color: hsl(var(--paper));
+  }
+
+  .bg-paper-warm {
+    background-color: hsl(var(--paper-warm));
+  }
+
+  /* Layout */
+  .container-max {
+    @apply mx-auto max-w-7xl px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
 }
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  @apply text-neutral-900 font-semibold;
+
+@layer components {
+  .artwork-container {
+    @apply relative overflow-hidden bg-gradient-to-br from-slate-50 to-stone-50 dark:from-slate-800 dark:to-slate-900 border border-border/50 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300;
+  }
+  
+  .artwork-image {
+    @apply w-full object-cover transition-transform duration-500 hover:scale-105;
+  }
+  
+  .btn-primary {
+    @apply bg-ink text-paper hover:bg-ink/90 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply border border-ink/20 text-ink hover:bg-ink/5 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+  }
 }
-.prose a {
-  @apply text-primary hover:underline;
+
+/* 개별 작품 페이지 - 전체화면 이미지 */
+.artwork-fullscreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.prose p {
-  @apply leading-relaxed mb-4;
+
+@media (max-width: 768px) {
+  .artwork-fullscreen {
+    height: 80vh;
+    padding: 1rem;
+  }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 640px) {
+  .artwork-fullscreen {
+    height: 70vh;
+    padding: 0.5rem;
+  }
+  
+  /* 모바일에서 네비게이션 간소화 */
+  .mobile-nav {
+    @apply px-4 py-3;
+  }
+  
+  /* 모바일에서 breadcrumb 위치 조정 */
+  .mobile-breadcrumb {
+    position: fixed;
+    top: 4rem;
+    left: 1rem;
+    z-index: 40;
+  }
+}
+
+/* 이미지 로딩 상태 */
+.artwork-loading {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700;
+}
+
+/* 텍스트 라인 클램프 유틸리티 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

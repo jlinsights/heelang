@@ -5,9 +5,10 @@ export interface Artwork {
   year: number
   medium: string
   dimensions: string
+  aspectRatio: string // CSS aspect-ratio 값 (예: "2/1", "1/1", "5/7")
   description: string
-  imageUrl: string // For placeholder generation
-  imageUrlQuery?: string // For placeholder query generation
+  imageUrl: string
+  imageUrlQuery?: string
   artistNote?: string
 }
 
@@ -15,5 +16,5 @@ export interface Artist {
   name: string
   bio: string
   statement: string
-  profileImageUrl: string // For placeholder generation
-}
+  profileImageUrl: string
+} 

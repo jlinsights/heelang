@@ -1,7 +1,5 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Artwork } from "@/lib/types"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from 'next/link'
+import { Artwork } from '@/lib/types'
 
 interface ArtworkCardProps {
   artwork: Artwork
@@ -9,30 +7,27 @@ interface ArtworkCardProps {
 
 export function ArtworkCard({ artwork }: ArtworkCardProps) {
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-lg h-full flex flex-col">
-      <Link href={`/gallery/${artwork.slug}`} className="block group h-full flex flex-col">
-        <CardHeader className="p-0">
-          <div className="aspect-[4/3] relative overflow-hidden">
-            <Image
-              src={`/placeholder.svg?width=400&height=300&query=${encodeURIComponent(artwork.imageUrlQuery)}`}
-              alt={artwork.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
-        </CardHeader>
-        <CardContent className="p-4 flex-grow">
-          <CardTitle className="text-lg font-medium text-neutral-800 group-hover:text-primary">
+    <Link href={`/gallery/${artwork.slug}`} className="group">
+      <div className="artwork-container bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 overflow-hidden">
+        <div 
+          className="relative overflow-hidden bg-stone-100 dark:bg-slate-700"
+          style={{ aspectRatio: artwork.aspectRatio }}
+        >
+          <img
+            src={artwork.imageUrl}
+            alt={artwork.title}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+        <div className="p-4">
+          <h3 className="font-crimson text-lg font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">
             {artwork.title}
-          </CardTitle>
-          <p className="text-sm text-neutral-600 mt-1">{artwork.year}</p>
-          <p className="text-xs text-neutral-500 mt-0.5">{artwork.medium}</p>
-        </CardContent>
-        <CardFooter className="p-4 pt-0">
-          <p className="text-sm text-primary group-hover:underline">더보기 (View Details)</p>
-        </CardFooter>
-      </Link>
-    </Card>
+          </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            {artwork.year} • {artwork.dimensions}
+          </p>
+        </div>
+      </div>
+    </Link>
   )
 }

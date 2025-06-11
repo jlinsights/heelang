@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { Inter, Noto_Serif_KR } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { ErrorBoundary } from "@/components/error-boundary"
-import { SkipToContent } from "@/components/simple-skip-link"
+// import { ThemeProvider } from "@/components/theme-provider"
+// import { ErrorBoundary } from "@/components/error-boundary"
+// import { SkipToContent } from "@/components/simple-skip-link"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -93,19 +93,15 @@ export default function RootLayout({
         }} />
       </head>
       <body className={`${inter.variable} ${notoSerifKR.variable} min-h-screen bg-background text-foreground`}>
-        <SkipToContent />
-        <ErrorBoundary>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main id="main-content">
-              {children}
-            </main>
-          </ThemeProvider>
-        </ErrorBoundary>
+        <main id="main-content">
+          {children}
+        </main>
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-8">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-sm">© 2025 The Asian Society of Calligraphic Arts (ASCA)</p>
+          </div>
+        </footer>
       </body>
     </html>
   )

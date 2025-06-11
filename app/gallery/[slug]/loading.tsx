@@ -93,15 +93,7 @@ export default function Loading() {
         </div>
       </main>
 
-      {/* Footer Skeleton */}
-      <footer className="border-t border-border/50 py-8 bg-stone-50 dark:bg-slate-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="flex items-center justify-between text-sm">
-            <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          </div>
-        </div>
-      </footer>
+
     </div>
   )
 } 

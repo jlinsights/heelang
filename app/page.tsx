@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/theme-toggle'
+// import { ThemeToggle } from '@/components/theme-toggle'
 import { Logo } from '@/components/logo'
 import { artworksData } from '@/lib/artworks'
 import { Button } from '@/components/ui/button'
 import { Calendar, MapPin } from 'lucide-react'
-import { PWAInstallButton } from '@/components/pwa-install-button'
+// import { PWAInstallButton } from '@/components/pwa-install-button'
 import { 
   PageTransition, 
   FadeInContainer, 
@@ -41,8 +41,8 @@ export default function HomePage() {
                   <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">
                     Exhibition
                   </Link>
-                  <PWAInstallButton />
-                  <ThemeToggle />
+                  {/* <PWAInstallButton /> */}
+                  {/* <ThemeToggle /> */}
                 </div>
               </div>
             </div>
@@ -221,17 +221,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 py-12">
-        <div className="container-max">
-          <div className="flex items-center justify-between">
-            <Logo size="sm" />
-            <div className="font-body text-sm text-ink-light">
-              © 2025 희랑 공경순 개인전. 후원: 사단법인 동양서예협회
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </div>
     </PageTransition>
   )

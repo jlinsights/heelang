@@ -251,17 +251,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 py-8 bg-stone-50 dark:bg-slate-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="flex items-center justify-between text-sm">
-            <Logo size="sm" />
-            <div className="text-ink-light">
-              © 2025 희랑 공경순 개인전. 후원: 사단법인 동양서예협회
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </div>
   )
 } 

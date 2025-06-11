@@ -174,17 +174,7 @@ export default function ArtistsPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 py-12">
-        <div className="container-max">
-          <div className="flex items-center justify-between">
-            <Logo size="sm" />
-            <div className="font-body text-sm text-ink-light">
-              © 2025 희랑 공경순 개인전. 후원: 사단법인 동양서예협회
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </div>
   )
 } 

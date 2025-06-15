@@ -173,14 +173,17 @@ export default function GalleryClient() {
           <div className="flex items-center justify-between py-4">
             <Logo size="md" />
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/gallery" className="text-ink font-medium text-sm">
-                Gallery
-              </Link>
               <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
-                Artist
+                작가 소개
+              </Link>
+              <Link href="/gallery" className="text-ink font-medium text-sm">
+                작품 갤러리
               </Link>
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
-                Exhibition
+                전시 정보
+              </Link>
+              <Link href="/contact" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
+                문의하기
               </Link>
               <SimpleThemeToggle />
             </div>

@@ -1,7 +1,7 @@
 import { Logo } from '@/components/logo'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
-import { Mail, MapPin, Phone, Send } from 'lucide-react'
+import { Instagram, Mail, MapPin, Phone, Send } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ContactPage() {
@@ -13,18 +13,18 @@ export default function ContactPage() {
           <div className="flex items-center justify-between py-6">
             <Logo size="md" />
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
-                Gallery
-              </Link>
-              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
-                Artist
-              </Link>
-              <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">
-                Exhibition
-              </Link>
-              <Link href="/contact" className="text-ink font-medium">
-                Contact
-              </Link>
+                          <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
+              작가 소개
+            </Link>
+            <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
+              작품 갤러리
+            </Link>
+            <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">
+              전시 정보
+            </Link>
+            <Link href="/contact" className="text-ink font-medium">
+              문의하기
+            </Link>
               <ThemeToggle />
             </div>
           </div>
@@ -62,23 +62,33 @@ export default function ContactPage() {
             <div className="max-w-4xl mx-auto">
               <h2 className="font-display text-3xl text-ink text-center mb-16">Contact Information</h2>
               
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="text-center space-y-4">
                   <Phone className="h-10 w-10 mx-auto text-ink-light mb-3" />
                   <h3 className="font-body text-lg font-medium mb-2">전화</h3>
-                  <p className="text-ink-light">02-123-4567</p>
+                  <p className="text-ink-light">010-3019-1417</p>
                 </div>
                 
                 <div className="text-center space-y-4">
                   <Mail className="h-10 w-10 mx-auto text-ink-light mb-3" />
                   <h3 className="font-body text-lg font-medium mb-2">이메일</h3>
-                  <p className="text-ink-light">info@calligraphy.com</p>
+                  <p className="text-ink-light">heelang@orientalcalligraphy.org</p>
+                </div>
+                
+                <div className="text-center space-y-4">
+                  <Instagram className="h-10 w-10 mx-auto text-ink-light mb-3" />
+                  <h3 className="font-body text-lg font-medium mb-2">인스타그램</h3>
+                  <p className="text-ink-light">
+                    <a href="https://instagram.com/heelang_calligraphy" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition-colors">
+                      @heelang_calligraphy
+                    </a>
+                  </p>
                 </div>
                 
                 <div className="text-center space-y-4">
                   <MapPin className="h-10 w-10 mx-auto text-ink-light mb-3" />
                   <h3 className="font-body text-lg font-medium mb-2">위치</h3>
-                  <p className="text-ink-light">서울특별시 강남구 테헤란로 123</p>
+                  <p className="text-ink-light">경기 김포시 김포한강5로 321 (구래동)<br />김포한강듀클래스 14층 1435호 희랑글씨</p>
                 </div>
               </div>
             </div>
@@ -170,7 +180,7 @@ export default function ContactPage() {
                 
                 <div className="bg-background rounded-lg p-6 border border-border/50">
                   <h3 className="font-display text-lg text-ink mb-3">주차는 가능한가요?</h3>
-                  <p className="text-ink-light">예술의 전당 주차장을 이용하실 수 있으며, 전시 관람객에게는 2시간 무료 주차 혜택이 있습니다.</p>
+                  <p className="text-ink-light">인사동 한국미술관 주차장을 이용하실 수 있으며, 전시 관람객에게는 2시간 무료 주차 혜택이 있습니다.</p>
                 </div>
                 
                 <div className="bg-background rounded-lg p-6 border border-border/50">

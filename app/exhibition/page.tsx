@@ -1,3 +1,4 @@
+import { KakaoMap } from '@/components/kakao-map'
 import { Logo } from '@/components/logo'
 import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Button } from '@/components/ui/button'
@@ -56,15 +57,18 @@ export default function ExhibitionPage() {
           <div className="flex items-center justify-between py-6">
             <Logo size="md" />
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
-                Gallery
-              </Link>
-              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
-                Artist
-              </Link>
-              <Link href="/exhibition" className="text-ink font-medium">
-                Exhibition
-              </Link>
+                          <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
+              작가 소개
+            </Link>
+            <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
+              작품 갤러리
+            </Link>
+            <Link href="/exhibition" className="text-ink font-medium">
+              전시 정보
+            </Link>
+            <Link href="/contact" className="text-ink-light hover:text-ink transition-colors duration-200">
+              문의하기
+            </Link>
               <SimpleThemeToggle />
             </div>
           </div>
@@ -269,23 +273,40 @@ export default function ExhibitionPage() {
                 <p className="font-body text-white/90 drop-shadow-sm">{exhibitionInfo.address}</p>
               </div>
               
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg h-64 flex items-center justify-center border border-white/30">
-                <div className="text-center space-y-2">
-                  <p className="font-body text-white/90">인사동 한국미술관</p>
-                  <p className="font-body text-sm text-white/80">지도 보기는 Google Maps에서 확인하세요</p>
-                </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border border-white/30">
+                <KakaoMap
+                  latitude={37.5735}
+                  longitude={126.9854}
+                  placeName="인사동 한국미술관"
+                  address="서울특별시 종로구 인사동길 41-1"
+                  className="border-0"
+                />
               </div>
               
-              <div className="text-center space-y-2">
-                <p className="font-body text-sm text-white/90">
-                  <strong>지하철</strong><br />
-                  1호선 종각역 3번 출구 도보 5분<br />
-                  3호선 안국역 6번 출구 도보 5분
-                </p>
-                <p className="font-body text-sm text-white/90">
-                  <strong>버스</strong><br />
-                  인사동 정류장 (02-017)
-                </p>
+              <div className="text-center space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                    <p className="font-body text-sm text-white/90">
+                      <strong className="text-white">지하철</strong><br />
+                      1호선 종각역 3번 출구 도보 5분<br />
+                      3호선 안국역 6번 출구 도보 5분
+                    </p>
+                  </div>
+                  <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                    <p className="font-body text-sm text-white/90">
+                      <strong className="text-white">버스</strong><br />
+                      인사동 정류장 (02-017)<br />
+                      간선버스, 지선버스 이용 가능
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                  <p className="font-body text-sm text-white/90">
+                    <strong className="text-white">주차 안내</strong><br />
+                    인사동 한국미술관 주차장 이용 가능 (전시 관람객 2시간 무료)
+                  </p>
+                </div>
               </div>
             </div>
           </div>

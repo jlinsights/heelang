@@ -250,14 +250,17 @@ export default function HomePage() {
             
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/gallery" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
-                Gallery
+              <Link href="/artist" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
+                작가 소개
               </Link>
-                              <Link href="/artist" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
-                Artist
+              <Link href="/gallery" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
+                작품 갤러리
               </Link>
               <Link href="/exhibition" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
-                Exhibition
+                전시 정보
+              </Link>
+              <Link href="/contact" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
+                문의하기
               </Link>
               <SimpleThemeToggle />
             </div>
@@ -280,25 +283,32 @@ export default function HomePage() {
             <div className="md:hidden border-t border-white/10 py-4">
               <div className="flex flex-col space-y-4">
                 <Link 
-                  href="/gallery" 
-                  className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Gallery
-                </Link>
-                <Link 
                   href="/artist" 
                   className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Artist
+                  작가 소개
+                </Link>
+                <Link 
+                  href="/gallery" 
+                  className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  작품 갤러리
                 </Link>
                 <Link 
                   href="/exhibition" 
                   className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Exhibition
+                  전시 정보
+                </Link>
+                <Link 
+                  href="/contact" 
+                  className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  문의하기
                 </Link>
               </div>
             </div>

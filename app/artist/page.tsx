@@ -108,20 +108,26 @@ export default function ArtistsPage() {
           <div className="flex items-center justify-between py-6">
             <Logo size="md" />
             <div className="hidden md:flex items-center space-x-8">
+              <Link href="/artist" className="text-ink font-medium">
+                작가 소개
+              </Link>
               <Link
                 href="/gallery"
                 className="text-ink-light hover:text-ink transition-colors duration-200"
               >
-                Gallery
-              </Link>
-              <Link href="/artist" className="text-ink font-medium">
-                Artist
+                작품 갤러리
               </Link>
               <Link
                 href="/exhibition"
                 className="text-ink-light hover:text-ink transition-colors duration-200"
               >
-                Exhibition
+                전시 정보
+              </Link>
+              <Link
+                href="/contact"
+                className="text-ink-light hover:text-ink transition-colors duration-200"
+              >
+                문의하기
               </Link>
               <SimpleThemeToggle />
             </div>

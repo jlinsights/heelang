@@ -1,3 +1,4 @@
+import { ClientLayout } from "@/components/client-layout"
 import type { Metadata } from "next"
 import { Inter, Noto_Serif_KR } from "next/font/google"
 import "./globals.css"
@@ -92,16 +93,21 @@ export default function RootLayout({
           `
         }} />
       </head>
-      <body className={`${inter.variable} ${notoSerifKR.variable} min-h-screen bg-background text-foreground`}>
-        <main id="main-content">
-          {children}
-        </main>
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white py-8">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-sm">© 2025 The Asian Society of Calligraphic Arts (ASCA)</p>
-          </div>
-        </footer>
+      <body 
+        className={`${inter.variable} ${notoSerifKR.variable}`}
+        suppressHydrationWarning
+      >
+        <ClientLayout>
+          <main id="main-content">
+            {children}
+          </main>
+          {/* Footer */}
+          <footer className="bg-gray-900 text-white py-8">
+            <div className="container mx-auto px-4 text-center">
+              <p className="text-sm">© 2025 The Asian Society of Calligraphic Arts (ASCA)</p>
+            </div>
+          </footer>
+        </ClientLayout>
       </body>
     </html>
   )

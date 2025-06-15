@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap");
 
 @layer base {
   :root {
@@ -86,11 +86,11 @@
 @layer utilities {
   /* Typography */
   .font-display {
-    font-family: 'Crimson Text', serif;
+    font-family: "Crimson Text", serif;
   }
-  
+
   .font-body {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
   /* Colors */
@@ -124,15 +124,15 @@
   .artwork-container {
     @apply relative overflow-hidden bg-gradient-to-br from-slate-50 to-stone-50 dark:from-slate-800 dark:to-slate-900 border border-border/50 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300;
   }
-  
+
   .artwork-image {
     @apply w-full object-cover transition-transform duration-500 hover:scale-105;
   }
-  
+
   .btn-primary {
     @apply bg-ink text-paper hover:bg-ink/90 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
   }
-  
+
   .btn-secondary {
     @apply border border-ink/20 text-ink hover:bg-ink/5 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
   }
@@ -161,12 +161,12 @@
     height: 70vh;
     padding: 0.5rem;
   }
-  
+
   /* 모바일에서 네비게이션 간소화 */
   .mobile-nav {
     @apply px-4 py-3;
   }
-  
+
   /* 모바일에서 breadcrumb 위치 조정 */
   .mobile-breadcrumb {
     position: fixed;
@@ -194,4 +194,40 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* 히어로 섹션 애니메이션 */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+/* 배경 이미지 전환 애니메이션 */
+.hero-background-image {
+  transition: opacity 1s ease-in-out;
+}
+
+/* 텍스트 그림자 효과 */
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* 미니멀한 버튼 호버 효과 */
+.minimal-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.minimal-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

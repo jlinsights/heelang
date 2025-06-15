@@ -1,20 +1,130 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
 import { Logo } from '@/components/logo'
-import { artworksData } from '@/lib/artworks'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
 import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
+import { Button } from '@/components/ui/button'
+import type { Artwork } from '@/lib/types'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 const ARTWORKS_PER_PAGE = 8
 
+// 로딩 컴포넌트
+function GalleryLoading() {
+  return (
+    <div className="min-h-screen bg-background">
+      <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-xl border-b border-border/50 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="flex items-center justify-between py-4">
+            <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            <div className="flex space-x-4">
+              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-16">
+        <div className="bg-stone-50 dark:bg-slate-900 border-b border-border/20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
+            <div className="space-y-4">
+              <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-12 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="space-y-3">
+                <div className="aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 export default function GalleryClient() {
   const [currentPage, setCurrentPage] = useState(1)
-  
+  const [artworks, setArtworks] = useState<Artwork[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadArtworks() {
+      try {
+        // 즉시 fallback 데이터 로드
+        const { fallbackArtworksData } = await import("@/lib/artworks");
+        setArtworks(fallbackArtworksData);
+        setLoading(false); // 즉시 로딩 완료
+
+        // 백그라운드에서 Airtable 데이터 시도
+        try {
+          const response = await fetch('/api/artworks');
+          const result = await response.json();
+
+          // Airtable 데이터가 있으면 업데이트
+          if (result.success && result.data && result.data.length > 0) {
+            setArtworks(result.data);
+            console.log("Gallery updated with Airtable data:", result.data.length, "artworks");
+          } else {
+            console.log("No Airtable data available, using fallback data");
+          }
+        } catch (airtableError) {
+          console.log(
+            "Airtable fetch failed, using fallback data:",
+            airtableError
+          );
+          // fallback 데이터는 이미 설정되어 있으므로 추가 작업 불필요
+        }
+      } catch (error) {
+        console.error("Failed to load gallery data:", error);
+        setError("작품을 불러오는데 실패했습니다.");
+        setLoading(false);
+      }
+    }
+
+    loadArtworks();
+  }, []);
+
+  if (loading) {
+    return <GalleryLoading />;
+  }
+
+  if (error && artworks.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-ink mb-4">
+            오류가 발생했습니다
+          </h1>
+          <p className="text-ink-light mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-ink text-white rounded hover:bg-ink/90"
+          >
+            다시 시도
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // 보물 시리즈를 첫 번째 페이지에 순서대로 배치
-  const treasureArtworks = artworksData
+  const treasureArtworks = artworks
     .filter(artwork => artwork.title.includes('보물'))
     .sort((a, b) => {
       // 보물 1, 2, 3, ... 8 순으로 정렬
@@ -23,7 +133,7 @@ export default function GalleryClient() {
       return numA - numB
     })
   
-  const otherArtworks = artworksData.filter(artwork => !artwork.title.includes('보물'))
+  const otherArtworks = artworks.filter(artwork => !artwork.title.includes('보물'))
   
   // 보물 시리즈를 먼저 배치하고 나머지 작품들을 뒤에 배치
   const reorderedArtworks = [...treasureArtworks, ...otherArtworks]
@@ -98,7 +208,7 @@ export default function GalleryClient() {
                   <p className="text-ink-light text-base lg:text-lg">
                     총 {reorderedArtworks.length}점의 작품 (페이지 {currentPage} / {totalPages}) - 페이지당 8작품
                   </p>
-                  {currentPage === 1 && (
+                  {currentPage === 1 && treasureArtworks.length > 0 && (
                     <p className="text-ink text-sm mt-2 font-medium">
                       📎 첫 번째 페이지: 보물 1 ~ 보물 8 시리즈
                     </p>
@@ -120,12 +230,22 @@ export default function GalleryClient() {
               >
                 <article className="space-y-3">
                   <div className="relative aspect-[3/4] bg-stone-100 dark:bg-slate-700 overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <img
-                      src={artwork.imageUrl}
-                      alt={`${artwork.title} - 공경순 작가의 ${artwork.year}년 서예 작품`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
+                    {artwork.imageUrl && artwork.imageUrl.trim() !== '' ? (
+                      <img
+                        src={artwork.imageUrl}
+                        alt={`${artwork.title} - 공경순 작가의 ${artwork.year}년 서예 작품`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-ink-light">
+                        <div className="text-center">
+                          <div className="text-4xl mb-2">🖼️</div>
+                          <p className="text-sm">이미지 준비중</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-display text-base lg:text-lg text-ink group-hover:text-ink/70 transition-colors line-clamp-2">
@@ -142,6 +262,11 @@ export default function GalleryClient() {
                         {artwork.dimensions}
                       </p>
                     </div>
+                    {artwork.artistNote && (
+                      <p className="text-xs text-ink-light italic line-clamp-2">
+                        "{artwork.artistNote}"
+                      </p>
+                    )}
                   </div>
                 </article>
               </Link>

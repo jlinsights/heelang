@@ -1,10 +1,105 @@
-import Link from 'next/link'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
+'use client'
+
 import { Logo } from '@/components/logo'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, User, Award } from 'lucide-react'
+import type { Artist } from '@/lib/types'
+import { ArrowLeft, Award, User } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+// 로딩 컴포넌트
+function ArtistLoading() {
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-xl border-b border-border/50 z-50">
+        <div className="container-max">
+          <div className="flex items-center justify-between py-6">
+            <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            <div className="hidden md:flex items-center space-x-8">
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="pt-24">
+        <div className="bg-stone-50 dark:bg-slate-900 border-b border-border/20">
+          <div className="container-max py-16">
+            <div className="space-y-4">
+              <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-12 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-6 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container-max py-16">
+          <div className="max-w-6xl mx-auto space-y-16">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <div className="aspect-[4/5] bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse"></div>
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="w-16 h-0.5 bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-4/5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
 
 export default function ArtistsPage() {
+  const [artist, setArtist] = useState<Artist | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadArtist() {
+      try {
+        // 즉시 fallback 데이터 로드
+        const { fallbackArtistData } = await import('@/lib/artworks')
+        setArtist(fallbackArtistData)
+        setLoading(false) // 즉시 로딩 완료
+        
+        // 백그라운드에서 Airtable 데이터 시도
+        try {
+          const { getArtist } = await import('@/lib/artworks')
+          const airtableArtist = await getArtist()
+          
+          // Airtable 데이터가 있으면 업데이트
+          if (airtableArtist) {
+            setArtist(airtableArtist)
+            console.log('Artist updated with Airtable data')
+          }
+        } catch (airtableError) {
+          console.log('Airtable fetch failed for artist:', airtableError)
+        }
+      } catch (error) {
+        console.error('Failed to load artist data:', error)
+        setLoading(false)
+      }
+    }
+
+    loadArtist()
+  }, [])
+
+  if (loading || !artist) {
+    return <ArtistLoading />
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -58,11 +153,22 @@ export default function ArtistsPage() {
               {/* Profile Image */}
               <div className="relative">
                 <div className="aspect-[4/5] relative overflow-hidden rounded-2xl bg-stone-100 dark:bg-slate-800">
-                  <img
-                    src="/Images/Artist/Artist.png"
-                    alt="희랑 공경순 작가"
-                    className="w-full h-full object-cover"
-                  />
+                  {artist.profileImageUrl && artist.profileImageUrl.trim() !== '' ? (
+                    <img
+                      src={artist.profileImageUrl}
+                      alt={`${artist.name} 작가`}
+                      className="w-full h-full object-cover"
+                      loading="eager"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-ink-light">
+                      <div className="text-center">
+                        <div className="text-6xl mb-4">👤</div>
+                        <p className="text-lg">프로필 이미지 준비중</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 {/* Decorative elements */}
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-ink/10 rounded-full -z-10"></div>
@@ -72,14 +178,15 @@ export default function ArtistsPage() {
               {/* Profile Content */}
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h2 className="font-display text-3xl lg:text-4xl text-ink">희랑 공경순</h2>
-                  <p className="font-korean text-xl text-ink-light">熙勆 孔慶順</p>
+                  <h2 className="font-display text-3xl lg:text-4xl text-ink">{artist.name}</h2>
+                  {artist.birthYear && (
+                    <p className="font-korean text-xl text-ink-light">출생: {artist.birthYear}년</p>
+                  )}
                   <div className="w-16 h-0.5 bg-ink/30"></div>
                 </div>
                 
                 <p className="font-body text-lg text-ink-light leading-relaxed">
-                  현대 서예의 새로운 경지를 개척하며, 전통과 현대를 아우르는 독창적인 작품 세계를 구축해온 서예가입니다. 
-                  붓끝에서 피어나는 철학적 사유와 깊이 있는 성찰을 통해 서예의 예술적 가치를 재조명하고 있습니다.
+                  {artist.bio}
                 </p>
 
                 <div className="flex flex-wrap gap-3">
@@ -105,64 +212,63 @@ export default function ArtistsPage() {
               
               <blockquote className="space-y-6">
                 <p className="font-body text-lg lg:text-xl text-ink leading-relaxed">
-                  "길은 걸어가는 것이며, 걸어가면서 만들어지는 것입니다. 인생의 매 순간이 하나의 길이며, 
-                  붓을 들고 종이 위에 획을 그어나가는 것 또한 길을 만들어가는 과정입니다."
-                </p>
-                
-                <p className="font-body text-base text-ink-light leading-relaxed">
-                  이번 전시 '길'에서는 지나온 발자취와 앞으로 나아갈 방향에 대한 깊은 성찰을 담았습니다. 
-                  각각의 작품은 인생의 한 구간을 상징하며, 전체적으로는 하나의 긴 여정을 표현합니다.
-                  서예는 단순한 글씨가 아닌, 마음의 흔적이자 시간의 기록입니다.
+                  "{artist.statement}"
                 </p>
               </blockquote>
             </div>
 
             {/* Background */}
-            <div className="space-y-8">
-              <div className="flex items-center gap-3">
-                <Award className="h-5 w-5 text-ink-light" />
-                <h3 className="font-display text-xl text-ink">이력</h3>
-              </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div className="space-y-4">
-                  <h4 className="font-display text-lg text-ink">학력</h4>
-                  <ul className="space-y-2 font-body text-ink-light">
-                    <li>• 한국예술종합학교 서예과 졸업</li>
-                    <li>• 동대학원 서예학 석사</li>
-                    <li>• 중국 서법협회 연수</li>
-                  </ul>
+            {(artist.education?.length || artist.awards?.length || artist.exhibitions?.length) && (
+              <div className="space-y-8">
+                <div className="flex items-center gap-3">
+                  <Award className="h-5 w-5 text-ink-light" />
+                  <h3 className="font-display text-xl text-ink">이력</h3>
                 </div>
                 
-                <div className="space-y-4">
-                  <h4 className="font-display text-lg text-ink">주요 수상</h4>
-                  <ul className="space-y-2 font-body text-ink-light">
-                    <li>• 2024. 2 국제공모전 &lt;Art Beyond Boundaries&gt; 국제예술상</li>
-                    <li>• 2023. 7 제63회 Kaishin 서법원대전 우수상</li>
-                    <li>• 2021. 5 제14회 낙동예술대전 캘리그래피부문 대상</li>
-                    <li>• 2024 제21회 대한민국 동양서예대전 대상</li>
-                  </ul>
-                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {artist.education && artist.education.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-display text-lg text-ink">학력</h4>
+                      <ul className="space-y-2 font-body text-ink-light">
+                        {artist.education.map((edu, index) => (
+                          <li key={index}>• {edu}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {artist.awards && artist.awards.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-display text-lg text-ink">주요 수상</h4>
+                      <ul className="space-y-2 font-body text-ink-light">
+                        {artist.awards.map((award, index) => (
+                          <li key={index}>• {award}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                                 <div className="space-y-4">
-                   <h4 className="font-display text-lg text-ink">주요 활동</h4>
-                   <ul className="space-y-2 font-body text-ink-light">
-                     <li>• 사단법인 동양서예협회 초대작가, 상임이사</li>
-                     <li>• 한국서예문화원 강사</li>
-                     <li>• 다수의 단체전 및 기획전 참여</li>
-                     <li>• 서예 워크숍 및 강연 활동</li>
-                   </ul>
-                 </div>
+                  {artist.exhibitions && artist.exhibitions.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-display text-lg text-ink">주요 전시</h4>
+                      <ul className="space-y-2 font-body text-ink-light">
+                        {artist.exhibitions.map((exhibition, index) => (
+                          <li key={index}>• {exhibition}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Exhibition Info */}
             <div className="bg-gradient-to-r from-stone-50 to-stone-100 dark:from-slate-900 dark:to-slate-800 rounded-xl p-8 text-center space-y-4">
               <h3 className="font-display text-xl text-ink">현재 전시</h3>
               <p className="font-body text-lg text-ink-light">
                 <strong className="text-ink">길 (Way)</strong><br />
-                2025년 6월 18일 - 24일<br />
-                인사동 한국미술관 2층
+                2024년 12월 - 2025년 3월<br />
+                온라인 전시
               </p>
               <Button asChild className="bg-ink hover:bg-ink/90 text-white">
                 <Link href="/gallery">
@@ -173,8 +279,6 @@ export default function ArtistsPage() {
           </div>
         </div>
       </main>
-
-
     </div>
   )
 } 

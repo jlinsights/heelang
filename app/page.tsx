@@ -253,7 +253,7 @@ export default function HomePage() {
               <Link href="/gallery" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
                 Gallery
               </Link>
-              <Link href="/artists" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
+                              <Link href="/artist" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
                 Artist
               </Link>
               <Link href="/exhibition" className="text-white/80 hover:text-white transition-colors duration-200 text-sm">
@@ -287,7 +287,7 @@ export default function HomePage() {
                   Gallery
                 </Link>
                 <Link 
-                  href="/artists" 
+                  href="/artist" 
                   className="text-white/80 hover:text-white transition-colors duration-200 text-sm px-2 py-1"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -344,7 +344,7 @@ export default function HomePage() {
               <div className="mt-8">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button asChild variant="outline" size="lg">
-                    <Link href="/artists">
+                    <Link href="/artist">
                       자세히 보기
                     </Link>
                   </Button>

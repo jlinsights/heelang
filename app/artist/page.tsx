@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { Logo } from '@/components/logo'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
-import { Button } from '@/components/ui/button'
-import type { Artist } from '@/lib/types'
-import { ArrowLeft, Award, User } from 'lucide-react'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { Logo } from "@/components/logo";
+import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
+import { Button } from "@/components/ui/button";
+import type { Artist } from "@/lib/types";
+import { ArrowLeft, Award, User } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // 로딩 컴포넌트
 function ArtistLoading() {
@@ -59,45 +59,45 @@ function ArtistLoading() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
 export default function ArtistsPage() {
-  const [artist, setArtist] = useState<Artist | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [artist, setArtist] = useState<Artist | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadArtist() {
       try {
         // 즉시 fallback 데이터 로드
-        const { fallbackArtistData } = await import('@/lib/artworks')
-        setArtist(fallbackArtistData)
-        setLoading(false) // 즉시 로딩 완료
-        
+        const { fallbackArtistData } = await import("@/lib/artworks");
+        setArtist(fallbackArtistData);
+        setLoading(false); // 즉시 로딩 완료
+
         // 백그라운드에서 Airtable 데이터 시도
         try {
-          const { getArtist } = await import('@/lib/artworks')
-          const airtableArtist = await getArtist()
-          
+          const { getArtist } = await import("@/lib/artworks");
+          const airtableArtist = await getArtist();
+
           // Airtable 데이터가 있으면 업데이트
           if (airtableArtist) {
-            setArtist(airtableArtist)
-            console.log('Artist updated with Airtable data')
+            setArtist(airtableArtist);
+            console.log("Artist updated with Airtable data");
           }
         } catch (airtableError) {
-          console.log('Airtable fetch failed for artist:', airtableError)
+          console.log("Airtable fetch failed for artist:", airtableError);
         }
       } catch (error) {
-        console.error('Failed to load artist data:', error)
-        setLoading(false)
+        console.error("Failed to load artist data:", error);
+        setLoading(false);
       }
     }
 
-    loadArtist()
-  }, [])
+    loadArtist();
+  }, []);
 
   if (loading || !artist) {
-    return <ArtistLoading />
+    return <ArtistLoading />;
   }
 
   return (
@@ -108,13 +108,19 @@ export default function ArtistsPage() {
           <div className="flex items-center justify-between py-6">
             <Logo size="md" />
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
+              <Link
+                href="/gallery"
+                className="text-ink-light hover:text-ink transition-colors duration-200"
+              >
                 Gallery
               </Link>
-              <Link href="/artists" className="text-ink font-medium">
+              <Link href="/artist" className="text-ink font-medium">
                 Artist
               </Link>
-              <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">
+              <Link
+                href="/exhibition"
+                className="text-ink-light hover:text-ink transition-colors duration-200"
+              >
                 Exhibition
               </Link>
               <SimpleThemeToggle />
@@ -153,7 +159,8 @@ export default function ArtistsPage() {
               {/* Profile Image */}
               <div className="relative">
                 <div className="aspect-[4/5] relative overflow-hidden rounded-2xl bg-stone-100 dark:bg-slate-800">
-                  {artist.profileImageUrl && artist.profileImageUrl.trim() !== '' ? (
+                  {artist.profileImageUrl &&
+                  artist.profileImageUrl.trim() !== "" ? (
                     <img
                       src={artist.profileImageUrl}
                       alt={`${artist.name} 작가`}
@@ -178,13 +185,17 @@ export default function ArtistsPage() {
               {/* Profile Content */}
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h2 className="font-display text-3xl lg:text-4xl text-ink">{artist.name}</h2>
+                  <h2 className="font-display text-3xl lg:text-4xl text-ink">
+                    {artist.name}
+                  </h2>
                   {artist.birthYear && (
-                    <p className="font-korean text-xl text-ink-light">출생: {artist.birthYear}년</p>
+                    <p className="font-korean text-xl text-ink-light">
+                      출생: {artist.birthYear}년
+                    </p>
                   )}
                   <div className="w-16 h-0.5 bg-ink/30"></div>
                 </div>
-                
+
                 <p className="font-body text-lg text-ink-light leading-relaxed">
                   {artist.bio}
                 </p>
@@ -207,12 +218,14 @@ export default function ArtistsPage() {
                 </div>
 
                 {/* Social Links */}
-                {(artist.socialLinks?.website || artist.socialLinks?.instagram || artist.socialLinks?.facebook) && (
+                {(artist.socialLinks?.website ||
+                  artist.socialLinks?.instagram ||
+                  artist.socialLinks?.facebook) && (
                   <div className="flex gap-4 pt-4">
                     {artist.socialLinks?.website && (
-                      <a 
-                        href={artist.socialLinks.website} 
-                        target="_blank" 
+                      <a
+                        href={artist.socialLinks.website}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-ink-light hover:text-ink transition-colors"
                       >
@@ -220,9 +233,9 @@ export default function ArtistsPage() {
                       </a>
                     )}
                     {artist.socialLinks?.instagram && (
-                      <a 
-                        href={artist.socialLinks.instagram} 
-                        target="_blank" 
+                      <a
+                        href={artist.socialLinks.instagram}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-ink-light hover:text-ink transition-colors"
                       >
@@ -230,9 +243,9 @@ export default function ArtistsPage() {
                       </a>
                     )}
                     {artist.socialLinks?.facebook && (
-                      <a 
-                        href={artist.socialLinks.facebook} 
-                        target="_blank" 
+                      <a
+                        href={artist.socialLinks.facebook}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-ink-light hover:text-ink transition-colors"
                       >
@@ -250,7 +263,7 @@ export default function ArtistsPage() {
                 <User className="h-5 w-5 text-ink-light" />
                 <h3 className="font-display text-xl text-ink">작가의 말</h3>
               </div>
-              
+
               <blockquote className="space-y-6">
                 <p className="font-body text-lg lg:text-xl text-ink leading-relaxed">
                   "{artist.statement}"
@@ -259,13 +272,16 @@ export default function ArtistsPage() {
             </div>
 
             {/* Background */}
-            {(artist.education?.length || artist.awards?.length || artist.exhibitions?.length || artist.collections?.length) && (
+            {(artist.education?.length ||
+              artist.awards?.length ||
+              artist.exhibitions?.length ||
+              artist.collections?.length) && (
               <div className="space-y-8">
                 <div className="flex items-center gap-3">
                   <Award className="h-5 w-5 text-ink-light" />
                   <h3 className="font-display text-xl text-ink">이력</h3>
                 </div>
-                
+
                 <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
                   {artist.education && artist.education.length > 0 && (
                     <div className="space-y-4">
@@ -277,10 +293,12 @@ export default function ArtistsPage() {
                       </ul>
                     </div>
                   )}
-                  
+
                   {artist.awards && artist.awards.length > 0 && (
                     <div className="space-y-4">
-                      <h4 className="font-display text-lg text-ink">주요 수상</h4>
+                      <h4 className="font-display text-lg text-ink">
+                        주요 수상
+                      </h4>
                       <ul className="space-y-2 font-body text-ink-light">
                         {artist.awards.map((award, index) => (
                           <li key={index}>• {award}</li>
@@ -291,7 +309,9 @@ export default function ArtistsPage() {
 
                   {artist.exhibitions && artist.exhibitions.length > 0 && (
                     <div className="space-y-4">
-                      <h4 className="font-display text-lg text-ink">주요 전시</h4>
+                      <h4 className="font-display text-lg text-ink">
+                        주요 전시
+                      </h4>
                       <ul className="space-y-2 font-body text-ink-light">
                         {artist.exhibitions.map((exhibition, index) => (
                           <li key={index}>• {exhibition}</li>
@@ -302,7 +322,9 @@ export default function ArtistsPage() {
 
                   {artist.collections && artist.collections.length > 0 && (
                     <div className="space-y-4">
-                      <h4 className="font-display text-lg text-ink">작품 소장</h4>
+                      <h4 className="font-display text-lg text-ink">
+                        작품 소장
+                      </h4>
                       <ul className="space-y-2 font-body text-ink-light">
                         {artist.collections.map((collection, index) => (
                           <li key={index}>• {collection}</li>
@@ -318,21 +340,23 @@ export default function ArtistsPage() {
             <div className="bg-gradient-to-r from-stone-50 to-stone-100 dark:from-slate-900 dark:to-slate-800 rounded-xl p-8 text-center space-y-4">
               <h3 className="font-display text-xl text-ink">현재 전시</h3>
               <p className="font-body text-lg text-ink-light">
-                <strong className="text-ink">길 (Way)</strong><br />
-                2025년 6월 18일 - 24일<br />
-                오전 10시 - 오후 6시<br />
-                인사동 한국미술관 2층<br />
+                <strong className="text-ink">길 (Way)</strong>
+                <br />
+                2025년 6월 18일 - 24일
+                <br />
+                오전 10시 - 오후 6시
+                <br />
+                인사동 한국미술관 2층
+                <br />
                 <span className="text-sm">후원: 사단법인 동양서예협회</span>
               </p>
               <Button asChild className="bg-ink hover:bg-ink/90 text-white">
-                <Link href="/exhibition">
-                  전시 정보 보기
-                </Link>
+                <Link href="/exhibition">전시 정보 보기</Link>
               </Button>
             </div>
           </div>
         </div>
       </main>
     </div>
-  )
-} 
+  );
+}

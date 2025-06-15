@@ -163,7 +163,7 @@ export default function ArtworkPage() {
                 Gallery
               </Link>
               <Link
-                href="/artists"
+                href="/artist"
                 className="text-ink-light hover:text-ink transition-colors duration-200 text-sm"
               >
                 Artist
@@ -339,7 +339,7 @@ export default function ArtworkPage() {
                       <Link href="/gallery">← 갤러리</Link>
                     </Button>
                     <Button asChild variant="outline" size="sm">
-                      <Link href="/artists">작가 소개 →</Link>
+                      <Link href="/artist">작가 소개 →</Link>
                     </Button>
                   </div>
                 </div>

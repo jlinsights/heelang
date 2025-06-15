@@ -59,7 +59,7 @@ export default function ExhibitionPage() {
               <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
                 Gallery
               </Link>
-              <Link href="/artists" className="text-ink-light hover:text-ink transition-colors duration-200">
+              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
                 Artist
               </Link>
               <Link href="/exhibition" className="text-ink font-medium">

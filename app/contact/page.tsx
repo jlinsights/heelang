@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { Logo } from '@/components/logo'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
-import { Phone, Mail, MapPin, Send } from 'lucide-react'
+import { Mail, MapPin, Phone, Send } from 'lucide-react'
+import Link from 'next/link'
 
 export default function ContactPage() {
   return (
@@ -16,7 +16,7 @@ export default function ContactPage() {
               <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
                 Gallery
               </Link>
-              <Link href="/artists" className="text-ink-light hover:text-ink transition-colors duration-200">
+              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
                 Artist
               </Link>
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200">

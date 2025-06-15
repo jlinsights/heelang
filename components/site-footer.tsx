@@ -1,42 +1,52 @@
-'use client'
+"use client";
 
-import Link from "next/link"
-import { TranslatedContent } from "./translated-content"
-import Image from "next/image"
-import { useState } from "react"
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 // 스폰서 로고 컴포넌트
-function SponsorLogo({ src, alt, width, height, className, fallbackSrc, fallbackClassName }: {
-  src: string
-  alt: string
-  width: number
-  height: number
-  className?: string
-  fallbackSrc?: string
-  fallbackClassName?: string
+function SponsorLogo({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  fallbackSrc,
+  fallbackClassName,
+}: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  className?: string;
+  fallbackSrc?: string;
+  fallbackClassName?: string;
 }) {
-  const [imageError, setImageError] = useState(false)
-  const [currentSrc, setCurrentSrc] = useState(src)
-  const [usingFallback, setUsingFallback] = useState(false)
+  const [imageError, setImageError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   const handleImageError = () => {
     if (fallbackSrc && currentSrc === src) {
-      setCurrentSrc(fallbackSrc)
-      setUsingFallback(true)
+      setCurrentSrc(fallbackSrc);
+      setUsingFallback(true);
     } else {
-      setImageError(true)
+      setImageError(true);
     }
-  }
+  };
 
   if (imageError) {
     return (
-      <div className={`flex items-center justify-center text-xs text-[#fcfcfc]/40 ${className}`}>
+      <div
+        className={`flex items-center justify-center text-xs text-[#fcfcfc]/40 ${className}`}
+      >
         {alt}
       </div>
-    )
+    );
   }
 
-  const imageClassName = usingFallback && fallbackClassName ? fallbackClassName : className
+  const imageClassName =
+    usingFallback && fallbackClassName ? fallbackClassName : className;
 
   return (
     <Image
@@ -47,7 +57,7 @@ function SponsorLogo({ src, alt, width, height, className, fallbackSrc, fallback
       className={imageClassName}
       onError={handleImageError}
     />
-  )
+  );
 }
 
 export function SiteFooter() {
@@ -69,13 +79,27 @@ export function SiteFooter() {
               />
             </Link>
             <div className="mt-4 space-y-1">
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">고유번호: 209-82-11380</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">☎︎ 0502-5550-8700</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">FAX: 0504-256-6600</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">info@orientalcalligraphy.org</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">서울시 성북구 보문로 57-1,</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">중앙빌딩 6층 (보문동7가)</p>
-              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">무통장 입금계좌: 신한은행 100-028-611714</p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                고유번호: 209-82-11380
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                ☎︎ 0502-5550-8700
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                FAX: 0504-256-6600
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                info@orientalcalligraphy.org
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                서울시 성북구 보문로 57-1,
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                중앙빌딩 6층 (보문동7가)
+              </p>
+              <p className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70">
+                무통장 입금계좌: 신한은행 100-028-611714
+              </p>
             </div>
           </div>
 
@@ -203,34 +227,34 @@ export function SiteFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/artists?type=공모작가"
+                  href="/artist"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  공모작가
+                  작가 소개
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/artists?type=청년작가"
+                  href="/gallery"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  청년작가
+                  작품 갤러리
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/artists?type=추천작가"
+                  href="/exhibition"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  추천작가
+                  전시 정보
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/artists?type=초대작가"
+                  href="/contact"
                   className="text-xs text-[#fcfcfc]/70 dark:text-[#fcfcfc]/70 hover:text-[#fcfcfc] dark:hover:text-white transition-colors"
                 >
-                  초대작가
+                  문의하기
                 </Link>
               </li>
             </ul>
@@ -328,13 +352,13 @@ export function SiteFooter() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-6">
             {/* 뉴스레터 구독 */}
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <Link 
-                href="https://orientalcalligraphy.stibee.com/subscribe/" 
+              <Link
+                href="https://orientalcalligraphy.stibee.com/subscribe/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs uppercase tracking-wider hover:text-[#fcfcfc]/80 transition-colors"
               >
-뉴스레터 구독
+                뉴스레터 구독
               </Link>
             </div>
 
@@ -343,26 +367,26 @@ export function SiteFooter() {
 
             {/* 법적 페이지 링크 */}
             <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-              <Link 
-                href="/terms-of-service" 
+              <Link
+                href="/terms-of-service"
                 className="text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors"
               >
                 이용약관
               </Link>
-              <Link 
-                href="/privacy-policy" 
+              <Link
+                href="/privacy-policy"
                 className="text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors"
               >
                 개인정보처리방침
               </Link>
-              <Link 
-                href="/copyright-policy" 
+              <Link
+                href="/copyright-policy"
                 className="text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors"
               >
                 저작권 정책
               </Link>
-              <Link 
-                href="/email-refuse" 
+              <Link
+                href="/email-refuse"
                 className="text-xs text-[#fcfcfc]/70 hover:text-[#fcfcfc] transition-colors"
               >
                 이메일 무단수집 거부
@@ -376,8 +400,8 @@ export function SiteFooter() {
           {/* 파트너 */}
           <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8 opacity-60 mb-6">
             {/* 삼성금융네트웍스 */}
-            <Link 
-              href="https://familyoffices.vip/" 
+            <Link
+              href="https://familyoffices.vip/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
@@ -386,8 +410,8 @@ export function SiteFooter() {
             </Link>
 
             {/* 예술의전당 */}
-            <Link 
-              href="https://www.sac.or.kr/site/main/home" 
+            <Link
+              href="https://www.sac.or.kr/site/main/home"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
@@ -396,8 +420,8 @@ export function SiteFooter() {
             </Link>
 
             {/* 대한검정회 */}
-            <Link 
-              href="https://www.hanja.ne.kr/index_original.asp" 
+            <Link
+              href="https://www.hanja.ne.kr/index_original.asp"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
@@ -406,8 +430,8 @@ export function SiteFooter() {
             </Link>
 
             {/* 서울특별시 */}
-            <Link 
-              href="https://www.seoul.go.kr/main/index.jsp" 
+            <Link
+              href="https://www.seoul.go.kr/main/index.jsp"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
@@ -416,8 +440,8 @@ export function SiteFooter() {
             </Link>
 
             {/* 문화체육관광부 */}
-            <Link 
-              href="https://www.mcst.go.kr/kor/main/jsp" 
+            <Link
+              href="https://www.mcst.go.kr/kor/main/jsp"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#fcfcfc]/40 hover:text-[#fcfcfc]/70 transition-colors"
@@ -429,11 +453,12 @@ export function SiteFooter() {
           {/* 저작권 표시 */}
           <div className="text-center">
             <p className="text-xs text-[#fcfcfc]/60 dark:text-[#fcfcfc]/60">
-              © The Asian Society of Calligraphic Arts (ASCA). All rights reserved.
+              © The Asian Society of Calligraphic Arts (ASCA). All rights
+              reserved.
             </p>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

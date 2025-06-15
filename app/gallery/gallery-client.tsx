@@ -176,7 +176,7 @@ export default function GalleryClient() {
               <Link href="/gallery" className="text-ink font-medium text-sm">
                 Gallery
               </Link>
-              <Link href="/artists" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
+              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
                 Artist
               </Link>
               <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">

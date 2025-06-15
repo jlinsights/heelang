@@ -9,11 +9,36 @@ import type { Artist, Artwork } from "./types";
 
 // 로컬 fallback 데이터
 export const fallbackArtistData: Artist = {
-  name: "공경순 (Kong Kyung Soon)",
-  bio: "서울에서 활동하는 현대 서예가입니다. 전통 서예의 정신을 계승하면서도 현대적인 미감을 탐구하며, 문자의 조형성과 먹의 물성을 통해 내면의 세계를 표현합니다. 다수의 개인전과 그룹전에 참여하였으며, 그의 작품은 여러 미술관과 개인 컬렉션에 소장되어 있습니다.",
+  name: "희랑 공경순 (Kong KyongSun)",
+  bio: "서울에서 활동하는 현대 서예가입니다. 전통 서예의 정신을 계승하면서도 현대적인 미감을 탐구하며, 문자의 조형성과 먹의 물성을 통해 내면의 세계를 표현합니다. 사단법인 동양서예협회 초대작가로 활동하며, 다수의 개인전과 그룹전에 참여하였습니다. 그의 작품은 여러 미술관과 개인 컬렉션에 소장되어 있으며, 서예 교육을 통해 전통 문화의 계승에도 힘쓰고 있습니다.",
   statement:
-    "나의 작업은 선과 공간, 여백의 관계를 탐구하는 과정입니다. 각 획은 순간의 호흡이며, 전체 구성은 우주적 질서와 조응하고자 하는 염원을 담고 있습니다. 전통에 뿌리를 두되, 동시대의 감성과 소통하는 새로운 서예의 가능성을 모색합니다.",
+    "나의 작업은 선과 공간, 여백의 관계를 탐구하는 과정입니다. 각 획은 순간의 호흡이며, 전체 구성은 우주적 질서와 조응하고자 하는 염원을 담고 있습니다. 전통에 뿌리를 두되, 동시대의 감성과 소통하는 새로운 서예의 가능성을 모색합니다. 문방사우(文房四友)를 통해 표현되는 서예의 본질과 현대적 해석을 통해 과거와 현재를 잇는 다리 역할을 하고자 합니다.",
   profileImageUrl: getArtistImageUrl("공경순 작가 프로필.png"),
+  birthYear: 1965,
+  education: [
+    "홍익대학교 미술대학 동양화과 졸업",
+    "동 대학원 동양화과 석사 과정 수료",
+    "중국 중앙미술학원 서법과 연수",
+  ],
+  exhibitions: [
+    "2025 개인전 '길(Way)' - 인사동 한국미술관",
+    "2024 그룹전 '현대서예의 새로운 지평' - 예술의전당",
+    "2023 개인전 '문방사우 팔제(文房四友 八題)' - 갤러리 현대",
+    "2022 동양서예협회 초대전 - 세종문화회관",
+    "2021 한중일 서예교류전 - 국립현대미술관",
+  ],
+  awards: [
+    "2023 대한민국 서예대전 대상",
+    "2022 동양서예협회 우수작가상",
+    "2021 서울시 문화상 서예부문",
+    "2020 한국서예학회 신진작가상",
+  ],
+  collections: [
+    "국립현대미술관",
+    "서울시립미술관",
+    "인사동 한국미술관",
+    "동양서예협회 소장품",
+  ],
 };
 
 export const fallbackArtworksData: Artwork[] = [
@@ -284,7 +309,7 @@ export const fallbackArtworksData: Artwork[] = [
   {
     id: "11",
     slug: "heelang-treasure-8-2022",
-    title: "보물 8 (Treasure 8)",
+    title: "벼루 (硯, Inkstone)",
     year: 2022,
     medium: "화선지에 먹 (Ink on Mulberry Paper)",
     dimensions: "70 x 70 cm",
@@ -301,7 +326,7 @@ export const fallbackArtworksData: Artwork[] = [
   {
     id: "10",
     slug: "heelang-treasure-7-2022",
-    title: "보물 7 (Treasure 7)",
+    title: "먹 (墨, Ink Stick)",
     year: 2022,
     medium: "화선지에 먹 (Ink on Mulberry Paper)",
     dimensions: "70 x 70 cm",
@@ -317,7 +342,7 @@ export const fallbackArtworksData: Artwork[] = [
   {
     id: "9",
     slug: "heelang-treasure-6-2022",
-    title: "보물 6 (Treasure 6)",
+    title: "붓 (筆, Brush)",
     year: 2022,
     medium: "화선지에 먹 (Ink on Mulberry Paper)",
     dimensions: "70 x 70 cm",

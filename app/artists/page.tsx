@@ -199,7 +199,48 @@ export default function ArtistsPage() {
                   <span className="px-3 py-1 bg-stone-100 dark:bg-slate-800 text-ink-light text-sm rounded-full">
                     서예 교육가
                   </span>
+                  {artist.birthYear && (
+                    <span className="px-3 py-1 bg-stone-100 dark:bg-slate-800 text-ink-light text-sm rounded-full">
+                      {artist.birthYear}년생
+                    </span>
+                  )}
                 </div>
+
+                {/* Social Links */}
+                {(artist.socialLinks?.website || artist.socialLinks?.instagram || artist.socialLinks?.facebook) && (
+                  <div className="flex gap-4 pt-4">
+                    {artist.socialLinks?.website && (
+                      <a 
+                        href={artist.socialLinks.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-ink-light hover:text-ink transition-colors"
+                      >
+                        🌐 웹사이트
+                      </a>
+                    )}
+                    {artist.socialLinks?.instagram && (
+                      <a 
+                        href={artist.socialLinks.instagram} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-ink-light hover:text-ink transition-colors"
+                      >
+                        📷 Instagram
+                      </a>
+                    )}
+                    {artist.socialLinks?.facebook && (
+                      <a 
+                        href={artist.socialLinks.facebook} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-ink-light hover:text-ink transition-colors"
+                      >
+                        📘 Facebook
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -218,14 +259,14 @@ export default function ArtistsPage() {
             </div>
 
             {/* Background */}
-            {(artist.education?.length || artist.awards?.length || artist.exhibitions?.length) && (
+            {(artist.education?.length || artist.awards?.length || artist.exhibitions?.length || artist.collections?.length) && (
               <div className="space-y-8">
                 <div className="flex items-center gap-3">
                   <Award className="h-5 w-5 text-ink-light" />
                   <h3 className="font-display text-xl text-ink">이력</h3>
                 </div>
                 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
                   {artist.education && artist.education.length > 0 && (
                     <div className="space-y-4">
                       <h4 className="font-display text-lg text-ink">학력</h4>
@@ -258,6 +299,17 @@ export default function ArtistsPage() {
                       </ul>
                     </div>
                   )}
+
+                  {artist.collections && artist.collections.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-display text-lg text-ink">작품 소장</h4>
+                      <ul className="space-y-2 font-body text-ink-light">
+                        {artist.collections.map((collection, index) => (
+                          <li key={index}>• {collection}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -267,12 +319,14 @@ export default function ArtistsPage() {
               <h3 className="font-display text-xl text-ink">현재 전시</h3>
               <p className="font-body text-lg text-ink-light">
                 <strong className="text-ink">길 (Way)</strong><br />
-                2024년 12월 - 2025년 3월<br />
-                온라인 전시
+                2025년 6월 18일 - 24일<br />
+                오전 10시 - 오후 6시<br />
+                인사동 한국미술관 2층<br />
+                <span className="text-sm">후원: 사단법인 동양서예협회</span>
               </p>
               <Button asChild className="bg-ink hover:bg-ink/90 text-white">
-                <Link href="/gallery">
-                  작품 감상하기
+                <Link href="/exhibition">
+                  전시 정보 보기
                 </Link>
               </Button>
             </div>

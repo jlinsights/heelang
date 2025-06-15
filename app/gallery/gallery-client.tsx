@@ -210,7 +210,7 @@ export default function GalleryClient() {
                   </p>
                   {currentPage === 1 && treasureArtworks.length > 0 && (
                     <p className="text-ink text-sm mt-2 font-medium">
-                      📎 첫 번째 페이지: 보물 1 ~ 보물 8 시리즈
+                      📎 첫 번째 페이지: 《文房四友 八題》 ; 문방사우를 주제로 한 여덟 개의 서예 작품
                     </p>
                   )}
                 </div>

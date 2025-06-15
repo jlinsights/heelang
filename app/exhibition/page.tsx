@@ -1,10 +1,8 @@
-import Link from 'next/link'
-import { OptimizedImage } from '@/components/optimized-image'
-import { Button } from '@/components/ui/button'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
 import { Logo } from '@/components/logo'
-import { Badge } from '@/components/ui/badge'
-import { Calendar, MapPin, Clock, Phone, Mail, User } from 'lucide-react'
+import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
+import { Button } from '@/components/ui/button'
+import { Calendar, Clock, Mail, MapPin, Phone, User } from 'lucide-react'
+import Link from 'next/link'
 
 const exhibitionInfo = {
   title: "길",
@@ -74,10 +72,21 @@ export default function ExhibitionPage() {
       </nav>
 
       {/* Header */}
-      <section className="section-padding pt-32 pb-12">
-        <div className="container-max">
+      <section 
+        className="section-padding pt-32 pb-12 relative overflow-hidden"
+        style={{
+          backgroundImage: `url('/Images/Artworks/2025/heelang-way-2025-large.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* 배경 오버레이 */}
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
+        
+        <div className="container-max relative z-10">
           <div className="flex items-center mb-8">
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
               <Link href="/">
                 ← 돌아가기
               </Link>
@@ -86,16 +95,18 @@ export default function ExhibitionPage() {
           
           <div className="text-center space-y-8">
             <div className="space-y-4">
-              <h1 className="font-display text-5xl lg:text-6xl text-ink">{exhibitionInfo.title}</h1>
-              <p className="font-english text-xl text-ink-light">{exhibitionInfo.titleEn}</p>
-              <div className="w-16 h-0.5 bg-ink/30 mx-auto"></div>
-              <p className="font-korean text-2xl text-ink-light">{exhibitionInfo.subtitle}</p>
-              <p className="font-korean text-lg text-ink-light">{exhibitionInfo.subtitleChinese}</p>
+              <h1 className="font-display text-5xl lg:text-6xl text-white drop-shadow-lg">{exhibitionInfo.title}</h1>
+              <p className="font-english text-xl text-white/90 drop-shadow-md">{exhibitionInfo.titleEn}</p>
+              <div className="w-16 h-0.5 bg-white/50 mx-auto"></div>
+              <p className="font-korean text-2xl text-white/90 drop-shadow-md">{exhibitionInfo.subtitle}</p>
+              <p className="font-korean text-lg text-white/80 drop-shadow-md">{exhibitionInfo.subtitleChinese}</p>
             </div>
-            <p className="font-body text-lg text-ink-light max-w-2xl mx-auto leading-relaxed">
-              인생의 매 순간이 하나의 길이며, 붓을 들고 종이 위에 획을 그어나가는 것 또한 길을 만들어가는 과정입니다. 
-              희랑 공경순 작가의 서예 철학이 담긴 특별한 개인전입니다.
-            </p>
+            <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto border border-white/10">
+              <p className="font-body text-lg text-white/90 leading-relaxed">
+                인생의 매 순간이 하나의 길이며, 붓을 들고 종이 위에 획을 그어나가는 것 또한 길을 만들어가는 과정입니다. 
+                희랑 공경순 작가의 서예 철학이 담긴 특별한 개인전입니다.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -180,36 +191,47 @@ export default function ExhibitionPage() {
       </section>
 
       {/* Programs */}
-      <section className="section-padding bg-slate-50/50 dark:bg-slate-800/50">
-        <div className="container-max">
+      <section 
+        className="section-padding relative overflow-hidden"
+        style={{
+          backgroundImage: `url('/Images/Artworks/2022/heelang-treasure-6-2022-large.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* 배경 오버레이 */}
+        <div className="absolute inset-0 bg-slate-900/70 dark:bg-black/80"></div>
+        
+        <div className="container-max relative z-10">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-ink mb-4">Special Programs</h2>
-            <div className="w-16 h-0.5 bg-ink/30 mx-auto mb-6"></div>
-            <p className="font-body text-lg text-ink-light max-w-2xl mx-auto">
+            <h2 className="font-display text-4xl text-white mb-4 drop-shadow-lg">Special Programs</h2>
+            <div className="w-16 h-0.5 bg-white/50 mx-auto mb-6"></div>
+            <p className="font-body text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
               전시와 함께 진행되는 특별 프로그램을 통해 더욱 깊이 있는 서예 경험을 만나보세요.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {programs.map((program, index) => (
-              <div key={index} className="bg-background rounded-lg p-8 border border-border/50 space-y-6">
+              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="font-display text-xl text-ink">{program.title}</h3>
-                  <p className="font-body text-ink-light leading-relaxed">{program.description}</p>
+                  <h3 className="font-display text-xl text-white drop-shadow-md">{program.title}</h3>
+                  <p className="font-body text-white/90 leading-relaxed drop-shadow-sm">{program.description}</p>
                 </div>
                 
-                <div className="space-y-3 pt-4 border-t border-border/30">
+                <div className="space-y-3 pt-4 border-t border-white/30">
                   <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-ink-light">일정</span>
-                    <span className="font-body text-sm text-ink">{program.schedule}</span>
+                    <span className="font-body text-sm text-white/80">일정</span>
+                    <span className="font-body text-sm text-white">{program.schedule}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-ink-light">소요시간</span>
-                    <span className="font-body text-sm text-ink">{program.duration}</span>
+                    <span className="font-body text-sm text-white/80">소요시간</span>
+                    <span className="font-body text-sm text-white">{program.duration}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-ink-light">정원</span>
-                    <span className="font-body text-sm text-ink">{program.capacity}</span>
+                    <span className="font-body text-sm text-white/80">정원</span>
+                    <span className="font-body text-sm text-white">{program.capacity}</span>
                   </div>
                 </div>
               </div>
@@ -219,37 +241,48 @@ export default function ExhibitionPage() {
       </section>
 
       {/* Location */}
-      <section className="section-padding">
-        <div className="container-max">
+      <section 
+        className="section-padding relative overflow-hidden"
+        style={{
+          backgroundImage: `url('/Images/Artworks/2023/heelang-breath-2023-large.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* 배경 오버레이 */}
+        <div className="absolute inset-0 bg-slate-800/75 dark:bg-black/85"></div>
+        
+        <div className="container-max relative z-10">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-ink mb-4">Location</h2>
-            <div className="w-16 h-0.5 bg-ink/30 mx-auto mb-6"></div>
-            <p className="font-body text-lg text-ink-light max-w-2xl mx-auto">
+            <h2 className="font-display text-4xl text-white mb-4 drop-shadow-lg">Location</h2>
+            <div className="w-16 h-0.5 bg-white/50 mx-auto mb-6"></div>
+            <p className="font-body text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
               한국 전통 문화의 중심지 인사동에서 만나는 특별한 서예 전시
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="bg-stone-50 dark:bg-slate-800 rounded-lg p-8 space-y-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 space-y-6 border border-white/20">
               <div className="text-center space-y-4">
-                <h3 className="font-display text-2xl text-ink">{exhibitionInfo.venue}</h3>
-                <p className="font-body text-ink-light">{exhibitionInfo.address}</p>
+                <h3 className="font-display text-2xl text-white drop-shadow-md">{exhibitionInfo.venue}</h3>
+                <p className="font-body text-white/90 drop-shadow-sm">{exhibitionInfo.address}</p>
               </div>
               
-              <div className="bg-background rounded-lg h-64 flex items-center justify-center border border-border/30">
+              <div className="bg-black/20 backdrop-blur-sm rounded-lg h-64 flex items-center justify-center border border-white/30">
                 <div className="text-center space-y-2">
-                  <p className="font-body text-ink-light">인사동 한국미술관</p>
-                  <p className="font-body text-sm text-ink-light">지도 보기는 Google Maps에서 확인하세요</p>
+                  <p className="font-body text-white/90">인사동 한국미술관</p>
+                  <p className="font-body text-sm text-white/80">지도 보기는 Google Maps에서 확인하세요</p>
                 </div>
               </div>
               
               <div className="text-center space-y-2">
-                <p className="font-body text-sm text-ink-light">
+                <p className="font-body text-sm text-white/90">
                   <strong>지하철</strong><br />
                   1호선 종각역 3번 출구 도보 5분<br />
                   3호선 안국역 6번 출구 도보 5분
                 </p>
-                <p className="font-body text-sm text-ink-light">
+                <p className="font-body text-sm text-white/90">
                   <strong>버스</strong><br />
                   인사동 정류장 (02-017)
                 </p>

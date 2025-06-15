@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, AnimatePresence, MotionProps } from 'framer-motion'
+import { AnimatePresence, motion, MotionProps } from 'framer-motion'
 import { ReactNode } from 'react'
 
 // 기본 애니메이션 variants
@@ -52,16 +52,11 @@ export const cardVariants = {
   animate: { 
     opacity: 1, 
     y: 0, 
-    scale: 1,
-    transition: { 
-      duration: 0.4, 
-      ease: [0.25, 0.1, 0.25, 1] // 부드러운 이징
-    }
+    scale: 1
   },
   hover: {
     y: -8,
-    scale: 1.02,
-    transition: { duration: 0.2, ease: 'easeOut' }
+    scale: 1.02
   },
   tap: { scale: 0.98 }
 }
@@ -71,11 +66,7 @@ export const imageVariants = {
   loading: { opacity: 0, scale: 1.05 },
   loaded: { 
     opacity: 1, 
-    scale: 1,
-    transition: { 
-      duration: 0.6, 
-      ease: [0.25, 0.1, 0.25, 1] 
-    }
+    scale: 1
   }
 }
 
@@ -89,17 +80,12 @@ export const modalVariants = {
   visible: { 
     opacity: 1, 
     scale: 1,
-    y: 0,
-    transition: { 
-      duration: 0.3, 
-      ease: [0.25, 0.1, 0.25, 1] 
-    }
+    y: 0
   },
   exit: { 
     opacity: 0, 
     scale: 0.8,
-    y: 20,
-    transition: { duration: 0.2 }
+    y: 20
   }
 }
 
@@ -197,7 +183,11 @@ export function AnimatedCard({ children, className, index = 0, ...props }: Anima
       animate="animate"
       whileHover="hover"
       whileTap="tap"
-      transition={{ delay: index * 0.1 }}
+      transition={{ 
+        duration: 0.4, 
+        delay: index * 0.1,
+        ease: "easeOut"
+      }}
       className={className}
       {...props}
     >

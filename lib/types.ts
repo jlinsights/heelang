@@ -58,6 +58,9 @@ export interface LayoutProps {
 // 테마 관련 타입들
 export type Theme = 'light' | 'dark' | 'system'
 
+// 언어 관련 타입들
+export type Locale = 'ko' | 'en' | 'ja' | 'zh'
+
 // 갤러리 상태 타입들
 export interface GalleryState {
   currentPage: number

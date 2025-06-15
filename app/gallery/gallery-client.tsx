@@ -123,17 +123,17 @@ export default function GalleryClient() {
     );
   }
 
-  // 보물 시리즈를 첫 번째 페이지에 순서대로 배치
+  // 문방사우 시리즈를 첫 번째 페이지에 순서대로 배치
   const treasureArtworks = artworks
-    .filter(artwork => artwork.title.includes('보물'))
+    .filter(artwork => artwork.category === 'treasure')
     .sort((a, b) => {
-      // 보물 1, 2, 3, ... 8 순으로 정렬
-      const numA = parseInt(a.title.match(/보물 (\d+)/)?.[1] || '0')
-      const numB = parseInt(b.title.match(/보물 (\d+)/)?.[1] || '0')
+      // treasure-1, treasure-2, ... treasure-8 순으로 정렬 (slug 기준)
+      const numA = parseInt(a.slug.match(/treasure-(\d+)/)?.[1] || '0')
+      const numB = parseInt(b.slug.match(/treasure-(\d+)/)?.[1] || '0')
       return numA - numB
     })
   
-  const otherArtworks = artworks.filter(artwork => !artwork.title.includes('보물'))
+  const otherArtworks = artworks.filter(artwork => artwork.category !== 'treasure')
   
   // 보물 시리즈를 먼저 배치하고 나머지 작품들을 뒤에 배치
   const reorderedArtworks = [...treasureArtworks, ...otherArtworks]

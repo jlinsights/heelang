@@ -1,6 +1,6 @@
 interface LogoProps {
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   showLink?: boolean;
   forceWhite?: boolean;
 }
@@ -15,6 +15,7 @@ export function Logo({
     sm: "h-8",
     md: "h-12",
     lg: "h-16",
+    xl: "h-20",
   };
 
   const logoElement = (

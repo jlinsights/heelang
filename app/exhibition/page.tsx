@@ -1,6 +1,6 @@
+import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
 import { KakaoMap } from '@/components/kakao-map'
-import { Logo } from '@/components/logo'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
+import { PageHeader } from '@/components/section-header'
 import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Mail, MapPin, Phone, User } from 'lucide-react'
 import Link from 'next/link'
@@ -51,74 +51,46 @@ const programs = [
 export default function ExhibitionPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-xl border-b border-border/50 z-50">
-        <div className="container-max">
-          <div className="flex items-center justify-between py-6">
-            <Logo size="md" />
-            <div className="hidden md:flex items-center space-x-8">
-                          <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200">
-              작가 소개
-            </Link>
-            <Link href="/gallery" className="text-ink-light hover:text-ink transition-colors duration-200">
-              작품 갤러리
-            </Link>
-            <Link href="/exhibition" className="text-ink font-medium">
-              전시 정보
-            </Link>
-            <Link href="/contact" className="text-ink-light hover:text-ink transition-colors duration-200">
-              문의하기
-            </Link>
-              <SimpleThemeToggle />
-            </div>
-          </div>
-        </div>
-      </nav>
+      <ArtNavigation />
+      <NavigationSpacer />
 
-      {/* Header */}
-      <section 
-        className="section-padding pt-32 pb-12 relative overflow-hidden"
-        style={{
-          backgroundImage: `url('/Images/Artworks/2025/heelang-way-2025-large.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* 배경 오버레이 */}
-        <div className="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
-        
-        <div className="container-max relative z-10">
-          <div className="flex items-center mb-8">
-            <Button asChild variant="ghost" size="sm" className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
-              <Link href="/">
-                ← 돌아가기
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="text-center space-y-8">
-            <div className="space-y-4">
-              <h1 className="font-display text-5xl lg:text-6xl text-white drop-shadow-lg">{exhibitionInfo.title}</h1>
-              <p className="font-english text-xl text-white/90 drop-shadow-md">{exhibitionInfo.titleEn}</p>
-              <div className="w-16 h-0.5 bg-white/50 mx-auto"></div>
-              <p className="font-korean text-2xl text-white/90 drop-shadow-md">{exhibitionInfo.subtitle}</p>
-              <p className="font-korean text-lg text-white/80 drop-shadow-md">{exhibitionInfo.subtitleChinese}</p>
-            </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto border border-white/10">
-              <p className="font-body text-lg text-white/90 leading-relaxed">
-                인생의 매 순간이 하나의 길이며, 붓을 들고 종이 위에 획을 그어나가는 것 또한 길을 만들어가는 과정입니다. 
-                희랑 공경순 작가의 서예 철학이 담긴 특별한 개인전입니다.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Main Content */}
+      <main className="section-padding">
+        <div className="container-art">
+          {/* Page Header */}
+          <PageHeader
+            breadcrumb={[{ label: "홈", href: "/" }, { label: "전시 정보" }]}
+            title={`${exhibitionInfo.title} (${exhibitionInfo.titleEn})`}
+            subtitle={exhibitionInfo.subtitle}
+            description="인생의 매 순간이 하나의 길이며, 붓을 들고 종이 위에 획을 그어나가는 것 또한 길을 만들어가는 과정입니다."
+            badge="Exhibition"
+            variant="default"
+            size="lg"
+          />
 
-      {/* Exhibition Details */}
-      <section className="section-padding pt-0 pb-16">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto">
+          {/* Exhibition Hero */}
+          <section 
+            className="relative overflow-hidden rounded-lg mb-16"
+            style={{
+              backgroundImage: `url('/Images/Artworks/2025/heelang-way-2025-large.jpg')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              height: '400px'
+            }}
+          >
+            <div className="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
+            <div className="relative z-10 h-full flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <h2 className="font-display text-4xl lg:text-5xl text-white drop-shadow-lg">{exhibitionInfo.title}</h2>
+                <p className="font-english text-xl text-white/90 drop-shadow-md">{exhibitionInfo.titleEn}</p>
+                <p className="font-korean text-lg text-white/80 drop-shadow-md">{exhibitionInfo.subtitleChinese}</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Exhibition Details */}
+          <section className="mb-16">
             <div className="grid md:grid-cols-2 gap-12">
               {/* Date & Venue */}
               <div className="space-y-8">
@@ -190,130 +162,74 @@ export default function ExhibitionPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Programs */}
-      <section 
-        className="section-padding relative overflow-hidden"
-        style={{
-          backgroundImage: `url('/Images/Artworks/2022/heelang-treasure-6-2022-large.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* 배경 오버레이 */}
-        <div className="absolute inset-0 bg-slate-900/70 dark:bg-black/80"></div>
-        
-        <div className="container-max relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-white mb-4 drop-shadow-lg">Special Programs</h2>
-            <div className="w-16 h-0.5 bg-white/50 mx-auto mb-6"></div>
-            <p className="font-body text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
-              전시와 함께 진행되는 특별 프로그램을 통해 더욱 깊이 있는 서예 경험을 만나보세요.
-            </p>
-          </div>
+          {/* Programs */}
+          <section className="mb-16">
+            <h2 className="font-display text-3xl text-ink text-center mb-12">특별 프로그램</h2>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {programs.map((program, index) => (
+                <div key={index} className="bg-paper/50 rounded-lg p-6 border border-border/30 hover:shadow-lg transition-shadow">
+                  <h3 className="font-display text-xl text-ink mb-4">{program.title}</h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="h-4 w-4 text-ink-light" />
+                      <span className="text-ink-light">{program.schedule}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-4 w-4 text-ink-light" />
+                      <span className="text-ink-light">{program.duration}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4 text-ink-light" />
+                      <span className="text-ink-light">정원: {program.capacity}</span>
+                    </div>
+                  </div>
+                  <p className="text-ink-light mt-4 text-sm leading-relaxed">{program.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {programs.map((program, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 space-y-6">
-                <div className="space-y-4">
-                  <h3 className="font-display text-xl text-white drop-shadow-md">{program.title}</h3>
-                  <p className="font-body text-white/90 leading-relaxed drop-shadow-sm">{program.description}</p>
-                </div>
-                
-                <div className="space-y-3 pt-4 border-t border-white/30">
-                  <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-white/80">일정</span>
-                    <span className="font-body text-sm text-white">{program.schedule}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-white/80">소요시간</span>
-                    <span className="font-body text-sm text-white">{program.duration}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-body text-sm text-white/80">정원</span>
-                    <span className="font-body text-sm text-white">{program.capacity}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Location */}
-      <section 
-        className="section-padding relative overflow-hidden"
-        style={{
-          backgroundImage: `url('/Images/Artworks/2023/heelang-breath-2023-large.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* 배경 오버레이 */}
-        <div className="absolute inset-0 bg-slate-800/75 dark:bg-black/85"></div>
-        
-        <div className="container-max relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-white mb-4 drop-shadow-lg">Location</h2>
-            <div className="w-16 h-0.5 bg-white/50 mx-auto mb-6"></div>
-            <p className="font-body text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
-              한국 전통 문화의 중심지 인사동에서 만나는 특별한 서예 전시
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 space-y-6 border border-white/20">
-              <div className="text-center space-y-4">
-                <h3 className="font-display text-2xl text-white drop-shadow-md">{exhibitionInfo.venue}</h3>
-                <p className="font-body text-white/90 drop-shadow-sm">{exhibitionInfo.address}</p>
-              </div>
-              
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border border-white/30">
-                <KakaoMap
-                  latitude={37.5735}
-                  longitude={126.9854}
-                  placeName="인사동 한국미술관"
-                  address="서울특별시 종로구 인사동길 41-1"
-                  className="border-0"
-                />
-              </div>
-              
-              <div className="text-center space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                    <p className="font-body text-sm text-white/90">
-                      <strong className="text-white">지하철</strong><br />
-                      1호선 종각역 3번 출구 도보 5분<br />
-                      3호선 안국역 6번 출구 도보 5분
-                    </p>
-                  </div>
-                  <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                    <p className="font-body text-sm text-white/90">
-                      <strong className="text-white">버스</strong><br />
-                      인사동 정류장 (02-017)<br />
-                      간선버스, 지선버스 이용 가능
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <p className="font-body text-sm text-white/90">
-                    <strong className="text-white">주차 안내</strong><br />
-                    인사동 한국미술관 주차장 이용 가능 (전시 관람객 2시간 무료)
-                  </p>
-                </div>
+          {/* Map */}
+          <section className="mb-16">
+            <h2 className="font-display text-3xl text-ink text-center mb-12">오시는 길</h2>
+            <div className="bg-paper/50 rounded-lg p-6 border border-border/30">
+              <KakaoMap
+                latitude={37.5735}
+                longitude={126.9854}
+                placeName="인사동 한국미술관"
+                address="서울특별시 종로구 인사동길 41-1"
+              />
+              <div className="mt-6 text-center">
+                <p className="text-ink-light mb-2">{exhibitionInfo.address}</p>
+                <p className="text-sm text-ink-light">지하철 3호선 안국역 6번 출구에서 도보 5분</p>
               </div>
             </div>
-          </div>
+          </section>
+
+          {/* Call to Action */}
+          <section className="text-center">
+            <div className="bg-ink/5 rounded-lg p-8 border border-border/30">
+              <h3 className="font-display text-2xl text-ink mb-4">전시 관람 예약</h3>
+              <p className="text-ink-light mb-6">더 나은 관람 경험을 위해 사전 예약을 권장합니다.</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild className="btn-art">
+                  <Link href="/contact">
+                    관람 예약하기
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="border-ink/20 text-ink hover:bg-ink/5">
+                  <Link href="/gallery">
+                    작품 미리보기
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-
-
+      </main>
     </div>
   )
 } 

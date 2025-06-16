@@ -108,6 +108,23 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* 라이트 모드 커스텀 색상 */
+    --ink: 0 0% 15%;
+    --ink-light: 0 0% 40%;
+    --ink-lighter: 0 0% 55%;
+    --ink-dark: 0 0% 5%;
+    --paper: 45 20% 96%;
+    --paper-warm: 45 25% 94%;
+    --paper-cream: 45 30% 92%;
+    --paper-aged: 45 35% 90%;
+    --brush: 0 0% 25%;
+    --brush-light: 0 0% 45%;
+    --brush-dark: 0 0% 10%;
+    --stone: 0 0% 50%;
+    --stone-light: 0 0% 70%;
+    --stone-dark: 0 0% 30%;
+    --gold: 45 100% 50%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -142,6 +159,23 @@ body {
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* 다크 모드 커스텀 색상 */
+    --ink: 0 0% 95%;
+    --ink-light: 0 0% 75%;
+    --ink-lighter: 0 0% 60%;
+    --ink-dark: 0 0% 98%;
+    --paper: 0 0% 8%;
+    --paper-warm: 0 0% 10%;
+    --paper-cream: 0 0% 12%;
+    --paper-aged: 0 0% 14%;
+    --brush: 0 0% 85%;
+    --brush-light: 0 0% 70%;
+    --brush-dark: 0 0% 95%;
+    --stone: 0 0% 50%;
+    --stone-light: 0 0% 40%;
+    --stone-dark: 0 0% 60%;
+    --gold: 45 100% 70%;
   }
 }
 

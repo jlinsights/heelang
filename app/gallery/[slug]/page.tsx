@@ -1,6 +1,7 @@
 "use client";
 
 import { Logo } from "@/components/logo";
+import { GalleryDetailImage } from "@/components/optimized-image";
 import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
 import { Button } from "@/components/ui/button";
 import type { Artwork } from "@/lib/types";
@@ -205,13 +206,14 @@ export default function ArtworkPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="flex items-center justify-center">
               <div className="relative max-w-4xl w-full bg-white dark:bg-slate-800 shadow-2xl rounded-lg overflow-hidden">
-                {artwork.imageUrl && artwork.imageUrl.trim() !== "" ? (
-                  <img
-                    src={artwork.imageUrl}
-                    alt={`${artwork.title} - 공경순 작가의 ${artwork.year}년 서예 작품`}
-                    className="w-full h-auto object-contain max-h-[80vh]"
-                    loading="eager"
-                    decoding="async"
+                {artwork.slug ? (
+                  <GalleryDetailImage
+                    artwork={{
+                      slug: artwork.slug,
+                      title: artwork.title,
+                      year: artwork.year,
+                    }}
+                    className="w-full h-auto max-h-[80vh]"
                   />
                 ) : (
                   <div className="w-full h-96 flex items-center justify-center text-ink-light">
@@ -258,6 +260,81 @@ export default function ArtworkPage() {
                     <p className="text-ink-light italic leading-relaxed">
                       "{artwork.artistNote}"
                     </p>
+                  </div>
+                )}
+
+                {/* 추가 작품 정보 */}
+                {artwork.tags && artwork.tags.length > 0 && (
+                  <div className="bg-stone-50 dark:bg-slate-800 p-6 rounded-lg">
+                    <h3 className="font-display text-lg text-ink mb-3">태그</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {artwork.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-ink/10 text-ink text-sm rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 시리즈 정보 */}
+                {artwork.series && (
+                  <div className="bg-stone-50 dark:bg-slate-800 p-6 rounded-lg">
+                    <h3 className="font-display text-lg text-ink mb-3">
+                      시리즈
+                    </h3>
+                    <p className="text-ink-light leading-relaxed">
+                      {artwork.series}
+                    </p>
+                  </div>
+                )}
+
+                {/* 기법 및 영감 */}
+                {(artwork.technique || artwork.inspiration) && (
+                  <div className="bg-stone-50 dark:bg-slate-800 p-6 rounded-lg space-y-4">
+                    {artwork.technique && (
+                      <div>
+                        <h4 className="font-medium text-ink mb-2">기법</h4>
+                        <p className="text-ink-light text-sm leading-relaxed">
+                          {artwork.technique}
+                        </p>
+                      </div>
+                    )}
+                    {artwork.inspiration && (
+                      <div>
+                        <h4 className="font-medium text-ink mb-2">영감</h4>
+                        <p className="text-ink-light text-sm leading-relaxed">
+                          {artwork.inspiration}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* 상징성 및 문화적 맥락 */}
+                {(artwork.symbolism || artwork.culturalContext) && (
+                  <div className="bg-stone-50 dark:bg-slate-800 p-6 rounded-lg space-y-4">
+                    {artwork.symbolism && (
+                      <div>
+                        <h4 className="font-medium text-ink mb-2">상징성</h4>
+                        <p className="text-ink-light text-sm leading-relaxed">
+                          {artwork.symbolism}
+                        </p>
+                      </div>
+                    )}
+                    {artwork.culturalContext && (
+                      <div>
+                        <h4 className="font-medium text-ink mb-2">
+                          문화적 맥락
+                        </h4>
+                        <p className="text-ink-light text-sm leading-relaxed">
+                          {artwork.culturalContext}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -333,6 +410,95 @@ export default function ArtworkPage() {
                             {artwork.category}
                           </p>
                         </div>
+                      </div>
+                    )}
+
+                    {artwork.price && (
+                      <div className="flex items-start space-x-3">
+                        <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+                          <div className="h-2 w-2 bg-ink-light rounded-full"></div>
+                        </div>
+                        <div>
+                          <p className="font-medium text-ink text-sm">가격</p>
+                          <p className="text-ink-light text-sm">
+                            {typeof artwork.price === "number"
+                              ? `₩${artwork.price.toLocaleString()}`
+                              : artwork.price}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {artwork.available !== undefined && (
+                      <div className="flex items-start space-x-3">
+                        <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+                          <div
+                            className={`h-2 w-2 rounded-full ${
+                              artwork.available ? "bg-green-500" : "bg-red-500"
+                            }`}
+                          ></div>
+                        </div>
+                        <div>
+                          <p className="font-medium text-ink text-sm">
+                            판매 상태
+                          </p>
+                          <p className="text-ink-light text-sm">
+                            {artwork.available ? "판매 가능" : "판매 완료"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {artwork.exhibition && (
+                      <div className="flex items-start space-x-3">
+                        <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+                          <div className="h-2 w-2 bg-ink-light rounded-full"></div>
+                        </div>
+                        <div>
+                          <p className="font-medium text-ink text-sm">전시</p>
+                          <p className="text-ink-light text-sm">
+                            {artwork.exhibition}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {(artwork.createdAt || artwork.updatedAt) && (
+                      <div className="pt-4 border-t border-border">
+                        {artwork.createdAt && (
+                          <div className="flex items-start space-x-3 mb-2">
+                            <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+                              <div className="h-2 w-2 bg-ink-light rounded-full"></div>
+                            </div>
+                            <div>
+                              <p className="font-medium text-ink text-sm">
+                                등록일
+                              </p>
+                              <p className="text-ink-light text-sm">
+                                {new Date(artwork.createdAt).toLocaleDateString(
+                                  "ko-KR"
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        {artwork.updatedAt && (
+                          <div className="flex items-start space-x-3">
+                            <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+                              <div className="h-2 w-2 bg-ink-light rounded-full"></div>
+                            </div>
+                            <div>
+                              <p className="font-medium text-ink text-sm">
+                                수정일
+                              </p>
+                              <p className="text-ink-light text-sm">
+                                {new Date(artwork.updatedAt).toLocaleDateString(
+                                  "ko-KR"
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

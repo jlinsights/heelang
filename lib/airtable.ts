@@ -1,4 +1,4 @@
-import { getArtistImageUrl, getArtworkImageUrl } from "./image-utils";
+import { getArtworkImageUrl } from "./image-utils";
 import type { Artist, Artwork } from "./types";
 
 // Airtable 설정
@@ -59,9 +59,11 @@ const localCache = new LocalStorageCache();
  */
 async function createAirtableBase() {
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-    console.warn(
-      "Airtable credentials not found. Using local data as fallback."
-    );
+    console.error("❌ Airtable 환경 변수가 설정되지 않았습니다.");
+    console.error("다음 환경 변수를 .env.local 파일에 설정해주세요:");
+    console.error("AIRTABLE_API_KEY=your_api_key");
+    console.error("AIRTABLE_BASE_ID=your_base_id");
+    console.warn("🔄 Fallback 데이터를 사용합니다.");
     return null;
   }
 
@@ -76,7 +78,7 @@ async function createAirtableBase() {
       // Airtable 인스턴스 생성
       const airtable = new Airtable({
         apiKey: AIRTABLE_API_KEY,
-        requestTimeout: 3000, // 3초로 단축
+        requestTimeout: 5000, // 5초로 증가
         // 연결 안정성을 위한 추가 설정
         endpointUrl: "https://api.airtable.com",
       });
@@ -84,40 +86,94 @@ async function createAirtableBase() {
       const base = airtable.base(AIRTABLE_BASE_ID);
 
       // 연결 테스트 (간단한 요청으로 확인)
-      if (attempt === 1) {
-        console.log(`Airtable connection attempt ${attempt}/${maxRetries}`);
-      }
+      console.log(`🔄 Airtable 연결 시도 ${attempt}/${maxRetries}`);
 
       return base;
     } catch (error) {
       lastError = error as Error;
       console.warn(
-        `Airtable connection attempt ${attempt}/${maxRetries} failed:`,
+        `❌ Airtable 연결 시도 ${attempt}/${maxRetries} 실패:`,
         error
       );
 
       if (attempt < maxRetries) {
         // 재시도 전 잠시 대기 (exponential backoff)
         const delay = Math.min(1000 * Math.pow(2, attempt - 1), 3000);
+        console.log(`⏳ ${delay}ms 후 재시도...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
 
-  console.error("Failed to initialize Airtable after all retries:", lastError);
+  console.error("❌ 모든 재시도 후 Airtable 연결 실패:", lastError);
+  console.warn("🔄 Fallback 데이터를 사용합니다.");
   return null;
 }
 
 /**
- * 슬러그 생성 유틸리티
+ * 헬퍼 함수들
  */
-function generateSlug(title: string): string {
-  return title
+
+// 필드 값을 우선순위에 따라 가져오는 함수
+function getFieldValue(fields: any, fieldNames: string[]): any {
+  for (const fieldName of fieldNames) {
+    if (
+      fields[fieldName] !== undefined &&
+      fields[fieldName] !== null &&
+      fields[fieldName] !== ""
+    ) {
+      return fields[fieldName];
+    }
+  }
+  return null;
+}
+
+// 슬러그 생성 함수
+function createSlug(title: string, year: number | string): string {
+  const cleanTitle = title
     .toLowerCase()
-    .replace(/[^a-z0-9가-힣\s-]/g, "")
+    .replace(/[^\w\s가-힣]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
     .trim();
+  return `heelang-${cleanTitle}-${year}`;
+}
+
+// 종횡비 계산 함수
+function calculateAspectRatio(dimensions: string): string {
+  if (!dimensions) return "1/1";
+
+  const match = dimensions.match(/(\d+)\s*[x×]\s*(\d+)/i);
+  if (match) {
+    const width = parseInt(match[1]);
+    const height = parseInt(match[2]);
+
+    // 간단한 비율로 변환
+    const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+    const divisor = gcd(width, height);
+    return `${width / divisor}/${height / divisor}`;
+  }
+
+  return "1/1";
+}
+
+// 태그 파싱 함수
+function parseTagsField(tagValue: any): string[] {
+  if (!tagValue) return [];
+
+  if (Array.isArray(tagValue)) {
+    return tagValue
+      .map((tag) => tag.toString().trim())
+      .filter((tag) => tag.length > 0);
+  }
+
+  if (typeof tagValue === "string") {
+    return tagValue
+      .split(/[,;|]/)
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
+  }
+
+  return [];
 }
 
 function getCachedData(key: string): any | null {
@@ -169,16 +225,18 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
   // 캐시된 데이터 확인
   const cachedData = getCachedData(cacheKey);
   if (cachedData) {
+    console.log(`📦 Using cached artworks data (${cachedData.length} items)`);
     return cachedData;
   }
 
   try {
     const base = await createAirtableBase();
     if (!base) {
-      console.warn("Airtable base not available, will use fallback data");
+      console.warn("🚫 Airtable base not available, will use fallback data");
       return null;
     }
 
+    console.log("📡 Fetching artworks from Airtable...");
     const records = await retryOperation(async () => {
       return await base("Artworks")
         .select({
@@ -188,354 +246,81 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
         .all();
     });
 
+    console.log(`📊 Retrieved ${records.length} records from Airtable`);
     const artworks: Artwork[] = [];
 
-    records.forEach((record: any) => {
+    records.forEach((record: any, index: number) => {
       const fields = record.fields;
-      const slug = fields.slug || `artwork-${record.id}`;
-      const year = fields.year || new Date().getFullYear();
 
-      // 문방사우 (보물 시리즈) 특별 처리
-      if (slug === "heelang-treasures-2022" || fields.title === "문방사우") {
-        // 8개의 개별 보물 작품으로 분리
-        for (let i = 1; i <= 8; i++) {
-          const treasureSlug = `heelang-treasure-${i}-2022`;
-          const treasureArtwork: Artwork = {
-            id: `${record.id}-treasure-${i}`,
-            slug: treasureSlug,
-            title: `보물 ${i} (Treasure ${i})`,
-            year: 2022,
-            medium:
-              fields.medium ||
-              fields.Medium ||
-              "화선지에 먹 (Ink on Mulberry Paper)",
-            dimensions: fields.dimensions || fields.Dimensions || "70 x 70 cm",
-            aspectRatio: "1/1",
-            description: `보물 시리즈의 ${
-              i === 1
-                ? "첫"
-                : i === 2
-                ? "두"
-                : i === 3
-                ? "세"
-                : i === 4
-                ? "네"
-                : i === 5
-                ? "다섯"
-                : i === 6
-                ? "여섯"
-                : i === 7
-                ? "일곱"
-                : "여덟"
-            } 번째 작품입니다.`,
-            imageUrl: getArtworkImageUrl(treasureSlug, 2022, "original"),
-            imageUrlQuery: `treasure ${i} calligraphy`,
-            artistNote:
-              fields.description ||
-              fields.Description ||
-              fields.artistNote ||
-              fields.ArtistNote ||
-              "문방사우 시리즈의 일부입니다.",
-            featured:
-              fields.featured === true || fields.Featured === true || i === 3, // Airtable featured 필드 우선, 기본값은 보물 3
-            category: "treasure",
-            available: true,
-          };
-          artworks.push(treasureArtwork);
-        }
+      // 디버깅을 위해 첫 번째 레코드의 필드 구조 출력
+      if (index === 0) {
+        console.log("🔍 Sample record fields:", Object.keys(fields));
       }
-      // 새로 추가된 작품들 특별 처리
-      else if (
-        slug === "heelang-dongjoo1-2023" ||
-        fields.title === "윤동주 시인 - 눈 감고 간다"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-dongjoo1-2023",
-          title: "윤동주 시인 - 눈 감고 간다",
-          year: 2023,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "50 x 70 cm",
-          aspectRatio: "5/7",
-          description:
-            "윤동주 시인의 시 '눈 감고 간다'를 서예로 표현한 작품입니다.",
-          imageUrl: getArtworkImageUrl(
-            "heelang-dongjoo1-2023",
-            2023,
-            "original"
-          ),
-          imageUrlQuery: "윤동주 시인 눈 감고 간다 서예",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "윤동주 시인의 시를 서예로 표현했습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "poetry",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (
-        slug === "heelang-dongjoo2-2023" ||
-        fields.title === "윤동주 시인 - 삶과 죽음"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-dongjoo2-2023",
-          title: "윤동주 시인 - 삶과 죽음",
-          year: 2023,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "50 x 70 cm",
-          aspectRatio: "5/7",
-          description:
-            "윤동주 시인의 삶과 죽음에 대한 철학을 서예로 표현한 작품입니다.",
-          imageUrl: getArtworkImageUrl(
-            "heelang-dongjoo2-2023",
-            2023,
-            "original"
-          ),
-          imageUrlQuery: "윤동주 시인 삶과 죽음 서예",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "윤동주 시인의 삶과 죽음에 대한 철학을 담았습니다.",
-          featured:
-            fields.featured === true || fields.Featured === true || true, // Airtable featured 필드 우선, 기본값은 true
-          category: "poetry",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (
-        slug === "heelang-grandpa-2022" ||
-        fields.title === "할아버지 손"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-grandpa-2022",
-          title: "할아버지 손",
-          year: 2022,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "60 x 80 cm",
-          aspectRatio: "3/4",
-          description:
-            "할아버지의 손을 통해 세월의 흔적과 삶의 지혜를 표현한 작품입니다.",
-          imageUrl: getArtworkImageUrl(
-            "heelang-grandpa-2022",
-            2022,
-            "original"
-          ),
-          imageUrlQuery: "할아버지 손 서예",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "할아버지의 손에 담긴 세월과 사랑을 표현했습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "family",
-          available: true,
-        };
-        artworks.push(artwork);
+
+      // 실제 Airtable 필드명 사용
+      const title = fields.title;
+      const year = fields.year;
+
+      if (!title) {
+        console.warn(`⚠️ Skipping record ${index + 1}: missing title`);
+        return;
       }
-      // 2025년 새로 추가된 작품들 특별 처리
-      else if (
-        slug === "heelang-writing-2025" ||
-        fields.title === "書 (글 서)"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-writing-2025",
-          title: "書 (글 서)",
-          year: 2025,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "70 x 100 cm",
-          aspectRatio: "7/10",
-          description:
-            "글을 쓴다는 것의 의미와 서예의 본질을 탐구한 작품입니다.",
-          imageUrl: getArtworkImageUrl(
-            "heelang-writing-2025",
-            2025,
-            "original"
-          ),
-          imageUrlQuery: "書 글 서 서예 calligraphy",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "글을 쓰는 행위 자체에 대한 성찰을 담았습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "philosophy",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (
-        slug === "heelang-cloud-2025" ||
-        fields.title === "雲 (구름 운)"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-cloud-2025",
-          title: "雲 (구름 운)",
-          year: 2025,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "80 x 120 cm",
-          aspectRatio: "2/3",
-          description:
-            "구름처럼 자유롭고 변화무쌍한 삶의 모습을 표현한 작품입니다.",
-          imageUrl: getArtworkImageUrl("heelang-cloud-2025", 2025, "original"),
-          imageUrlQuery: "雲 구름 운 서예 자연",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "구름의 자유로움과 변화하는 아름다움을 담았습니다.",
-          featured:
-            fields.featured === true || fields.Featured === true || true, // Airtable featured 필드 우선, 기본값은 true
-          category: "nature",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (
-        slug === "heelang-good-day-2025" ||
-        fields.title === "日日是好日 (일일시호일)"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-good-day-2025",
-          title: "日日是好日 (일일시호일)",
-          year: 2025,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "50 x 70 cm",
-          aspectRatio: "5/7",
-          description:
-            "매일매일이 좋은 날이라는 선불교의 가르침을 담은 작품입니다.",
-          imageUrl: getArtworkImageUrl(
-            "heelang-good-day-2025",
-            2025,
-            "original"
-          ),
-          imageUrlQuery: "日日是好日 일일시호일 선불교 매일 좋은날",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "매일을 감사하며 살아가는 마음을 표현했습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "zen",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (slug === "heelang-fly-2025" || fields.title === "飛 (날 비)") {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-fly-2025",
-          title: "飛 (날 비)",
-          year: 2025,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "60 x 90 cm",
-          aspectRatio: "2/3",
-          description:
-            "자유롭게 날아오르는 꿈과 희망을 표현한 역동적인 작품입니다.",
-          imageUrl: getArtworkImageUrl("heelang-fly-2025", 2025, "original"),
-          imageUrlQuery: "飛 날 비 자유 꿈 희망 서예",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "제약 없이 자유롭게 날아오르는 정신을 담았습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "freedom",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else if (
-        slug === "heelang-firmly-2025" ||
-        fields.title === "담담하게 그러나 단단하게"
-      ) {
-        const artwork: Artwork = {
-          id: record.id,
-          slug: "heelang-firmly-2025",
-          title: "담담하게 그러나 단단하게",
-          year: 2025,
-          medium:
-            fields.medium ||
-            fields.Medium ||
-            "화선지에 먹 (Ink on Mulberry Paper)",
-          dimensions: fields.dimensions || fields.Dimensions || "70 x 100 cm",
-          aspectRatio: "7/10",
-          description:
-            "인생을 대하는 올바른 자세에 대한 철학적 성찰을 담은 작품입니다.",
-          imageUrl: getArtworkImageUrl("heelang-firmly-2025", 2025, "original"),
-          imageUrlQuery: "담담하게 단단하게 인생 철학 서예",
-          artistNote:
-            fields.description ||
-            fields.Description ||
-            fields.artistNote ||
-            fields.ArtistNote ||
-            "평온하면서도 굳건한 마음가짐을 표현했습니다.",
-          featured: fields.featured === true || fields.Featured === true,
-          category: "philosophy",
-          available: true,
-        };
-        artworks.push(artwork);
-      } else {
-        // 일반 작품 처리
-        const artwork: Artwork = {
-          id: record.id,
-          slug: slug,
-          title: fields.title || fields.Title || "제목 없음",
-          year: year,
-          medium: fields.medium || fields.Medium || "화선지에 먹",
-          dimensions: fields.dimensions || fields.Dimensions || "",
-          aspectRatio: fields.aspectRatio || fields.AspectRatio || "1/1",
-          description: fields.description || fields.Description || "",
-          // 로컬 이미지 URL 사용
-          imageUrl: getArtworkImageUrl(slug, year, "original"),
-          imageUrlQuery: fields.imageUrlQuery || "",
-          artistNote: fields.artistNote || fields.ArtistNote || "",
-          featured: fields.featured === true || fields.Featured === true,
-          category: fields.category || fields.Category || "recent",
-          available: fields.available !== false && fields.Available !== false,
-        };
-        artworks.push(artwork);
+
+      // 작품 데이터 구성 (실제 Airtable 필드명 사용)
+      const artwork: Artwork = {
+        id: record.id,
+        slug: fields.slug || createSlug(title, year),
+        title,
+        year: parseInt(year?.toString() || "2024"),
+        medium: fields.medium || "화선지에 먹",
+        dimensions: fields.dimensions || "70 x 140 cm",
+        aspectRatio:
+          fields.aspectRatio ||
+          calculateAspectRatio(fields.dimensions || "70 x 140 cm"),
+        description: fields.description || "",
+        imageUrl: getArtworkImageUrl(
+          fields.slug || createSlug(title, year),
+          parseInt(year?.toString() || "2024"),
+          "medium"
+        ),
+        imageUrlQuery: `${title} calligraphy art`,
+        artistNote: fields.artistNote || "",
+        featured: fields.featured === true,
+        category: fields.category || "calligraphy",
+        available: fields.available !== false,
+        tags: parseTagsField(fields.tags),
+        series: fields.series,
+        technique: fields.technique,
+        inspiration: fields.inspiration,
+        symbolism: fields.symbolism,
+        culturalContext: fields.culturalContext,
+        price: parseFloat(fields.price?.toString() || "0") || undefined,
+        exhibition: fields.exhibition,
+        createdAt: fields.createdTime || new Date().toISOString(),
+        updatedAt: fields.lastModifiedTime || new Date().toISOString(),
+      };
+
+      artworks.push(artwork);
+
+      if (index < 3) {
+        console.log(
+          `📝 Processed artwork ${index + 1}: "${artwork.title}" (${
+            artwork.year
+          })`
+        );
       }
     });
 
+    console.log(
+      `✅ Successfully processed ${artworks.length} artworks from Airtable`
+    );
+
+    // 캐시에 저장
     setCachedData(cacheKey, artworks);
+
     return artworks;
   } catch (error) {
-    console.warn(
-      "Error fetching from Airtable, will use fallback data:",
-      error
-    );
+    console.error("❌ Error in fetchArtworksFromAirtable:", error);
     return null;
   }
 }
@@ -549,17 +334,18 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
   // 캐시된 데이터 확인
   const cachedData = getCachedData(cacheKey);
   if (cachedData) {
+    console.log("📦 Using cached artist data");
     return cachedData;
   }
 
   try {
     const base = await createAirtableBase();
     if (!base) {
-      console.warn("Airtable base not available, will use fallback data");
+      console.warn("🚫 Airtable base not available for artist data");
       return null;
     }
 
-    console.log("Fetching artist from Airtable...");
+    console.log("📡 Fetching artist from Airtable...");
 
     const records = await base("Artists")
       .select({
@@ -568,50 +354,114 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       .all();
 
     if (records.length === 0) {
-      throw new Error("No artist data found");
+      console.warn("⚠️ No artist data found in Airtable");
+      return null;
     }
 
     const fields = records[0].fields as any;
-    const artist: Artist = {
-      name: fields.name || fields.Name || "",
-      bio: fields.bio || fields.Bio || "",
-      statement: fields.statement || fields.Statement || "",
-      profileImageUrl: getArtistImageUrl("공경순 작가 프로필.png"),
-      birthYear: fields.birthYear || fields.BirthYear || undefined,
-      education: (fields.education || fields.Education || "")
-        .toString()
-        .split("\n")
-        .filter((item: string) => item.trim().length > 0),
-      exhibitions: (fields.exhibitions || fields.Exhibitions || "")
-        .toString()
-        .split("\n")
-        .filter((item: string) => item.trim().length > 0),
-      awards: (fields.awards || fields.Awards || "")
-        .toString()
-        .split("\n")
-        .filter((item: string) => item.trim().length > 0),
-      collections: (fields.collections || fields.Collections || "")
-        .toString()
-        .split("\n")
-        .filter((item: string) => item.trim().length > 0),
-      website: fields.website || fields.Website || undefined,
-      socialLinks: {
-        instagram: fields.instagram || fields.Instagram || undefined,
-        facebook: fields.facebook || fields.Facebook || undefined,
-        twitter: fields.twitter || fields.Twitter || undefined,
-        website: fields.website || fields.Website || undefined,
-      },
+
+    // 작가 정보를 우선순위에 따라 가져오는 헬퍼 함수들
+    const getName = () => {
+      return (
+        fields.name ||
+        fields.Name ||
+        fields.작가명 ||
+        fields["작가 이름"] ||
+        "희랑 공경순"
+      );
     };
 
+    const getBio = () => {
+      return (
+        fields.bio ||
+        fields.Bio ||
+        fields.biography ||
+        fields.Biography ||
+        fields.소개 ||
+        fields["작가 소개"] ||
+        ""
+      );
+    };
+
+    const getEmail = () => {
+      return fields.email || fields.Email || fields.이메일 || "";
+    };
+
+    const getPhone = () => {
+      return (
+        fields.phone ||
+        fields.Phone ||
+        fields.전화번호 ||
+        fields["연락처"] ||
+        ""
+      );
+    };
+
+    const artist: Artist = {
+      id: records[0].id,
+      name: getName(),
+      bio: getBio(),
+      email: getEmail(),
+      phone: getPhone(),
+      socialLinks: {
+        instagram: fields.instagram || fields.Instagram || "",
+        facebook: fields.facebook || fields.Facebook || "",
+        website: fields.website || fields.Website || "",
+        youtube: fields.youtube || fields.YouTube || "",
+        linkedin: fields.linkedin || fields.LinkedIn || "",
+      },
+      birthPlace: fields.birthPlace || fields.BirthPlace || fields.출생지 || "",
+      currentLocation:
+        fields.currentLocation || fields.CurrentLocation || fields.거주지 || "",
+      specialties: parseTagsField(
+        fields.specialties || fields.Specialties || fields.전문분야
+      ),
+      influences: parseTagsField(
+        fields.influences || fields.Influences || fields.영향
+      ),
+      teachingExperience: parseTagsField(
+        fields.teachingExperience ||
+          fields.TeachingExperience ||
+          fields.교육경력
+      ),
+      publications: parseTagsField(
+        fields.publications || fields.Publications || fields.출판물
+      ),
+      memberships: parseTagsField(
+        fields.memberships || fields.Memberships || fields.소속단체
+      ),
+      philosophy: fields.philosophy || fields.Philosophy || fields.철학 || "",
+      techniques: parseTagsField(
+        fields.techniques || fields.Techniques || fields.기법
+      ),
+      materials: parseTagsField(
+        fields.materials || fields.Materials || fields.재료
+      ),
+      awards: parseTagsField(fields.awards || fields.Awards || fields.수상경력),
+      exhibitions: parseTagsField(
+        fields.exhibitions || fields.Exhibitions || fields.전시경력
+      ),
+      collections: parseTagsField(
+        fields.collections || fields.Collections || fields.소장처
+      ),
+    };
+
+    console.log("✅ Successfully fetched artist data from Airtable");
+
+    // 캐시에 저장
     setCachedData(cacheKey, artist);
 
-    console.log("Successfully fetched artist from Airtable");
     return artist;
   } catch (error) {
-    console.warn(
-      "Error fetching artist from Airtable, will use fallback data:",
-      error
-    );
+    console.error("❌ Error fetching artist from Airtable:", error);
+
+    // 권한 오류인 경우 특별 처리
+    if (error instanceof Error && error.message.includes("not authorized")) {
+      console.warn(
+        "🔒 No permission to access Artists table, will use fallback data"
+      );
+    }
+
     return null;
   }
 }

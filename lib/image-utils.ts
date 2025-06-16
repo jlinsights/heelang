@@ -1,5 +1,8 @@
 import { IMAGE_CONFIG } from "./constants";
 
+// 이미지 크기 타입 정의
+export type ImageSize = "thumb" | "medium" | "large" | "original";
+
 // 이미지 URL 생성 함수
 export function generateImageUrl(
   src: string,
@@ -67,17 +70,95 @@ export function generateAltText(
 }
 
 /**
- * 작품 slug와 연도를 기반으로 로컬 이미지 URL을 생성합니다.
+ * 작품 slug와 연도를 기반으로 최적화된 이미지 URL을 생성합니다.
+ *
+ * @param slug 작품 슬러그
+ * @param year 작품 연도
+ * @param size 이미지 크기 (thumb, medium, large, original)
+ * @returns 최적화된 이미지 URL
  */
 export function getArtworkImageUrl(
   slug: string,
   year: string | number,
-  size: "thumb" | "medium" | "large" | "original" = "original"
+  size: ImageSize = "medium"
 ): string {
   const yearStr = year.toString();
 
-  // 실제 파일은 크기 접미사 없이 저장되어 있음
-  return `/Images/Artworks/${yearStr}/${slug}.jpg`;
+  if (size === "original") {
+    // 원본 이미지 (크기 접미사 없음)
+    return `/Images/Artworks/${yearStr}/${slug}.jpg`;
+  }
+
+  // 최적화된 이미지 (크기 접미사 포함)
+  return `/Images/Artworks/${yearStr}/${slug}-${size}.jpg`;
+}
+
+/**
+ * 반응형 이미지를 위한 srcSet 생성
+ *
+ * @param slug 작품 슬러그
+ * @param year 작품 연도
+ * @returns srcSet 문자열
+ */
+export function getArtworkImageSrcSet(
+  slug: string,
+  year: string | number
+): string {
+  const thumbUrl = getArtworkImageUrl(slug, year, "thumb");
+  const mediumUrl = getArtworkImageUrl(slug, year, "medium");
+  const largeUrl = getArtworkImageUrl(slug, year, "large");
+
+  return `${thumbUrl} 400w, ${mediumUrl} 800w, ${largeUrl} 1200w`;
+}
+
+/**
+ * 용도에 따른 최적 이미지 크기 반환
+ *
+ * @param usage 사용 용도
+ * @returns 권장 이미지 크기
+ */
+export function getOptimalImageSize(
+  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail"
+): ImageSize {
+  switch (usage) {
+    case "gallery-grid":
+      return "medium";
+    case "gallery-detail":
+      return "large";
+    case "featured":
+      return "large";
+    case "hero":
+      return "large";
+    case "thumbnail":
+      return "thumb";
+    default:
+      return "medium";
+  }
+}
+
+/**
+ * 반응형 이미지 sizes 속성 생성 (용도별)
+ *
+ * @param usage 사용 용도
+ * @returns sizes 속성 문자열
+ */
+export function getResponsiveImageSizes(
+  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail"
+): string {
+  switch (usage) {
+    case "gallery-grid":
+      return "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
+    case "gallery-detail":
+      return "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw";
+    case "featured":
+      return "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw";
+    case "hero":
+      return "100vw";
+    case "thumbnail":
+      return "(max-width: 640px) 25vw, 15vw";
+    default:
+      return "(max-width: 768px) 50vw, 33vw";
+  }
 }
 
 /**
@@ -112,12 +193,7 @@ export async function getAvailableImageUrl(
   slug: string,
   year: string | number
 ): Promise<string> {
-  const sizes: Array<"original" | "large" | "medium" | "thumb"> = [
-    "original",
-    "large",
-    "medium",
-    "thumb",
-  ];
+  const sizes: ImageSize[] = ["large", "medium", "thumb", "original"];
 
   for (const size of sizes) {
     const url = getArtworkImageUrl(slug, year, size);
@@ -129,4 +205,37 @@ export async function getAvailableImageUrl(
 
   // 모든 이미지가 없으면 기본 medium 크기 반환
   return getArtworkImageUrl(slug, year, "medium");
+}
+
+/**
+ * 작품 이미지 메타데이터 반환
+ *
+ * @param slug 작품 슬러그
+ * @param year 작품 연도
+ * @param usage 사용 용도
+ * @returns 이미지 메타데이터 객체
+ */
+export function getArtworkImageMeta(
+  slug: string,
+  year: string | number,
+  usage:
+    | "gallery-grid"
+    | "gallery-detail"
+    | "featured"
+    | "hero"
+    | "thumbnail" = "gallery-grid"
+) {
+  const size = getOptimalImageSize(usage);
+  const src = getArtworkImageUrl(slug, year, size);
+  const srcSet = getArtworkImageSrcSet(slug, year);
+  const sizes = getResponsiveImageSizes(usage);
+
+  return {
+    src,
+    srcSet,
+    sizes,
+    loading:
+      usage === "hero" || usage === "featured" ? "eager" : ("lazy" as const),
+    priority: usage === "hero" || usage === "featured",
+  };
 }

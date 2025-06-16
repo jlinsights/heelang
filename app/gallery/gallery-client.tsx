@@ -1,154 +1,250 @@
 'use client'
 
-import { Logo } from '@/components/logo'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
+import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
+import { ArtworkCardSkeleton, ArtworkGrid } from '@/components/artwork-card'
+import { PageHeader } from '@/components/section-header'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import type { Artwork } from '@/lib/types'
-import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { ChevronLeft, ChevronRight, Filter, Grid, List, Tag, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-const ARTWORKS_PER_PAGE = 8
+const ARTWORKS_PER_PAGE = 12
+
+// 카테고리 필터 옵션
+const categoryOptions = [
+  { value: 'all', label: '전체', count: 0 },
+  { value: 'treasure', label: '문방사우', count: 0 },
+  { value: 'calligraphy', label: '서예', count: 0 },
+  { value: 'painting', label: '회화', count: 0 },
+  { value: 'mixed', label: '혼합매체', count: 0 }
+]
+
+// 정렬 옵션
+const sortOptions = [
+  { value: 'default', label: '기본 순서' },
+  { value: 'title', label: '제목순' },
+  { value: 'year', label: '연도순' },
+  { value: 'category', label: '카테고리순' },
+  { value: 'tags', label: '태그순' }
+]
 
 // 로딩 컴포넌트
 function GalleryLoading() {
   return (
     <div className="min-h-screen bg-background">
-      <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-xl border-b border-border/50 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex items-center justify-between py-4">
-            <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="flex space-x-4">
-              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            </div>
+      <ArtNavigation />
+      <NavigationSpacer />
+      
+      <main className="section-padding">
+        <div className="container-art">
+          {/* 헤더 스켈레톤 */}
+          <div className="space-y-6 mb-12">
+            <div className="h-4 w-24 bg-stone-light animate-pulse rounded" />
+            <div className="h-12 w-64 bg-stone-light animate-pulse rounded" />
+            <div className="h-6 w-96 bg-stone-light animate-pulse rounded" />
           </div>
-        </div>
-      </nav>
 
-      <main className="pt-16">
-        <div className="bg-stone-50 dark:bg-slate-900 border-b border-border/20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
-            <div className="space-y-4">
-              <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-12 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            </div>
+          {/* 필터 스켈레톤 */}
+          <div className="flex flex-wrap gap-4 mb-8">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-10 w-20 bg-stone-light animate-pulse rounded-lg" />
+            ))}
           </div>
-        </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
+          {/* 그리드 스켈레톤 */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="space-y-3">
-                <div className="aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 animate-pulse"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 animate-pulse"></div>
-                </div>
-              </div>
+            {Array.from({ length: 12 }).map((_, i) => (
+              <ArtworkCardSkeleton key={i} />
             ))}
           </div>
         </div>
       </main>
     </div>
-  );
+  )
 }
 
 export default function GalleryClient() {
   const [currentPage, setCurrentPage] = useState(1)
   const [artworks, setArtworks] = useState<Artwork[]>([])
+  const [filteredArtworks, setFilteredArtworks] = useState<Artwork[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [availableTags, setAvailableTags] = useState<string[]>([])
+  const [sortBy, setSortBy] = useState('default')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   useEffect(() => {
     async function loadArtworks() {
       try {
-        // 즉시 fallback 데이터 로드
-        const { fallbackArtworksData } = await import("@/lib/artworks");
-        setArtworks(fallbackArtworksData);
-        setLoading(false); // 즉시 로딩 완료
+        const { fallbackArtworksData } = await import("@/lib/artworks")
+        setArtworks(fallbackArtworksData)
+        setFilteredArtworks(fallbackArtworksData)
+        
+        // 사용 가능한 태그 추출
+        const tags = new Set<string>()
+        fallbackArtworksData.forEach(artwork => {
+          if (artwork.tags) {
+            artwork.tags.forEach(tag => tags.add(tag))
+          }
+        })
+        setAvailableTags(Array.from(tags).sort())
+        
+        setLoading(false)
 
-        // 백그라운드에서 Airtable 데이터 시도
         try {
-          const response = await fetch('/api/artworks');
-          const result = await response.json();
+          const response = await fetch('/api/artworks')
+          const result = await response.json()
 
-          // Airtable 데이터가 있으면 업데이트
           if (result.success && result.data && result.data.length > 0) {
-            setArtworks(result.data);
-            console.log("Gallery updated with Airtable data:", result.data.length, "artworks");
-          } else {
-            console.log("No Airtable data available, using fallback data");
+            setArtworks(result.data)
+            setFilteredArtworks(result.data)
+            
+            // Airtable 데이터에서 태그 추출
+            const airtableTags = new Set<string>()
+            result.data.forEach((artwork: Artwork) => {
+              if (artwork.tags) {
+                artwork.tags.forEach(tag => airtableTags.add(tag))
+              }
+            })
+            setAvailableTags(Array.from(airtableTags).sort())
+            
+            console.log("Gallery updated with Airtable data:", result.data.length, "artworks")
+            console.log("Available tags:", Array.from(airtableTags))
           }
         } catch (airtableError) {
-          console.log(
-            "Airtable fetch failed, using fallback data:",
-            airtableError
-          );
-          // fallback 데이터는 이미 설정되어 있으므로 추가 작업 불필요
+          console.log("Using fallback data")
         }
       } catch (error) {
-        console.error("Failed to load gallery data:", error);
-        setError("작품을 불러오는데 실패했습니다.");
-        setLoading(false);
+        console.error("Failed to load gallery data:", error)
+        setError("작품을 불러오는데 실패했습니다.")
+        setLoading(false)
       }
     }
 
-    loadArtworks();
-  }, []);
+    loadArtworks()
+  }, [])
+
+  // 필터링 및 정렬
+  useEffect(() => {
+    let filtered = [...artworks]
+
+    // 카테고리 필터
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(artwork => artwork.category === selectedCategory)
+    }
+
+    // 태그 필터
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter(artwork => {
+        if (!artwork.tags || artwork.tags.length === 0) return false
+        return selectedTags.every(tag => artwork.tags!.includes(tag))
+      })
+    }
+
+    // 정렬
+    switch (sortBy) {
+      case 'title':
+        filtered.sort((a, b) => a.title.localeCompare(b.title))
+        break
+      case 'year':
+        filtered.sort((a, b) => (b.year || 0) - (a.year || 0))
+        break
+      case 'category':
+        filtered.sort((a, b) => (a.category || '').localeCompare(b.category || ''))
+        break
+      case 'tags':
+        filtered.sort((a, b) => {
+          const aFirstTag = a.tags?.[0] || ''
+          const bFirstTag = b.tags?.[0] || ''
+          return aFirstTag.localeCompare(bFirstTag)
+        })
+        break
+      case 'default':
+      default:
+        // 문방사우 시리즈를 먼저 배치
+        const treasureArtworks = filtered
+          .filter(artwork => artwork.category === 'treasure')
+    .sort((a, b) => {
+            const numA = parseInt(a.slug.match(/treasure-(\d+)/)?.[1] || '0')
+            const numB = parseInt(b.slug.match(/treasure-(\d+)/)?.[1] || '0')
+      return numA - numB
+    })
+
+        const otherArtworks = filtered.filter(artwork => artwork.category !== 'treasure')
+        filtered = [...treasureArtworks, ...otherArtworks]
+        break
+    }
+
+    setFilteredArtworks(filtered)
+    setCurrentPage(1) // 필터 변경 시 첫 페이지로 이동
+  }, [artworks, selectedCategory, selectedTags, sortBy])
+
+  // 카테고리별 작품 수 계산
+  const getCategoryCount = (category: string) => {
+    if (category === 'all') return artworks.length
+    return artworks.filter(artwork => artwork.category === category).length
+  }
+
+  // 태그별 작품 수 계산
+  const getTagCount = (tag: string) => {
+    return artworks.filter(artwork => artwork.tags?.includes(tag)).length
+  }
+
+  // 태그 추가/제거
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    )
+  }
+
+  // 모든 필터 초기화
+  const clearAllFilters = () => {
+    setSelectedCategory('all')
+    setSelectedTags([])
+    setSortBy('default')
+  }
 
   if (loading) {
-    return <GalleryLoading />;
+    return <GalleryLoading />
   }
 
   if (error && artworks.length === 0) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-ink mb-4">
-            오류가 발생했습니다
-          </h1>
-          <p className="text-ink-light mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-ink text-white rounded hover:bg-ink/90"
-          >
-            다시 시도
-          </button>
+      <div className="min-h-screen bg-background">
+        <ArtNavigation />
+        <NavigationSpacer />
+        <div className="section-padding flex items-center justify-center">
+          <Card className="card-art max-w-md">
+            <CardContent className="p-8 text-center space-y-4">
+              <h1 className="text-2xl font-bold text-ink">오류가 발생했습니다</h1>
+              <p className="text-ink-light">{error}</p>
+              <Button onClick={() => window.location.reload()} className="btn-art">
+                다시 시도
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    );
+    )
   }
 
-  // 문방사우 시리즈를 첫 번째 페이지에 순서대로 배치
-  const treasureArtworks = artworks
-    .filter(artwork => artwork.category === 'treasure')
-    .sort((a, b) => {
-      // treasure-1, treasure-2, ... treasure-8 순으로 정렬 (slug 기준)
-      const numA = parseInt(a.slug.match(/treasure-(\d+)/)?.[1] || '0')
-      const numB = parseInt(b.slug.match(/treasure-(\d+)/)?.[1] || '0')
-      return numA - numB
-    })
-  
-  const otherArtworks = artworks.filter(artwork => artwork.category !== 'treasure')
-  
-  // 보물 시리즈를 먼저 배치하고 나머지 작품들을 뒤에 배치
-  const reorderedArtworks = [...treasureArtworks, ...otherArtworks]
-  
   // 페이지네이션 계산
-  const totalPages = Math.ceil(reorderedArtworks.length / ARTWORKS_PER_PAGE)
+  const totalPages = Math.ceil(filteredArtworks.length / ARTWORKS_PER_PAGE)
   const startIndex = (currentPage - 1) * ARTWORKS_PER_PAGE
   const endIndex = startIndex + ARTWORKS_PER_PAGE
-  const currentArtworks = reorderedArtworks.slice(startIndex, endIndex)
+  const currentArtworks = filteredArtworks.slice(startIndex, endIndex)
 
-  // 페이지 번호 배열 생성 (최대 5개 페이지 번호 표시)
+  // 페이지 번호 배열 생성
   const getPageNumbers = () => {
     const pages = []
     const maxVisiblePages = 5
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i)
@@ -156,179 +252,254 @@ export default function GalleryClient() {
     } else {
       const start = Math.max(1, currentPage - 2)
       const end = Math.min(totalPages, start + maxVisiblePages - 1)
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i)
       }
     }
-    
+
     return pages
   }
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-xl border-b border-border/50 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex items-center justify-between py-4">
-            <Logo size="md" />
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/artist" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
-                작가 소개
-              </Link>
-              <Link href="/gallery" className="text-ink font-medium text-sm">
-                작품 갤러리
-              </Link>
-              <Link href="/exhibition" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
-                전시 정보
-              </Link>
-              <Link href="/contact" className="text-ink-light hover:text-ink transition-colors duration-200 text-sm">
-                문의하기
-              </Link>
-              <SimpleThemeToggle />
-            </div>
-          </div>
-        </div>
-      </nav>
+      <ArtNavigation />
+      <NavigationSpacer />
 
-      {/* Main Content */}
-      <main className="pt-16">
-        {/* Header */}
-        <div className="bg-stone-50 dark:bg-slate-900 border-b border-border/20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="space-y-4">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    돌아가기
-                  </Link>
+      <main className="section-padding">
+        <div className="container-art">
+          {/* 페이지 헤더 */}
+          <PageHeader
+            breadcrumb={[
+              { label: '홈', href: '/' },
+              { label: '갤러리' }
+            ]}
+            title="작품 갤러리"
+            subtitle="희랑 공경순의 서예 작품"
+            description="전통 서예의 정신과 현대적 감각이 어우러진 작품들을 감상해보세요."
+            badge="Gallery"
+            variant="default"
+            size="lg"
+          />
+
+          {/* 필터 및 정렬 */}
+          <div className="mt-12 space-y-6">
+            {/* 통계 정보 */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <p className="text-sm text-ink-light">
+                  총 <span className="font-medium text-ink">{filteredArtworks.length}</span>개의 작품
+                </p>
+                {(selectedCategory !== 'all' || selectedTags.length > 0) && (
+                  <div className="flex items-center space-x-2">
+                    {selectedCategory !== 'all' && (
+                      <Badge variant="secondary" className="text-xs">
+                        {categoryOptions.find(cat => cat.value === selectedCategory)?.label}
+                      </Badge>
+                    )}
+                    {selectedTags.map(tag => (
+                      <Badge key={tag} variant="secondary" className="text-xs flex items-center gap-1">
+                        <Tag className="w-3 h-3" />
+                        {tag}
+                      </Badge>
+                    ))}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearAllFilters}
+                      className="text-xs text-ink-light hover:text-ink"
+                    >
+                      <X className="w-3 h-3 mr-1" />
+                      초기화
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/* 뷰 모드 토글 */}
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="p-2"
+              >
+                  <Grid className="h-4 w-4" />
                 </Button>
-                <div>
-                  <h1 className="font-display text-3xl lg:text-4xl xl:text-5xl text-ink mb-2">
-                    Gallery
-                  </h1>
-                  <p className="text-ink-light text-base lg:text-lg">
-                    총 {reorderedArtworks.length}점의 작품 (페이지 {currentPage} / {totalPages}) - 페이지당 8작품
-                  </p>
-                  {currentPage === 1 && treasureArtworks.length > 0 && (
-                    <p className="text-ink text-sm mt-2 font-medium">
-                      📎 첫 번째 페이지: 《文房四友 八題》 ; 문방사우를 주제로 한 여덟 개의 서예 작품
-                    </p>
-                  )}
-                </div>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="p-2"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
               </div>
             </div>
+
+            {/* 카테고리 필터 */}
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Filter className="h-4 w-4 text-ink-light" />
+                <span className="text-sm font-medium text-ink">카테고리</span>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {categoryOptions.map((category) => {
+                  const count = getCategoryCount(category.value)
+                  if (count === 0 && category.value !== 'all') return null
+                  
+                  return (
+                    <Button
+                      key={category.value}
+                      variant={selectedCategory === category.value ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category.value)}
+                      className={selectedCategory === category.value ? 'btn-art' : 'btn-art-outline'}
+                    >
+                      {category.label}
+                      <Badge variant="secondary" className="ml-2 text-xs">
+                        {count}
+                      </Badge>
+                    </Button>
+                  )
+                })}
           </div>
         </div>
 
-        {/* Gallery Grid - 4x2 Layout (8 artworks) */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12 lg:py-16">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {currentArtworks.map((artwork) => (
-              <Link 
-                key={artwork.id}
-                href={`/gallery/${artwork.slug}`}
-                className="group space-y-4 block"
-              >
-                <article className="space-y-3">
-                  <div className="relative aspect-[3/4] bg-stone-100 dark:bg-slate-700 overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                    {artwork.imageUrl && artwork.imageUrl.trim() !== '' ? (
-                      <img
-                        src={artwork.imageUrl}
-                        alt={`${artwork.title} - 공경순 작가의 ${artwork.year}년 서예 작품`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-ink-light">
-                        <div className="text-center">
-                          <div className="text-4xl mb-2">🖼️</div>
-                          <p className="text-sm">이미지 준비중</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-display text-base lg:text-lg text-ink group-hover:text-ink/70 transition-colors line-clamp-2">
-                      {artwork.title}
-                    </h3>
-                    <div className="space-y-0.5">
-                      <p className="text-xs lg:text-sm text-ink-light">
-                        {artwork.year}
-                      </p>
-                      <p className="text-xs lg:text-sm text-ink-light line-clamp-1">
-                        {artwork.medium}
-                      </p>
-                      <p className="text-xs lg:text-sm text-ink-light line-clamp-1">
-                        {artwork.dimensions}
-                      </p>
+            {/* 태그 필터 */}
+            {availableTags.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Tag className="h-4 w-4 text-ink-light" />
+                  <span className="text-sm font-medium text-ink">태그</span>
+                  {selectedTags.length > 0 && (
+                    <Badge variant="outline" className="text-xs">
+                      {selectedTags.length}개 선택
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {availableTags.map((tag) => {
+                    const count = getTagCount(tag)
+                    const isSelected = selectedTags.includes(tag)
+                    
+                    return (
+                      <Button
+                        key={tag}
+                        variant={isSelected ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => toggleTag(tag)}
+                        className={`text-xs ${isSelected ? 'btn-art' : 'btn-art-outline'}`}
+                      >
+                        <Tag className="w-3 h-3 mr-1" />
+                        {tag}
+                        <Badge variant="secondary" className="ml-2 text-xs">
+                          {count}
+                        </Badge>
+                      </Button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* 정렬 옵션 */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Filter className="h-4 w-4 text-ink-light" />
+                <span className="text-sm text-ink-light">정렬:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {sortOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    variant={sortBy === option.value ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setSortBy(option.value)}
+                    className="text-xs"
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+            </div>
+          </div>
+        </div>
+
+          {/* 작품 그리드 */}
+          <div className="mt-12">
+            {currentArtworks.length > 0 ? (
+              <ArtworkGrid
+                artworks={currentArtworks}
+                variant="default"
+                columns={viewMode === 'grid' ? 4 : 3}
+                showMetadata={true}
+                showActions={true}
+              />
+            ) : (
+              <Card className="card-art">
+                <CardContent className="p-12 text-center">
+                  <div className="space-y-4">
+                    <div className="w-16 h-16 bg-stone-light rounded-full flex items-center justify-center mx-auto">
+                      <Filter className="w-8 h-8 text-ink-lighter" />
                     </div>
-                    {artwork.artistNote && (
-                      <p className="text-xs text-ink-light italic line-clamp-2">
-                        "{artwork.artistNote}"
-                      </p>
-                    )}
+                    <h3 className="text-lg font-medium text-ink">작품이 없습니다</h3>
+                    <p className="text-ink-light">선택한 필터에 해당하는 작품이 없습니다.</p>
+                    <Button
+                      onClick={clearAllFilters}
+                      variant="outline"
+                      className="btn-art-outline"
+                    >
+                      필터 초기화
+                    </Button>
                   </div>
-                </article>
-              </Link>
-            ))}
-          </div>
+                </CardContent>
+              </Card>
+            )}
         </div>
 
-        {/* Pagination */}
+          {/* 페이지네이션 */}
         {totalPages > 1 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-16">
-            <div className="flex items-center justify-center space-x-2">
-              {/* 이전 페이지 버튼 */}
+            <div className="mt-16 flex justify-center">
+              <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="w-24"
+                  className="btn-art-outline"
               >
-                ← 이전
+                  <ChevronLeft className="h-4 w-4" />
+                  이전
               </Button>
 
-              {/* 페이지 번호들 */}
-              {getPageNumbers().map((pageNum) => (
+                <div className="flex space-x-1">
+                  {getPageNumbers().map((pageNum) => (
                 <Button
                   key={pageNum}
-                  variant={currentPage === pageNum ? "default" : "outline"}
+                      variant={currentPage === pageNum ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`w-10 h-10 p-0 ${
-                    currentPage === pageNum 
-                      ? 'bg-ink text-white hover:bg-ink/90' 
-                      : ''
-                  }`}
+                      className={currentPage === pageNum ? 'btn-art' : 'hover:bg-paper-warm'}
                 >
                   {pageNum}
                 </Button>
               ))}
+                </div>
 
-              {/* 다음 페이지 버튼 */}
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
-                className="w-24"
+                  className="btn-art-outline"
               >
-                다음 →
+                  다음
+                  <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
-            
-            {/* 페이지 정보 */}
-            <div className="text-center mt-4">
-              <p className="text-sm text-ink-light">
-                {startIndex + 1}-{Math.min(endIndex, reorderedArtworks.length)}개 작품 (총 {reorderedArtworks.length}개)
-              </p>
             </div>
+          )}
           </div>
-        )}
       </main>
     </div>
   )

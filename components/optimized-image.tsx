@@ -1,65 +1,40 @@
 "use client";
 
+import { generateAltText, getArtworkImageMeta } from "@/lib/image-utils";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
 
 interface OptimizedImageProps {
-  src: string;
-  alt: string;
+  slug: string;
+  year: string | number;
+  title: string;
+  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail";
   className?: string;
   aspectRatio?: string;
+  showLoadingState?: boolean;
   priority?: boolean;
-  sizes?: string;
   onLoad?: () => void;
   onError?: () => void;
-  fallbackSrc?: string;
 }
 
 export function OptimizedImage({
-  src,
-  alt,
+  slug,
+  year,
+  title,
+  usage,
   className,
-  aspectRatio = "1/1",
-  priority = false,
-  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+  aspectRatio,
+  showLoadingState = true,
+  priority,
   onLoad,
   onError,
-  fallbackSrc = "/images/placeholder.jpg",
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [isInView, setIsInView] = useState(priority);
-  const [currentSrc, setCurrentSrc] = useState(priority ? src : "");
-  const imgRef = useRef<HTMLImageElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Intersection Observer for lazy loading
-  useEffect(() => {
-    if (priority || isInView) return;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsInView(true);
-            setCurrentSrc(src);
-            observerRef.current?.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "50px",
-      }
-    );
-
-    if (imgRef.current) {
-      observerRef.current.observe(imgRef.current);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [src, priority, isInView]);
+  const imageMeta = getArtworkImageMeta(slug, year, usage);
+  const altText = generateAltText(title, "artwork");
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -67,92 +42,182 @@ export function OptimizedImage({
   };
 
   const handleError = () => {
-    setHasError(true);
     setIsLoading(false);
-    setCurrentSrc(fallbackSrc);
+    setHasError(true);
     onError?.();
   };
 
+  // 에러 상태 렌더링
+  if (hasError) {
+    return (
+      <div
+        className={cn(
+          "w-full h-full bg-gradient-zen flex items-center justify-center",
+          aspectRatio,
+          className
+        )}
+      >
+        <div className="text-center text-ink-lighter">
+          <div className="w-16 h-16 mx-auto mb-4 bg-ink-lighter/20 rounded-full flex items-center justify-center">
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <p className="text-sm">이미지를 불러올 수 없습니다</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        "relative overflow-hidden bg-stone-100 dark:bg-slate-800",
-        className
-      )}
-      style={{ aspectRatio }}
-    >
-      {/* Loading skeleton */}
-      {isLoading && (
-        <div className="absolute inset-0 animate-pulse bg-gray-200 dark:bg-gray-700" />
+    <div className={cn("relative overflow-hidden", aspectRatio, className)}>
+      {/* 로딩 상태 */}
+      {showLoadingState && isLoading && (
+        <div className="absolute inset-0 bg-stone-light animate-pulse z-10" />
       )}
 
-      {/* Image */}
-      <img
-        ref={imgRef}
-        src={currentSrc}
-        alt={alt}
+      {/* 최적화된 이미지 */}
+      <Image
+        src={imageMeta.src}
+        sizes={imageMeta.sizes}
+        alt={altText}
+        fill
         className={cn(
-          "w-full h-full object-cover transition-opacity duration-300",
-          isLoading ? "opacity-0" : "opacity-100"
+          "object-cover transition-all duration-700 ease-out",
+          isLoading && showLoadingState && "scale-110 blur-sm opacity-0",
+          !isLoading && "scale-100 blur-0 opacity-100"
         )}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        sizes={sizes}
+        loading={priority ? "eager" : (imageMeta.loading as "eager" | "lazy")}
+        priority={priority ?? imageMeta.priority}
         onLoad={handleLoad}
         onError={handleError}
+        quality={85}
       />
-
-      {/* Error state */}
-      {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-stone-100 dark:bg-slate-800">
-          <div className="text-center text-ink-light">
-            <div className="w-12 h-12 mx-auto mb-2 opacity-50">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-              </svg>
-            </div>
-            <p className="text-sm">이미지를 불러올 수 없습니다</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
-// 갤러리 썸네일용 특화 컴포넌트
-export function GalleryThumbnail({
-  src,
-  alt,
+interface ArtworkImageProps {
+  artwork: {
+    slug: string;
+    title: string;
+    year: string | number;
+  };
+  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail";
+  className?: string;
+  aspectRatio?: string;
+  showLoadingState?: boolean;
+  priority?: boolean;
+  onLoad?: () => void;
+  onError?: () => void;
+}
+
+export function ArtworkImage({
+  artwork,
+  usage,
   className,
-  ...props
-}: Omit<OptimizedImageProps, "aspectRatio">) {
+  aspectRatio,
+  showLoadingState = true,
+  priority,
+  onLoad,
+  onError,
+}: ArtworkImageProps) {
   return (
     <OptimizedImage
-      src={src}
-      alt={alt}
-      aspectRatio="4/5"
-      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-      className={cn("rounded-lg", className)}
-      {...props}
+      slug={artwork.slug}
+      year={artwork.year}
+      title={artwork.title}
+      usage={usage}
+      className={className}
+      aspectRatio={aspectRatio}
+      showLoadingState={showLoadingState}
+      priority={priority}
+      onLoad={onLoad}
+      onError={onError}
     />
   );
 }
 
-// 개별 작품 페이지용 특화 컴포넌트
-export function ArtworkDetail({
-  src,
-  alt,
+// 사용 편의를 위한 프리셋 컴포넌트들
+export function GalleryGridImage({
+  artwork,
   className,
-  ...props
-}: OptimizedImageProps) {
+  priority,
+}: {
+  artwork: { slug: string; title: string; year: string | number };
+  className?: string;
+  priority?: boolean;
+}) {
   return (
-    <OptimizedImage
-      src={src}
-      alt={alt}
-      sizes="(max-width: 768px) 100vw, 90vw"
-      priority
+    <ArtworkImage
+      artwork={artwork}
+      usage="gallery-grid"
+      aspectRatio="aspect-[3/4]"
       className={className}
-      {...props}
+      priority={priority}
+    />
+  );
+}
+
+export function GalleryDetailImage({
+  artwork,
+  className,
+}: {
+  artwork: { slug: string; title: string; year: string | number };
+  className?: string;
+}) {
+  return (
+    <ArtworkImage
+      artwork={artwork}
+      usage="gallery-detail"
+      className={className}
+      priority={true}
+    />
+  );
+}
+
+export function FeaturedImage({
+  artwork,
+  className,
+}: {
+  artwork: { slug: string; title: string; year: string | number };
+  className?: string;
+}) {
+  return (
+    <ArtworkImage
+      artwork={artwork}
+      usage="featured"
+      aspectRatio="aspect-[4/5]"
+      className={className}
+      priority={true}
+    />
+  );
+}
+
+export function ThumbnailImage({
+  artwork,
+  className,
+}: {
+  artwork: { slug: string; title: string; year: string | number };
+  className?: string;
+}) {
+  return (
+    <ArtworkImage
+      artwork={artwork}
+      usage="thumbnail"
+      aspectRatio="aspect-square"
+      className={className}
+      showLoadingState={false}
     />
   );
 }

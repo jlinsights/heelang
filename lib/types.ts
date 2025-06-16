@@ -18,6 +18,13 @@ export interface Artwork {
   available?: boolean
   createdAt?: string
   updatedAt?: string
+  // 추가 메타데이터
+  exhibition?: string // 전시 정보
+  series?: string // 시리즈명
+  technique?: string // 기법
+  inspiration?: string // 영감
+  symbolism?: string // 상징성
+  culturalContext?: string // 문화적 맥락
 }
 
 export interface SocialLinks {
@@ -25,13 +32,16 @@ export interface SocialLinks {
   facebook?: string
   twitter?: string
   website?: string
+  youtube?: string
+  linkedin?: string
 }
 
 export interface Artist {
+  id?: string
   name: string
   bio: string
-  statement: string
-  profileImageUrl: string
+  statement?: string
+  profileImageUrl?: string
   // Airtable 연동을 위한 추가 필드들
   birthYear?: number
   education?: string[]
@@ -42,6 +52,17 @@ export interface Artist {
   email?: string
   phone?: string
   socialLinks?: SocialLinks
+  // 추가 작가 정보
+  birthPlace?: string // 출생지
+  currentLocation?: string // 현재 거주지
+  specialties?: string[] // 전문 분야
+  influences?: string[] // 영향받은 작가/사상
+  teachingExperience?: string[] // 교육 경력
+  publications?: string[] // 출판물
+  memberships?: string[] // 소속 단체
+  philosophy?: string // 작가 철학
+  techniques?: string[] // 주요 기법
+  materials?: string[] // 주요 재료
 }
 
 // 페이지 컴포넌트 Props 타입들

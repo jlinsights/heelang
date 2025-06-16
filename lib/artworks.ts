@@ -16,29 +16,37 @@ export const fallbackArtistData: Artist = {
   profileImageUrl: getArtistImageUrl("공경순 작가 프로필.png"),
   birthYear: 1980,
   education: [
-    "서울대학교 미술대학 동양화과 졸업 (2003)",
-    "동 대학원 동양화과 석사 (2005)",
-    "중국 중앙미술학원 서법과 연수 (2010)",
+    "일본 교토예술대학교 미술과 서예코스 졸업 (2025)",
+    "일본 교토외국어대학교 외국어학부 졸업 (2003)",
   ],
   exhibitions: [
     "2025 개인전 '길(Way)' - 인사동 한국미술관",
-    "2024 그룹전 '현대서예의 새로운 지평' - 예술의전당",
-    "2023 개인전 '문방사우 팔제(文房四友 八題)' - 갤러리 현대",
-    "2022 동양서예협회 초대전 - 세종문화회관",
-    "2021 한중일 서예교류전 - 국립현대미술관",
+    "2025 중국•닝보 제25회 중일 난정서법 교류전 - 닝보미술관",
+    "2025 제65회 魁心書法院展 - 일본 긴자 요쿄홀",
+    "2024 제5회 희랑글씨 회원전 '쉼소리' 전 - 제주민속촌",
+    "2024 Art Beyond Boundaries - 일본 롯폰기 국립신미술관",
+    "2023 제4회 희랑글씨 회원전 이분법전 - 김포아트홀",
+    "2022 제3회 희랑글씨 회원전 쓰임전 - 김포아트빌리지",
+    "2022 제2회 희랑글씨 회원전 울림전 - 김포 장기도서관",
+    "2021년 제1회 희랑글씨 회원전 시간을여행하다전 - 김포 마산도서관",
   ],
   awards: [
-    "2024 대한민국 서예대전 대상",
-    "2023 동양서예협회 우수작가상",
-    "2022 서울시 문화상 서예부문",
-    "2021 한국서예학회 신진작가상",
+    "2024 제21회 대한민국동양서예대전 대상",
+    "2021 제14회 낙동예술대전 캘리그라피부문 대상",
+    "2025 Art Beyond Boundaries 국제예술상",
+    "2020 경기도지사 표창장- 사회복지 유공",
   ],
   collections: [
-    "국립현대미술관",
-    "서울시립미술관",
-    "인사동 한국미술관",
-    "동양서예협회 소장품",
+    "인사동 한국미술관 영구소장",
+    "제주민속촌 미술관 소장",
+    "김포시립미술관 소장",
+    "개인 컬렉션 다수",
   ],
+  website: "https://heelang.orientalcalligraphy.org",
+  socialLinks: {
+    instagram: "https://instagram.com/heelang_calligraphy",
+    website: "https://heelang.orientalcalligraphy.org",
+  },
 };
 
 export const fallbackArtworksData: Artwork[] = [
@@ -60,6 +68,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "recent",
     available: true,
+    tags: ["여행", "인생", "길", "감정"],
   },
   {
     id: "24",
@@ -82,6 +91,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: true,
     category: "recent",
     available: true,
+    tags: ["꽃", "자연", "아름다움", "본질"],
   },
   {
     id: "23",
@@ -98,6 +108,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "recent",
     available: true,
+    tags: ["순수", "소년", "호기심", "그리움"],
   },
   {
     id: "22",
@@ -115,6 +126,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "recent",
     available: true,
+    tags: ["복", "행복", "평안", "성찰"],
   },
   {
     id: "21",
@@ -131,6 +143,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: true,
     category: "recent",
     available: true,
+    tags: ["길", "인생", "예술", "탐구"],
   },
 
   // 2024년 작품
@@ -150,6 +163,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["축하", "기쁨", "일상", "가치"],
   },
   {
     id: "19",
@@ -171,6 +185,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["좋은날", "긍정", "감사", "일상"],
   },
   {
     id: "18",
@@ -189,6 +204,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["기복", "변화", "평정심", "인생"],
   },
   {
     id: "17",
@@ -210,6 +226,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["진리", "평범함", "일상", "지혜"],
   },
   {
     id: "16",
@@ -231,6 +248,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["자연", "속삭임", "평온", "교감"],
   },
   {
     id: "15",
@@ -249,6 +267,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2024",
     available: true,
+    tags: ["줄기", "성장", "의지", "식물"],
   },
 
   // 2023년 작품
@@ -269,6 +288,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2023",
     available: true,
+    tags: ["호흡", "생명", "리듬", "흐름"],
   },
   {
     id: "13",
@@ -286,6 +306,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2023",
     available: true,
+    tags: ["벼루", "도구", "전통", "존경"],
   },
   {
     id: "12",
@@ -303,6 +324,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "2023",
     available: true,
+    tags: ["기억", "과거", "감정", "가치"],
   },
 
   // 2022년 작품 (보물 시리즈)
@@ -322,6 +344,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "treasure",
     available: true,
+    tags: ["보물", "내면", "깨달음", "문방사우"],
   },
   {
     id: "10",
@@ -338,6 +361,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "treasure",
     available: true,
+    tags: ["보물", "지혜", "가치", "문방사우"],
   },
   {
     id: "9",
@@ -356,6 +380,7 @@ export const fallbackArtworksData: Artwork[] = [
     featured: false,
     category: "treasure",
     available: true,
+    tags: ["보물", "인간관계", "연결", "문방사우"],
   },
   {
     id: "8",
@@ -365,13 +390,16 @@ export const fallbackArtworksData: Artwork[] = [
     medium: "화선지에 먹 (Ink on Mulberry Paper)",
     dimensions: "70 x 70 cm",
     aspectRatio: "1/1",
-    description: "보물 시리즈의 다섯 번째 작품으로, 시간의 소중함을 다룹니다.",
+    description:
+      "보물 시리즈의 다섯 번째 작품으로, 종이의 순수함과 가능성을 탐구합니다.",
     imageUrl: getArtworkImageUrl("heelang-treasure-5-2022", 2022, "medium"),
-    imageUrlQuery: "treasure 5 time precious moments calligraphy",
-    artistNote: "지나간 시간은 다시 돌아오지 않는 진정한 보물입니다.",
+    imageUrlQuery: "paper jongi calligraphy traditional tools",
+    artistNote:
+      "백지의 무한한 가능성과 순수함을 통해 창조의 시작점을 표현했습니다.",
     featured: false,
     category: "treasure",
     available: true,
+    tags: ["보물", "종이", "가능성", "문방사우"],
   },
   {
     id: "7",
@@ -382,10 +410,11 @@ export const fallbackArtworksData: Artwork[] = [
     dimensions: "70 x 70 cm",
     aspectRatio: "1/1",
     description:
-      "보물 시리즈의 네 번째 작품으로, 건강한 몸과 마음의 가치를 탐구합니다.",
+      "문방사우 시리즈의 네 번째 작품으로, 붓의 유연함과 표현력을 탐구합니다.",
     imageUrl: getArtworkImageUrl("heelang-treasure-4-2022", 2022, "medium"),
-    imageUrlQuery: "treasure 4 health body mind wellness calligraphy",
-    artistNote: "건강한 몸과 마음이야말로 모든 행복의 기초가 되는 보물입니다.",
+    imageUrlQuery: "brush but calligraphy traditional tools",
+    artistNote:
+      "붓털의 부드러움과 강인함을 통해 유연성과 표현의 자유로움을 담았습니다.",
     featured: false,
     category: "treasure",
     available: true,
@@ -398,10 +427,12 @@ export const fallbackArtworksData: Artwork[] = [
     medium: "화선지에 먹 (Ink on Mulberry Paper)",
     dimensions: "70 x 70 cm",
     aspectRatio: "1/1",
-    description: "보물 시리즈의 세 번째 작품으로, 사랑의 의미를 탐구합니다.",
+    description:
+      "문방사우 시리즈의 세 번째 작품으로, 종이의 순수함과 가능성을 탐구합니다.",
     imageUrl: getArtworkImageUrl("heelang-treasure-3-2022", 2022, "medium"),
-    imageUrlQuery: "treasure 3 love affection heart calligraphy",
-    artistNote: "진실한 사랑은 주고받을수록 더 커지는 신비로운 보물입니다.",
+    imageUrlQuery: "paper jongi calligraphy traditional tools",
+    artistNote:
+      "백지의 무한한 가능성과 순수함을 통해 창조의 시작점을 표현했습니다.",
     featured: true,
     category: "treasure",
     available: true,
@@ -415,11 +446,11 @@ export const fallbackArtworksData: Artwork[] = [
     dimensions: "70 x 70 cm",
     aspectRatio: "1/1",
     description:
-      "보물 시리즈의 두 번째 작품으로, 평화로운 마음의 가치를 표현합니다.",
+      "문방사우 시리즈의 두 번째 작품으로, 벼루의 견고함과 포용력을 표현합니다.",
     imageUrl: getArtworkImageUrl("heelang-treasure-2-2022", 2022, "medium"),
-    imageUrlQuery: "treasure 2 peace tranquility mind calligraphy",
+    imageUrlQuery: "inkstone byeoru calligraphy traditional tools",
     artistNote:
-      "어떤 외적 조건보다도 내면의 평화가 진정한 부라는 것을 표현했습니다.",
+      "벼루의 단단함과 먹을 받아들이는 포용력을 통해 인내와 수용의 미덕을 담았습니다.",
     featured: false,
     category: "treasure",
     available: true,
@@ -433,11 +464,11 @@ export const fallbackArtworksData: Artwork[] = [
     dimensions: "70 x 70 cm",
     aspectRatio: "1/1",
     description:
-      "보물 시리즈의 첫 번째 작품으로, 감사하는 마음의 소중함을 담았습니다.",
+      "문방사우 시리즈의 첫 번째 작품으로, 먹의 깊이와 농담을 탐구합니다.",
     imageUrl: getArtworkImageUrl("heelang-treasure-1-2022", 2022, "medium"),
-    imageUrlQuery: "treasure 1 gratitude appreciation heart calligraphy",
+    imageUrlQuery: "ink stick muk calligraphy traditional tools",
     artistNote:
-      "모든 것에 감사할 수 있는 마음이야말로 가장 큰 보물이라는 깨달음을 담았습니다.",
+      "먹의 진한 농담과 번짐을 통해 서예의 근본적 아름다움을 표현했습니다.",
     featured: false,
     category: "treasure",
     available: true,
@@ -503,59 +534,220 @@ export const fallbackArtworksData: Artwork[] = [
 ];
 
 /**
- * 작품 데이터를 가져오는 통합 함수 (Airtable 우선, fallback 지원)
+ * 클라이언트 사이드에서 API를 통해 작품 데이터를 가져오는 함수
+ */
+async function fetchArtworksFromAPI(): Promise<Artwork[]> {
+  try {
+    const response = await fetch("/api/artworks", {
+      cache: "no-store", // 항상 최신 데이터 가져오기
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.success && result.data) {
+      return result.data;
+    } else {
+      console.warn("API returned no data:", result.message);
+      return [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch artworks from API:", error);
+    return [];
+  }
+}
+
+/**
+ * 환경에 따라 적절한 데이터 소스를 선택하는 함수
+ */
+async function getArtworksFromSource(): Promise<Artwork[]> {
+  // 서버 사이드인지 확인
+  const isServer = typeof window === "undefined";
+
+  if (isServer) {
+    // 서버 사이드: Airtable에 직접 접근
+    try {
+      console.log(
+        "🔍 Server-side: Attempting to fetch artworks from Airtable..."
+      );
+      const airtableData = await fetchArtworksFromAirtable();
+
+      if (airtableData && airtableData.length > 0) {
+        console.log(
+          `✅ Successfully fetched ${airtableData.length} artworks from Airtable`
+        );
+        return airtableData;
+      } else {
+        console.warn("⚠️ No artworks found in Airtable, using fallback data");
+        return fallbackArtworksData;
+      }
+    } catch (error) {
+      console.error("❌ Error fetching artworks from Airtable:", error);
+      console.log("🔄 Using fallback artworks data");
+      return fallbackArtworksData;
+    }
+  } else {
+    // 클라이언트 사이드: API 라우트를 통해 접근
+    try {
+      console.log("🔍 Client-side: Attempting to fetch artworks from API...");
+      const apiData = await fetchArtworksFromAPI();
+
+      if (apiData && apiData.length > 0) {
+        console.log(
+          `✅ Successfully fetched ${apiData.length} artworks from API`
+        );
+        return apiData;
+      } else {
+        console.warn("⚠️ No artworks found from API, using fallback data");
+        return fallbackArtworksData;
+      }
+    } catch (error) {
+      console.error("❌ Error fetching artworks from API:", error);
+      console.log("🔄 Using fallback artworks data");
+      return fallbackArtworksData;
+    }
+  }
+}
+
+/**
+ * 작품 목록을 가져오는 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getArtworks(): Promise<Artwork[]> {
-  try {
-    const airtableData = await fetchArtworksFromAirtable();
-    if (airtableData && airtableData.length > 0) {
-      return airtableData;
-    }
-  } catch (error) {
-    console.warn("Failed to fetch from Airtable, using fallback data:", error);
-  }
-
-  return fallbackArtworksData;
+  return await getArtworksFromSource();
 }
 
 /**
- * 작가 정보를 가져오는 통합 함수 (Airtable 우선, fallback 지원)
+ * 클라이언트 사이드에서 API를 통해 작가 데이터를 가져오는 함수
+ */
+async function fetchArtistFromAPI(): Promise<Artist> {
+  try {
+    const response = await fetch("/api/artist", {
+      cache: "no-store", // 항상 최신 데이터 가져오기
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.success && result.data) {
+      return result.data;
+    } else {
+      console.warn("API returned no artist data:", result.message);
+      return fallbackArtistData;
+    }
+  } catch (error) {
+    console.error("Failed to fetch artist from API:", error);
+    return fallbackArtistData;
+  }
+}
+
+/**
+ * 환경에 따라 적절한 데이터 소스에서 작가 정보를 가져오는 함수
+ */
+async function getArtistFromSource(): Promise<Artist> {
+  // 서버 사이드인지 확인
+  const isServer = typeof window === "undefined";
+
+  if (isServer) {
+    // 서버 사이드: Airtable에 직접 접근
+    try {
+      console.log(
+        "🔍 Server-side: Attempting to fetch artist from Airtable..."
+      );
+      const airtableData = await fetchArtistFromAirtable();
+
+      if (airtableData) {
+        console.log("✅ Successfully fetched artist data from Airtable");
+        return airtableData;
+      } else {
+        console.warn("⚠️ No artist found in Airtable, using fallback data");
+        return fallbackArtistData;
+      }
+    } catch (error) {
+      console.error("❌ Error fetching artist from Airtable:", error);
+      console.log("🔄 Using fallback artist data");
+      return fallbackArtistData;
+    }
+  } else {
+    // 클라이언트 사이드: API 라우트를 통해 접근
+    try {
+      console.log("🔍 Client-side: Attempting to fetch artist from API...");
+      const apiData = await fetchArtistFromAPI();
+      console.log("✅ Successfully fetched artist data from API");
+      return apiData;
+    } catch (error) {
+      console.error("❌ Error fetching artist from API:", error);
+      console.log("🔄 Using fallback artist data");
+      return fallbackArtistData;
+    }
+  }
+}
+
+/**
+ * 작가 정보를 가져오는 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getArtist(): Promise<Artist> {
-  try {
-    const airtableData = await fetchArtistFromAirtable();
-    if (airtableData) {
-      return airtableData;
-    }
-  } catch (error) {
-    console.warn(
-      "Failed to fetch artist from Airtable, using fallback data:",
-      error
-    );
-  }
-
-  return fallbackArtistData;
+  return await getArtistFromSource();
 }
 
 /**
- * 추천 작품들을 가져오는 통합 함수
+ * 추천 작품들을 가져오는 통합 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getFeaturedArtworks(
   limit: number = 3
 ): Promise<Artwork[]> {
-  try {
-    const airtableData = await fetchFeaturedArtworks(limit);
-    if (airtableData && airtableData.length > 0) {
-      return airtableData;
+  // 서버 사이드인지 확인
+  const isServer = typeof window === "undefined";
+
+  if (isServer) {
+    // 서버 사이드: Airtable에 직접 접근
+    try {
+      console.log(
+        "🔍 Server-side: Attempting to fetch featured artworks from Airtable..."
+      );
+      const airtableData = await fetchFeaturedArtworks(limit);
+      if (airtableData && airtableData.length > 0) {
+        console.log(
+          `✅ Successfully fetched ${airtableData.length} featured artworks from Airtable`
+        );
+        return airtableData;
+      }
+    } catch (error) {
+      console.warn(
+        "Failed to fetch featured artworks from Airtable, using fallback data:",
+        error
+      );
     }
-  } catch (error) {
-    console.warn(
-      "Failed to fetch featured artworks from Airtable, using fallback data:",
-      error
-    );
+  } else {
+    // 클라이언트 사이드: API를 통해 모든 작품을 가져온 후 featured 필터링
+    try {
+      console.log(
+        "🔍 Client-side: Attempting to fetch artworks from API for featured selection..."
+      );
+      const allArtworks = await fetchArtworksFromAPI();
+      if (allArtworks && allArtworks.length > 0) {
+        const featuredFromAPI = allArtworks.filter(
+          (artwork) => artwork.featured
+        );
+        if (featuredFromAPI.length > 0) {
+          console.log(
+            `✅ Successfully found ${featuredFromAPI.length} featured artworks from API`
+          );
+          return featuredFromAPI.slice(0, limit);
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to fetch featured artworks from API:", error);
+    }
   }
 
   // fallback: featured가 true인 작품들 또는 최신 작품들
+  console.log("🔄 Using fallback featured artworks data");
   const featured = fallbackArtworksData.filter((artwork) => artwork.featured);
   if (featured.length >= limit) {
     return featured.slice(0, limit);
@@ -570,21 +762,59 @@ export async function getFeaturedArtworks(
 }
 
 /**
- * 보물 시리즈 작품들을 가져오는 통합 함수
+ * 보물 시리즈 작품들을 가져오는 통합 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getTreasureArtworks(): Promise<Artwork[]> {
-  try {
-    const airtableData = await fetchTreasureFromAirtable();
-    if (airtableData.length > 0) {
-      return airtableData;
+  // 서버 사이드인지 확인
+  const isServer = typeof window === "undefined";
+
+  if (isServer) {
+    // 서버 사이드: Airtable에 직접 접근
+    try {
+      console.log(
+        "🔍 Server-side: Attempting to fetch treasure artworks from Airtable..."
+      );
+      const airtableData = await fetchTreasureFromAirtable();
+      if (airtableData.length > 0) {
+        console.log(
+          `✅ Successfully fetched ${airtableData.length} treasure artworks from Airtable`
+        );
+        return airtableData;
+      }
+    } catch (error) {
+      console.warn(
+        "Failed to fetch treasure artworks from Airtable, using fallback data:",
+        error
+      );
     }
-  } catch (error) {
-    console.warn(
-      "Failed to fetch treasure artworks from Airtable, using fallback data:",
-      error
-    );
+  } else {
+    // 클라이언트 사이드: API를 통해 모든 작품을 가져온 후 treasure 필터링
+    try {
+      console.log(
+        "🔍 Client-side: Attempting to fetch artworks from API for treasure selection..."
+      );
+      const allArtworks = await fetchArtworksFromAPI();
+      if (allArtworks && allArtworks.length > 0) {
+        const treasureFromAPI = allArtworks.filter(
+          (artwork) =>
+            artwork.title.includes("보물") ||
+            artwork.title.toLowerCase().includes("treasure") ||
+            artwork.category === "treasure"
+        );
+        if (treasureFromAPI.length > 0) {
+          console.log(
+            `✅ Successfully found ${treasureFromAPI.length} treasure artworks from API`
+          );
+          return treasureFromAPI;
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to fetch treasure artworks from API:", error);
+    }
   }
 
+  // fallback: 보물 시리즈 작품들
+  console.log("🔄 Using fallback treasure artworks data");
   return fallbackArtworksData.filter(
     (artwork) =>
       artwork.title.includes("보물") ||
@@ -602,7 +832,7 @@ export async function getArtworkById(id: string): Promise<Artwork | null> {
 }
 
 /**
- * 특정 작품을 slug로 가져오는 함수 (즉시 fallback 지원)
+ * 특정 작품을 slug로 가져오는 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
   // 즉시 fallback에서 찾기
@@ -611,18 +841,16 @@ export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
   );
 
   try {
-    // 백그라운드에서 Airtable 데이터 시도
-    const airtableData = await fetchArtworksFromAirtable();
-    if (airtableData && airtableData.length > 0) {
-      const airtableArtwork = airtableData.find(
-        (artwork) => artwork.slug === slug
-      );
-      if (airtableArtwork) {
-        return airtableArtwork;
+    // 환경에 따라 적절한 소스에서 데이터 가져오기
+    const artworks = await getArtworksFromSource();
+    if (artworks && artworks.length > 0) {
+      const foundArtwork = artworks.find((artwork) => artwork.slug === slug);
+      if (foundArtwork) {
+        return foundArtwork;
       }
     }
   } catch (error) {
-    console.warn("Failed to fetch from Airtable for slug:", slug, error);
+    console.warn("Failed to fetch artwork for slug:", slug, error);
   }
 
   return fallbackArtwork || null;

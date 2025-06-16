@@ -1,5 +1,4 @@
 import { fetchArtistFromAirtable } from "@/lib/airtable";
-import { fallbackArtistData } from "@/lib/artworks";
 import type { Artist } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +7,7 @@ let cachedArtist: Artist | null = null;
 let cacheTimestamp = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5분
 
-async function getCachedArtist(): Promise<Artist> {
+async function getCachedArtist(): Promise<Artist | null> {
   const now = Date.now();
 
   // 캐시가 유효한지 확인
@@ -27,17 +26,16 @@ async function getCachedArtist(): Promise<Artist> {
       console.log("✅ Cached artist data from Airtable");
       return artist;
     } else {
-      console.warn("⚠️ No artist found in Airtable, using fallback data");
-      cachedArtist = fallbackArtistData;
+      console.warn("⚠️ No artist found in Airtable");
+      cachedArtist = null;
       cacheTimestamp = now;
-      return fallbackArtistData;
+      return null;
     }
   } catch (error) {
     console.error("❌ Error fetching artist from Airtable:", error);
-    console.log("🔄 Using fallback artist data");
-    cachedArtist = fallbackArtistData;
+    cachedArtist = null;
     cacheTimestamp = now;
-    return fallbackArtistData;
+    return null;
   }
 }
 
@@ -45,17 +43,25 @@ export async function GET(request: NextRequest) {
   try {
     const artist = await getCachedArtist();
 
-    return NextResponse.json({
-      success: true,
-      data: artist,
-    });
+    if (artist) {
+      return NextResponse.json({
+        success: true,
+        data: artist,
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: "No artist data available",
+        data: null,
+      });
+    }
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(
       {
         success: false,
         message: "Failed to fetch artist data",
-        data: fallbackArtistData,
+        data: null,
       },
       { status: 500 }
     );

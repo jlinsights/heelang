@@ -1,5 +1,4 @@
 import { fetchArtworksFromAirtable } from "@/lib/airtable";
-import { fallbackArtworksData } from "@/lib/artworks";
 import type { Artwork } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,16 +26,16 @@ async function getCachedArtworks(): Promise<Artwork[]> {
       console.log(`✅ Cached ${artworks.length} artworks from Airtable`);
       return artworks;
     } else {
-      console.warn("⚠️ No artworks from Airtable, using fallback");
-      cachedArtworks = fallbackArtworksData;
+      console.warn("⚠️ No artworks from Airtable");
+      cachedArtworks = [];
       cacheTimestamp = now;
-      return fallbackArtworksData;
+      return [];
     }
   } catch (error) {
     console.error("❌ Error fetching artworks:", error);
-    cachedArtworks = fallbackArtworksData;
+    cachedArtworks = [];
     cacheTimestamp = now;
-    return fallbackArtworksData;
+    return [];
   }
 }
 
@@ -54,10 +53,10 @@ export async function GET(request: NextRequest) {
 
     const artworks = await getCachedArtworks();
 
-    if (!artworks) {
+    if (!artworks || artworks.length === 0) {
       return NextResponse.json({
         success: false,
-        message: "Airtable data not available",
+        message: "No artworks available",
         data: slug ? null : [],
       });
     }

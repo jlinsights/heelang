@@ -1,14 +1,126 @@
-import { IMAGE_CONFIG } from "./constants";
-
 // 이미지 크기 타입 정의
 export type ImageSize = "thumb" | "medium" | "large" | "original";
 
-// 이미지 URL 생성 함수
+// 사용 용도별 이미지 크기 매핑
+export const IMAGE_SIZE_MAP = {
+  "gallery-grid": "medium" as ImageSize,
+  "gallery-detail": "large" as ImageSize,
+  featured: "medium" as ImageSize,
+  hero: "large" as ImageSize,
+  thumbnail: "thumb" as ImageSize,
+} as const;
+
+/**
+ * 최적화된 이미지 경로 생성 (fallback 지원)
+ */
+export function getOptimizedImagePath(
+  slug: string,
+  year: string | number,
+  size: ImageSize = "medium"
+): string {
+  const basePath = `/Images/Artworks/${year}/${slug}`;
+
+  // 최적화된 이미지 경로 시도
+  if (size !== "original") {
+    return `${basePath}-${size}.jpg`;
+  }
+
+  // 원본 이미지 경로
+  return `${basePath}.jpg`;
+}
+
+/**
+ * Artwork 이미지 URL 생성 (기존 함수 개선)
+ */
+export function getArtworkImageUrl(
+  slug: string,
+  year: string | number,
+  size: ImageSize = "medium"
+): string {
+  return getOptimizedImagePath(slug, year, size);
+}
+
+/**
+ * 사용 용도에 따른 이미지 메타데이터 생성
+ */
+export function getArtworkImageMeta(
+  slug: string,
+  year: string | number,
+  usage: keyof typeof IMAGE_SIZE_MAP
+) {
+  const size = IMAGE_SIZE_MAP[usage];
+  const src = getArtworkImageUrl(slug, year, size);
+
+  // 사용 용도별 sizes 속성
+  const sizesMap = {
+    "gallery-grid": "(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw",
+    "gallery-detail": "(max-width: 768px) 100vw, 80vw",
+    featured: "(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw",
+    hero: "100vw",
+    thumbnail: "(max-width: 768px) 25vw, 200px",
+  };
+
+  // 사용 용도별 loading 우선순위
+  const priorityMap = {
+    "gallery-grid": false,
+    "gallery-detail": true,
+    featured: true,
+    hero: true,
+    thumbnail: false,
+  };
+
+  return {
+    src,
+    sizes: sizesMap[usage],
+    loading: priorityMap[usage] ? "eager" : "lazy",
+    priority: priorityMap[usage],
+  };
+}
+
+/**
+ * 아티스트 이미지 URL 생성
+ */
+export function getArtistImageUrl(filename: string): string {
+  return `/Images/Artist/${filename}`;
+}
+
+/**
+ * Alt 텍스트 생성
+ */
+export function generateAltText(
+  title: string,
+  type: "artwork" | "artist"
+): string {
+  if (type === "artwork") {
+    return `희랑 공경순 작가의 서예 작품 "${title}"`;
+  }
+  return `희랑 공경순 작가 ${title}`;
+}
+
+/**
+ * 반응형 이미지 sizes 속성 생성
+ */
+export function getImageSizes(
+  type: "artwork" | "artist" | "gallery" | "featured"
+): string {
+  const sizesMap = {
+    artwork: "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+    artist: "(max-width: 768px) 100vw, 50vw",
+    gallery: "(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw",
+    featured: "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+  };
+
+  return sizesMap[type];
+}
+
+/**
+ * 이미지 URL 생성 함수 (개발환경 고려)
+ */
 export function generateImageUrl(
   src: string,
   width?: number,
   height?: number,
-  quality: number = 75
+  quality: number = 85
 ): string {
   if (src.startsWith("http")) {
     return src; // 외부 URL은 그대로 반환
@@ -19,32 +131,13 @@ export function generateImageUrl(
     return src;
   }
 
-  // 실제 이미지 최적화 서비스 URL 생성 (예: Vercel, CloudFlare Images 등)
-  const params = new URLSearchParams();
-  if (width) params.set("w", width.toString());
-  if (height) params.set("h", height.toString());
-  params.set("q", quality.toString());
-
-  return `${src}?${params.toString()}`;
+  // Next.js 자체 최적화 사용
+  return src;
 }
 
-// 반응형 이미지 sizes 속성 생성
-export function getImageSizes(
-  type: "artwork" | "profile" | "thumbnail"
-): string {
-  switch (type) {
-    case "artwork":
-      return IMAGE_CONFIG.artworkImageSizes;
-    case "profile":
-      return IMAGE_CONFIG.profileImageSize;
-    case "thumbnail":
-      return "(max-width: 768px) 50vw, 25vw";
-    default:
-      return "100vw";
-  }
-}
-
-// 이미지 preload 링크 생성
+/**
+ * 이미지 preload 링크 생성
+ */
 export function generatePreloadLink(src: string, sizes?: string) {
   return {
     rel: "preload",
@@ -52,120 +145,6 @@ export function generatePreloadLink(src: string, sizes?: string) {
     href: src,
     ...(sizes && { imageSizes: sizes }),
   };
-}
-
-// 이미지 alt 텍스트 생성 (접근성 향상)
-export function generateAltText(
-  title: string,
-  type: "artwork" | "profile"
-): string {
-  switch (type) {
-    case "artwork":
-      return `서예 작품: ${title}`;
-    case "profile":
-      return `작가 프로필 사진: ${title}`;
-    default:
-      return title;
-  }
-}
-
-/**
- * 작품 slug와 연도를 기반으로 최적화된 이미지 URL을 생성합니다.
- *
- * @param slug 작품 슬러그
- * @param year 작품 연도
- * @param size 이미지 크기 (thumb, medium, large, original)
- * @returns 최적화된 이미지 URL
- */
-export function getArtworkImageUrl(
-  slug: string,
-  year: string | number,
-  size: ImageSize = "medium"
-): string {
-  const yearStr = year.toString();
-
-  if (size === "original") {
-    // 원본 이미지 (크기 접미사 없음)
-    return `/Images/Artworks/${yearStr}/${slug}.jpg`;
-  }
-
-  // 최적화된 이미지 (크기 접미사 포함)
-  return `/Images/Artworks/${yearStr}/${slug}-${size}.jpg`;
-}
-
-/**
- * 반응형 이미지를 위한 srcSet 생성
- *
- * @param slug 작품 슬러그
- * @param year 작품 연도
- * @returns srcSet 문자열
- */
-export function getArtworkImageSrcSet(
-  slug: string,
-  year: string | number
-): string {
-  const thumbUrl = getArtworkImageUrl(slug, year, "thumb");
-  const mediumUrl = getArtworkImageUrl(slug, year, "medium");
-  const largeUrl = getArtworkImageUrl(slug, year, "large");
-
-  return `${thumbUrl} 400w, ${mediumUrl} 800w, ${largeUrl} 1200w`;
-}
-
-/**
- * 용도에 따른 최적 이미지 크기 반환
- *
- * @param usage 사용 용도
- * @returns 권장 이미지 크기
- */
-export function getOptimalImageSize(
-  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail"
-): ImageSize {
-  switch (usage) {
-    case "gallery-grid":
-      return "medium";
-    case "gallery-detail":
-      return "large";
-    case "featured":
-      return "large";
-    case "hero":
-      return "large";
-    case "thumbnail":
-      return "thumb";
-    default:
-      return "medium";
-  }
-}
-
-/**
- * 반응형 이미지 sizes 속성 생성 (용도별)
- *
- * @param usage 사용 용도
- * @returns sizes 속성 문자열
- */
-export function getResponsiveImageSizes(
-  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail"
-): string {
-  switch (usage) {
-    case "gallery-grid":
-      return "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
-    case "gallery-detail":
-      return "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw";
-    case "featured":
-      return "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw";
-    case "hero":
-      return "100vw";
-    case "thumbnail":
-      return "(max-width: 640px) 25vw, 15vw";
-    default:
-      return "(max-width: 768px) 50vw, 33vw";
-  }
-}
-
-/**
- * 아티스트 프로필 이미지 URL을 생성합니다.
- */
-export function getArtistImageUrl(filename: string): string {
-  return `/Images/Artist/${filename}`;
 }
 
 /**
@@ -205,37 +184,4 @@ export async function getAvailableImageUrl(
 
   // 모든 이미지가 없으면 기본 medium 크기 반환
   return getArtworkImageUrl(slug, year, "medium");
-}
-
-/**
- * 작품 이미지 메타데이터 반환
- *
- * @param slug 작품 슬러그
- * @param year 작품 연도
- * @param usage 사용 용도
- * @returns 이미지 메타데이터 객체
- */
-export function getArtworkImageMeta(
-  slug: string,
-  year: string | number,
-  usage:
-    | "gallery-grid"
-    | "gallery-detail"
-    | "featured"
-    | "hero"
-    | "thumbnail" = "gallery-grid"
-) {
-  const size = getOptimalImageSize(usage);
-  const src = getArtworkImageUrl(slug, year, size);
-  const srcSet = getArtworkImageSrcSet(slug, year);
-  const sizes = getResponsiveImageSizes(usage);
-
-  return {
-    src,
-    srcSet,
-    sizes,
-    loading:
-      usage === "hero" || usage === "featured" ? "eager" : ("lazy" as const),
-    priority: usage === "hero" || usage === "featured",
-  };
 }

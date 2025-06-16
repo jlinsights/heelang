@@ -1,14 +1,13 @@
 "use client";
 
 import { generateAltText, getArtworkImageMeta } from "@/lib/image-utils";
+import type { Artwork } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
 
-interface OptimizedImageProps {
-  slug: string;
-  year: string | number;
-  title: string;
+interface OptimizedArtworkImageProps {
+  artwork: Artwork;
   usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail";
   className?: string;
   aspectRatio?: string;
@@ -18,10 +17,8 @@ interface OptimizedImageProps {
   onError?: () => void;
 }
 
-export function OptimizedImage({
-  slug,
-  year,
-  title,
+export function OptimizedArtworkImage({
+  artwork,
   usage,
   className,
   aspectRatio,
@@ -29,12 +26,13 @@ export function OptimizedImage({
   priority,
   onLoad,
   onError,
-}: OptimizedImageProps) {
+}: OptimizedArtworkImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const imageMeta = getArtworkImageMeta(slug, year, usage);
-  const altText = generateAltText(title, "artwork");
+  // artwork.slug와 artwork.year를 사용해서 최적화된 이미지 메타데이터 생성
+  const imageMeta = getArtworkImageMeta(artwork.slug, artwork.year, usage);
+  const altText = generateAltText(artwork.title, "artwork");
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -42,53 +40,30 @@ export function OptimizedImage({
   };
 
   const handleError = () => {
-    setIsLoading(false);
     setHasError(true);
+    setIsLoading(false);
     onError?.();
   };
 
-  // 에러 상태 렌더링
-  if (hasError) {
-    return (
-      <div
-        className={cn(
-          "w-full h-full bg-gradient-zen flex items-center justify-center",
-          aspectRatio,
-          className
-        )}
-      >
-        <div className="text-center text-ink-lighter">
-          <div className="w-16 h-16 mx-auto mb-4 bg-ink-lighter/20 rounded-full flex items-center justify-center">
-            <svg
-              className="w-8 h-8"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
-          <p className="text-sm">이미지를 불러올 수 없습니다</p>
-        </div>
-      </div>
-    );
-  }
+  // 에러 발생 시 기존 imageUrl로 fallback
+  const finalSrc = hasError ? artwork.imageUrl : imageMeta.src;
 
   return (
-    <div className={cn("relative overflow-hidden", aspectRatio, className)}>
-      {/* 로딩 상태 */}
-      {showLoadingState && isLoading && (
-        <div className="absolute inset-0 bg-stone-light animate-pulse z-10" />
+    <div
+      className={cn(
+        "relative overflow-hidden bg-gray-100 dark:bg-gray-800",
+        aspectRatio || "aspect-[3/4]",
+        className
+      )}
+    >
+      {/* 로딩 스켈레톤 */}
+      {isLoading && showLoadingState && (
+        <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700" />
       )}
 
       {/* 최적화된 이미지 */}
       <Image
-        src={imageMeta.src}
+        src={finalSrc}
         sizes={imageMeta.sizes}
         alt={altText}
         fill
@@ -107,62 +82,20 @@ export function OptimizedImage({
   );
 }
 
-interface ArtworkImageProps {
-  artwork: {
-    slug: string;
-    title: string;
-    year: string | number;
-  };
-  usage: "gallery-grid" | "gallery-detail" | "featured" | "hero" | "thumbnail";
-  className?: string;
-  aspectRatio?: string;
-  showLoadingState?: boolean;
-  priority?: boolean;
-  onLoad?: () => void;
-  onError?: () => void;
-}
-
-export function ArtworkImage({
-  artwork,
-  usage,
-  className,
-  aspectRatio,
-  showLoadingState = true,
-  priority,
-  onLoad,
-  onError,
-}: ArtworkImageProps) {
-  return (
-    <OptimizedImage
-      slug={artwork.slug}
-      year={artwork.year}
-      title={artwork.title}
-      usage={usage}
-      className={className}
-      aspectRatio={aspectRatio}
-      showLoadingState={showLoadingState}
-      priority={priority}
-      onLoad={onLoad}
-      onError={onError}
-    />
-  );
-}
-
-// 사용 편의를 위한 프리셋 컴포넌트들
+// 기존 ArtworkCard에서 사용할 수 있는 간편한 래퍼 컴포넌트들
 export function GalleryGridImage({
   artwork,
   className,
   priority,
 }: {
-  artwork: { slug: string; title: string; year: string | number };
+  artwork: Artwork;
   className?: string;
   priority?: boolean;
 }) {
   return (
-    <ArtworkImage
+    <OptimizedArtworkImage
       artwork={artwork}
       usage="gallery-grid"
-      aspectRatio="aspect-[3/4]"
       className={className}
       priority={priority}
     />
@@ -173,11 +106,11 @@ export function GalleryDetailImage({
   artwork,
   className,
 }: {
-  artwork: { slug: string; title: string; year: string | number };
+  artwork: Artwork;
   className?: string;
 }) {
   return (
-    <ArtworkImage
+    <OptimizedArtworkImage
       artwork={artwork}
       usage="gallery-detail"
       className={className}
@@ -189,17 +122,18 @@ export function GalleryDetailImage({
 export function FeaturedImage({
   artwork,
   className,
+  priority,
 }: {
-  artwork: { slug: string; title: string; year: string | number };
+  artwork: Artwork;
   className?: string;
+  priority?: boolean;
 }) {
   return (
-    <ArtworkImage
+    <OptimizedArtworkImage
       artwork={artwork}
       usage="featured"
-      aspectRatio="aspect-[4/5]"
       className={className}
-      priority={true}
+      priority={priority}
     />
   );
 }
@@ -208,16 +142,15 @@ export function ThumbnailImage({
   artwork,
   className,
 }: {
-  artwork: { slug: string; title: string; year: string | number };
+  artwork: Artwork;
   className?: string;
 }) {
   return (
-    <ArtworkImage
+    <OptimizedArtworkImage
       artwork={artwork}
       usage="thumbnail"
-      aspectRatio="aspect-square"
       className={className}
-      showLoadingState={false}
+      priority={false}
     />
   );
 }

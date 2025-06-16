@@ -2,10 +2,10 @@ import {
   fetchArtistFromAirtable,
   fetchArtworksFromAirtable,
   fetchFeaturedArtworks,
-  fetchTreasureArtworks as fetchTreasureFromAirtable,
-} from "./airtable";
+  fetchTreasureArtworks,
+} from "@/lib/airtable";
+import type { Artist, Artwork } from "@/lib/types";
 import { getArtistImageUrl, getArtworkImageUrl } from "./image-utils";
-import type { Artist, Artwork } from "./types";
 
 // 로컬 fallback 데이터
 export const fallbackArtistData: Artist = {
@@ -551,7 +551,7 @@ async function fetchArtworksFromAPI(): Promise<Artwork[]> {
     if (result.success && result.data) {
       return result.data;
     } else {
-      console.warn("API returned no data:", result.message);
+      console.warn("API returned no artwork data:", result.message);
       return [];
     }
   } catch (error) {
@@ -561,7 +561,7 @@ async function fetchArtworksFromAPI(): Promise<Artwork[]> {
 }
 
 /**
- * 환경에 따라 적절한 데이터 소스를 선택하는 함수
+ * 환경에 따라 적절한 데이터 소스에서 작품 목록을 가져오는 함수
  */
 async function getArtworksFromSource(): Promise<Artwork[]> {
   // 서버 사이드인지 확인
@@ -581,13 +581,12 @@ async function getArtworksFromSource(): Promise<Artwork[]> {
         );
         return airtableData;
       } else {
-        console.warn("⚠️ No artworks found in Airtable, using fallback data");
-        return fallbackArtworksData;
+        console.warn("⚠️ No artworks found in Airtable");
+        return [];
       }
     } catch (error) {
       console.error("❌ Error fetching artworks from Airtable:", error);
-      console.log("🔄 Using fallback artworks data");
-      return fallbackArtworksData;
+      return [];
     }
   } else {
     // 클라이언트 사이드: API 라우트를 통해 접근
@@ -601,13 +600,12 @@ async function getArtworksFromSource(): Promise<Artwork[]> {
         );
         return apiData;
       } else {
-        console.warn("⚠️ No artworks found from API, using fallback data");
-        return fallbackArtworksData;
+        console.warn("⚠️ No artworks found from API");
+        return [];
       }
     } catch (error) {
       console.error("❌ Error fetching artworks from API:", error);
-      console.log("🔄 Using fallback artworks data");
-      return fallbackArtworksData;
+      return [];
     }
   }
 }
@@ -622,7 +620,7 @@ export async function getArtworks(): Promise<Artwork[]> {
 /**
  * 클라이언트 사이드에서 API를 통해 작가 데이터를 가져오는 함수
  */
-async function fetchArtistFromAPI(): Promise<Artist> {
+async function fetchArtistFromAPI(): Promise<Artist | null> {
   try {
     const response = await fetch("/api/artist", {
       cache: "no-store", // 항상 최신 데이터 가져오기
@@ -638,18 +636,18 @@ async function fetchArtistFromAPI(): Promise<Artist> {
       return result.data;
     } else {
       console.warn("API returned no artist data:", result.message);
-      return fallbackArtistData;
+      return null;
     }
   } catch (error) {
     console.error("Failed to fetch artist from API:", error);
-    return fallbackArtistData;
+    return null;
   }
 }
 
 /**
  * 환경에 따라 적절한 데이터 소스에서 작가 정보를 가져오는 함수
  */
-async function getArtistFromSource(): Promise<Artist> {
+async function getArtistFromSource(): Promise<Artist | null> {
   // 서버 사이드인지 확인
   const isServer = typeof window === "undefined";
 
@@ -665,25 +663,29 @@ async function getArtistFromSource(): Promise<Artist> {
         console.log("✅ Successfully fetched artist data from Airtable");
         return airtableData;
       } else {
-        console.warn("⚠️ No artist found in Airtable, using fallback data");
-        return fallbackArtistData;
+        console.warn("⚠️ No artist found in Airtable");
+        return null;
       }
     } catch (error) {
       console.error("❌ Error fetching artist from Airtable:", error);
-      console.log("🔄 Using fallback artist data");
-      return fallbackArtistData;
+      return null;
     }
   } else {
     // 클라이언트 사이드: API 라우트를 통해 접근
     try {
       console.log("🔍 Client-side: Attempting to fetch artist from API...");
       const apiData = await fetchArtistFromAPI();
-      console.log("✅ Successfully fetched artist data from API");
-      return apiData;
+
+      if (apiData) {
+        console.log("✅ Successfully fetched artist data from API");
+        return apiData;
+      } else {
+        console.warn("⚠️ No artist found from API");
+        return null;
+      }
     } catch (error) {
       console.error("❌ Error fetching artist from API:", error);
-      console.log("🔄 Using fallback artist data");
-      return fallbackArtistData;
+      return null;
     }
   }
 }
@@ -691,7 +693,7 @@ async function getArtistFromSource(): Promise<Artist> {
 /**
  * 작가 정보를 가져오는 함수 (환경에 따라 적절한 소스 선택)
  */
-export async function getArtist(): Promise<Artist> {
+export async function getArtist(): Promise<Artist | null> {
   return await getArtistFromSource();
 }
 
@@ -718,10 +720,7 @@ export async function getFeaturedArtworks(
         return airtableData;
       }
     } catch (error) {
-      console.warn(
-        "Failed to fetch featured artworks from Airtable, using fallback data:",
-        error
-      );
+      console.warn("Failed to fetch featured artworks from Airtable:", error);
     }
   } else {
     // 클라이언트 사이드: API를 통해 모든 작품을 가져온 후 featured 필터링
@@ -746,19 +745,8 @@ export async function getFeaturedArtworks(
     }
   }
 
-  // fallback: featured가 true인 작품들 또는 최신 작품들
-  console.log("🔄 Using fallback featured artworks data");
-  const featured = fallbackArtworksData.filter((artwork) => artwork.featured);
-  if (featured.length >= limit) {
-    return featured.slice(0, limit);
-  }
-
-  const remaining = limit - featured.length;
-  const latest = fallbackArtworksData
-    .filter((artwork) => !artwork.featured)
-    .slice(0, remaining);
-
-  return [...featured, ...latest];
+  console.log("⚠️ No featured artworks found");
+  return [];
 }
 
 /**
@@ -774,7 +762,7 @@ export async function getTreasureArtworks(): Promise<Artwork[]> {
       console.log(
         "🔍 Server-side: Attempting to fetch treasure artworks from Airtable..."
       );
-      const airtableData = await fetchTreasureFromAirtable();
+      const airtableData = await fetchTreasureArtworks();
       if (airtableData.length > 0) {
         console.log(
           `✅ Successfully fetched ${airtableData.length} treasure artworks from Airtable`
@@ -782,10 +770,7 @@ export async function getTreasureArtworks(): Promise<Artwork[]> {
         return airtableData;
       }
     } catch (error) {
-      console.warn(
-        "Failed to fetch treasure artworks from Airtable, using fallback data:",
-        error
-      );
+      console.warn("Failed to fetch treasure artworks from Airtable:", error);
     }
   } else {
     // 클라이언트 사이드: API를 통해 모든 작품을 가져온 후 treasure 필터링
@@ -796,10 +781,7 @@ export async function getTreasureArtworks(): Promise<Artwork[]> {
       const allArtworks = await fetchArtworksFromAPI();
       if (allArtworks && allArtworks.length > 0) {
         const treasureFromAPI = allArtworks.filter(
-          (artwork) =>
-            artwork.title.includes("보물") ||
-            artwork.title.toLowerCase().includes("treasure") ||
-            artwork.category === "treasure"
+          (artwork) => artwork.category === "treasure"
         );
         if (treasureFromAPI.length > 0) {
           console.log(
@@ -813,18 +795,12 @@ export async function getTreasureArtworks(): Promise<Artwork[]> {
     }
   }
 
-  // fallback: 보물 시리즈 작품들
-  console.log("🔄 Using fallback treasure artworks data");
-  return fallbackArtworksData.filter(
-    (artwork) =>
-      artwork.title.includes("보물") ||
-      artwork.title.toLowerCase().includes("treasure") ||
-      artwork.category === "treasure"
-  );
+  console.log("⚠️ No treasure artworks found");
+  return [];
 }
 
 /**
- * 특정 작품을 ID로 가져오는 함수
+ * ID로 특정 작품을 찾는 함수
  */
 export async function getArtworkById(id: string): Promise<Artwork | null> {
   const artworks = await getArtworks();
@@ -832,28 +808,11 @@ export async function getArtworkById(id: string): Promise<Artwork | null> {
 }
 
 /**
- * 특정 작품을 slug로 가져오는 함수 (환경에 따라 적절한 소스 선택)
+ * Slug로 특정 작품을 찾는 함수
  */
 export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
-  // 즉시 fallback에서 찾기
-  const fallbackArtwork = fallbackArtworksData.find(
-    (artwork) => artwork.slug === slug
-  );
-
-  try {
-    // 환경에 따라 적절한 소스에서 데이터 가져오기
-    const artworks = await getArtworksFromSource();
-    if (artworks && artworks.length > 0) {
-      const foundArtwork = artworks.find((artwork) => artwork.slug === slug);
-      if (foundArtwork) {
-        return foundArtwork;
-      }
-    }
-  } catch (error) {
-    console.warn("Failed to fetch artwork for slug:", slug, error);
-  }
-
-  return fallbackArtwork || null;
+  const artworks = await getArtworks();
+  return artworks.find((artwork) => artwork.slug === slug) || null;
 }
 
 // 기존 export들 (하위 호환성)

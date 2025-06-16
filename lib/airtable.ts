@@ -347,7 +347,7 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
 
     console.log("📡 Fetching artist from Airtable...");
 
-    const records = await base("Artists")
+    const records = await base("Artist")
       .select({
         maxRecords: 1,
       })
@@ -397,12 +397,33 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       );
     };
 
+    const getProfileImageUrl = () => {
+      // 에어테이블의 Attachment 필드에서 이미지 URL 가져오기
+      const profileImage =
+        fields.profileImage ||
+        fields.ProfileImage ||
+        fields["프로필 이미지"] ||
+        fields.profile_image;
+
+      if (
+        profileImage &&
+        Array.isArray(profileImage) &&
+        profileImage.length > 0
+      ) {
+        return profileImage[0].url;
+      }
+
+      // fallback으로 최적화된 로컬 이미지 사용
+      return "/Images/Artist/Artist.png";
+    };
+
     const artist: Artist = {
       id: records[0].id,
       name: getName(),
       bio: getBio(),
       email: getEmail(),
       phone: getPhone(),
+      profileImageUrl: getProfileImageUrl(),
       socialLinks: {
         instagram: fields.instagram || fields.Instagram || "",
         facebook: fields.facebook || fields.Facebook || "",

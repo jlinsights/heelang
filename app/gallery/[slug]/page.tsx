@@ -1,11 +1,11 @@
 "use client";
 
 import { Logo } from "@/components/logo";
-import { GalleryDetailImage } from "@/components/optimized-image";
 import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
 import { Button } from "@/components/ui/button";
 import type { Artwork } from "@/lib/types";
 import { Calendar, Palette, Ruler, Share } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -207,12 +207,11 @@ export default function ArtworkPage() {
             <div className="flex items-center justify-center">
               <div className="relative max-w-4xl w-full bg-white dark:bg-slate-800 shadow-2xl rounded-lg overflow-hidden">
                 {artwork.slug ? (
-                  <GalleryDetailImage
-                    artwork={{
-                      slug: artwork.slug,
-                      title: artwork.title,
-                      year: artwork.year,
-                    }}
+                  <Image
+                    src={artwork.imageUrl}
+                    alt={artwork.title}
+                    width={512}
+                    height={512}
                     className="w-full h-auto max-h-[80vh]"
                   />
                 ) : (

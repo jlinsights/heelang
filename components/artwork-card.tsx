@@ -1,11 +1,11 @@
 "use client";
 
-import { GalleryGridImage } from "@/components/optimized-image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Artwork } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Calendar, Eye, Heart, Share2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -26,6 +26,7 @@ export function ArtworkCard({
   showActions = false,
   priority = false,
 }: ArtworkCardProps) {
+  const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
   const cardVariants = {
@@ -62,16 +63,29 @@ export function ArtworkCard({
                 imageAspectRatio[variant]
               )}
             >
-              {artwork.slug ? (
-                <GalleryGridImage
-                  artwork={{
-                    slug: artwork.slug,
-                    title: artwork.title,
-                    year: artwork.year,
-                  }}
-                  className="group-hover:scale-110 group-focus:scale-110 transition-transform duration-700 ease-out"
-                  priority={priority}
-                />
+              {artwork.imageUrl ? (
+                <>
+                  {/* 로딩 상태 */}
+                  {isLoading && (
+                    <div className="absolute inset-0 bg-stone-light animate-pulse z-10" />
+                  )}
+
+                  <Image
+                    src={artwork.imageUrl}
+                    alt={artwork.title}
+                    fill
+                    className={cn(
+                      "object-cover transition-all duration-700 ease-out group-hover:scale-110 group-focus:scale-110",
+                      isLoading && "scale-110 blur-sm opacity-0",
+                      !isLoading && "scale-100 blur-0 opacity-100"
+                    )}
+                    loading={priority ? "eager" : "lazy"}
+                    priority={priority}
+                    onLoad={() => setIsLoading(false)}
+                    onError={() => setIsLoading(false)}
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                  />
+                </>
               ) : (
                 <div className="w-full h-full bg-gradient-zen flex items-center justify-center">
                   <div className="text-center text-ink-lighter">

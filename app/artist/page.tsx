@@ -358,26 +358,151 @@ export default function ArtistPage() {
                 <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-stone-200 dark:border-gray-700 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-ink dark:text-white">
-                      <Award className="w-5 h-5 mr-2" />
+                      <Award className="w-5 h-5 mr-2 text-amber-600 dark:text-amber-400" />
                       수상 경력
+                      <Badge variant="secondary" className="ml-3 text-xs">
+                        총 {artist.awards.length}회
+                      </Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-3">
-                      {artist.awards.map((award, index) => (
-                        <li key={index} className="flex items-start">
-                          <Badge
-                            variant="secondary"
-                            className="mr-3 mt-0.5 flex-shrink-0"
-                          >
-                            수상
-                          </Badge>
-                          <span className="text-ink-light dark:text-gray-300">
-                            {award}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="space-y-6">
+                      {(() => {
+                        // 구조화된 수상경력 데이터 파싱 (Year | Contest | Award 형태)
+                        const awardsByYear = artist.awards.reduce(
+                          (
+                            acc: Record<
+                              string,
+                              Array<{
+                                year: string;
+                                contest: string;
+                                award: string;
+                                original: string;
+                              }>
+                            >,
+                            award
+                          ) => {
+                            const parts = award.split(" | ");
+                            if (parts.length >= 3) {
+                              const year = parts[0].trim();
+                              const contest = parts[1].trim();
+                              const awardName = parts[2].trim();
+
+                              if (!acc[year]) {
+                                acc[year] = [];
+                              }
+                              acc[year].push({
+                                year,
+                                contest,
+                                award: awardName,
+                                original: award,
+                              });
+                            } else {
+                              // 기존 형태의 데이터도 지원
+                              const yearMatch = award.match(/(\d{4})/);
+                              const year = yearMatch ? yearMatch[1] : "기타";
+                              const cleanAward = award
+                                .replace(/^\d{4}년?\s*/, "")
+                                .replace(/^\d{4}\.\s*/, "");
+
+                              if (!acc[year]) {
+                                acc[year] = [];
+                              }
+                              acc[year].push({
+                                year,
+                                contest: "",
+                                award: cleanAward || award,
+                                original: award,
+                              });
+                            }
+                            return acc;
+                          },
+                          {}
+                        );
+
+                        // 년도별 정렬 (최신년도부터)
+                        const sortedYears = Object.keys(awardsByYear).sort(
+                          (a, b) => {
+                            if (a === "기타") return 1;
+                            if (b === "기타") return -1;
+                            return parseInt(b) - parseInt(a);
+                          }
+                        );
+
+                        return sortedYears.map((year, yearIndex) => (
+                          <div key={year} className="relative">
+                            {/* 년도 헤더 */}
+                            <div className="flex items-center mb-4 sticky top-28 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm py-2 z-10 rounded-lg">
+                              <div className="flex items-center">
+                                <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center mr-3 shadow-md">
+                                  <span className="text-white text-xs font-bold">
+                                    {year === "기타" ? "?" : year.slice(-2)}
+                                  </span>
+                                </div>
+                                <h4 className="text-lg font-bold text-amber-700 dark:text-amber-300">
+                                  {year === "기타" ? "기타" : `${year}년`}
+                                </h4>
+                                <Badge
+                                  variant="outline"
+                                  className="ml-3 text-amber-600 border-amber-300 dark:border-amber-600 text-xs"
+                                >
+                                  {awardsByYear[year].length}건
+                                </Badge>
+                              </div>
+                            </div>
+
+                            {/* 해당 년도 수상 목록 */}
+                            <div className="space-y-3 ml-4 border-l-2 border-amber-200 dark:border-amber-700 pl-6">
+                              {awardsByYear[year].map((awardData, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-start group hover:bg-amber-50/50 dark:hover:bg-amber-900/10 rounded-lg p-3 transition-all duration-200 relative"
+                                >
+                                  {/* 연결점 */}
+                                  <div className="absolute -left-8 top-4 w-3 h-3 bg-amber-400 rounded-full border-2 border-white dark:border-gray-800 shadow-sm"></div>
+
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center flex-wrap gap-2 mb-3">
+                                      <Badge
+                                        variant="secondary"
+                                        className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-xs"
+                                      >
+                                        수상
+                                      </Badge>
+                                      {awardData.contest && (
+                                        <Badge
+                                          variant="outline"
+                                          className="text-xs border-amber-300 text-amber-600 dark:border-amber-600 dark:text-amber-400"
+                                        >
+                                          {awardData.contest}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <div className="text-ink dark:text-gray-100 font-medium leading-relaxed">
+                                      <div className="font-semibold text-amber-700 dark:text-amber-300 mb-1">
+                                        {awardData.award}
+                                      </div>
+                                      {awardData.contest && (
+                                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                                          {awardData.contest}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* 년도 구분선 (마지막 년도 제외) */}
+                            {yearIndex < sortedYears.length - 1 && (
+                              <div className="mt-8 mb-2">
+                                <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-200 dark:via-amber-700 to-transparent"></div>
+                              </div>
+                            )}
+                          </div>
+                        ));
+                      })()}
+                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -387,71 +512,191 @@ export default function ArtistPage() {
                 <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-stone-200 dark:border-gray-700 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-ink dark:text-white">
-                      <Calendar className="w-5 h-5 mr-2" />
+                      <Calendar className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
                       전시 경력
+                      <Badge variant="secondary" className="ml-3 text-xs">
+                        총 {artist.exhibitions.length}회
+                      </Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      {/* 개인전과 단체전 분리 */}
+                    <div className="space-y-8">
                       {(() => {
-                        const soloExhibitions = artist.exhibitions.filter(
+                        // 구조화된 전시경력 데이터 파싱 (Year | Type | Title | Venue 형태)
+                        const parseExhibition = (exhibition: string) => {
+                          const parts = exhibition.split(" | ");
+                          if (parts.length >= 4) {
+                            return {
+                              year: parts[0].trim(),
+                              type: parts[1].trim(),
+                              title: parts[2].trim(),
+                              venue: parts[3].trim(),
+                              original: exhibition,
+                            };
+                          } else if (parts.length >= 3) {
+                            return {
+                              year: parts[0].trim(),
+                              type: parts[1].trim(),
+                              title: parts[2].trim(),
+                              venue: "",
+                              original: exhibition,
+                            };
+                          }
+                          // 기존 형태 지원
+                          return {
+                            year: "",
+                            type: exhibition.includes("개인전")
+                              ? "개인전"
+                              : "단체전",
+                            title: exhibition,
+                            venue: "",
+                            original: exhibition,
+                          };
+                        };
+
+                        const parsedExhibitions =
+                          artist.exhibitions.map(parseExhibition);
+                        const soloExhibitions = parsedExhibitions.filter(
                           (ex) =>
-                            ex.includes("개인전") ||
-                            ex.includes("solo") ||
-                            ex.includes("Solo")
+                            ex.type.includes("개인전") ||
+                            ex.type.includes("solo") ||
+                            ex.type.includes("Solo")
                         );
-                        const groupExhibitions = artist.exhibitions.filter(
+                        const groupExhibitions = parsedExhibitions.filter(
                           (ex) =>
-                            !ex.includes("개인전") &&
-                            !ex.includes("solo") &&
-                            !ex.includes("Solo")
+                            ex.type.includes("단체전") ||
+                            ex.type.includes("group") ||
+                            ex.type.includes("Group")
                         );
 
                         return (
-                          <>
+                          <div className="space-y-8">
+                            {/* 개인전 섹션 */}
                             {soloExhibitions.length > 0 && (
                               <div>
-                                <h4 className="font-semibold text-ink dark:text-white mb-3">
-                                  개인전
-                                </h4>
-                                <ul className="space-y-2">
+                                <div className="flex items-center mb-6">
+                                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-3 shadow-md">
+                                    <span className="text-white text-xs font-bold">
+                                      개
+                                    </span>
+                                  </div>
+                                  <h4 className="text-lg font-bold text-blue-700 dark:text-blue-300">
+                                    개인전
+                                  </h4>
+                                  <Badge
+                                    variant="secondary"
+                                    className="ml-3 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs"
+                                  >
+                                    {soloExhibitions.length}회
+                                  </Badge>
+                                </div>
+
+                                <div className="ml-4 border-l-2 border-blue-200 dark:border-blue-700 pl-6 space-y-4">
                                   {soloExhibitions.map((exhibition, index) => (
-                                    <li
-                                      key={index}
-                                      className="flex items-start"
+                                    <div
+                                      key={`solo-${index}`}
+                                      className="flex items-start group hover:bg-blue-50/50 dark:hover:bg-blue-900/10 rounded-lg p-3 transition-all duration-200 relative"
                                     >
-                                      <div className="w-2 h-2 bg-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                                      <span className="text-ink-light dark:text-gray-300">
-                                        {exhibition}
-                                      </span>
-                                    </li>
+                                      {/* 연결점 */}
+                                      <div className="absolute -left-8 top-4 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm"></div>
+
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center flex-wrap gap-2 mb-2">
+                                          {exhibition.year && (
+                                            <Badge
+                                              variant="outline"
+                                              className="text-xs border-blue-300 text-blue-600 dark:border-blue-600 dark:text-blue-400"
+                                            >
+                                              {exhibition.year}
+                                            </Badge>
+                                          )}
+                                          <Badge
+                                            variant="secondary"
+                                            className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs"
+                                          >
+                                            {exhibition.type}
+                                          </Badge>
+                                        </div>
+                                        <div className="text-ink dark:text-gray-100 font-medium leading-relaxed">
+                                          <div className="font-semibold text-blue-700 dark:text-blue-300 mb-1">
+                                            {exhibition.title}
+                                          </div>
+                                          {exhibition.venue && (
+                                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                              {exhibition.venue}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
                                   ))}
-                                </ul>
+                                </div>
                               </div>
                             )}
 
+                            {/* 단체전 섹션 */}
                             {groupExhibitions.length > 0 && (
                               <div>
-                                <h4 className="font-semibold text-ink dark:text-white mb-3">
-                                  단체전
-                                </h4>
-                                <ul className="space-y-2">
+                                <div className="flex items-center mb-6">
+                                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 shadow-md">
+                                    <span className="text-white text-xs font-bold">
+                                      단
+                                    </span>
+                                  </div>
+                                  <h4 className="text-lg font-bold text-green-700 dark:text-green-300">
+                                    단체전
+                                  </h4>
+                                  <Badge
+                                    variant="secondary"
+                                    className="ml-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-xs"
+                                  >
+                                    {groupExhibitions.length}회
+                                  </Badge>
+                                </div>
+
+                                <div className="ml-4 border-l-2 border-green-200 dark:border-green-700 pl-6 space-y-4">
                                   {groupExhibitions.map((exhibition, index) => (
-                                    <li
-                                      key={index}
-                                      className="flex items-start"
+                                    <div
+                                      key={`group-${index}`}
+                                      className="flex items-start group hover:bg-green-50/50 dark:hover:bg-green-900/10 rounded-lg p-3 transition-all duration-200 relative"
                                     >
-                                      <div className="w-2 h-2 bg-stone-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                                      <span className="text-ink-light dark:text-gray-300">
-                                        {exhibition}
-                                      </span>
-                                    </li>
+                                      {/* 연결점 */}
+                                      <div className="absolute -left-8 top-4 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm"></div>
+
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center flex-wrap gap-2 mb-2">
+                                          {exhibition.year && (
+                                            <Badge
+                                              variant="outline"
+                                              className="text-xs border-green-300 text-green-600 dark:border-green-600 dark:text-green-400"
+                                            >
+                                              {exhibition.year}
+                                            </Badge>
+                                          )}
+                                          <Badge
+                                            variant="secondary"
+                                            className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-xs"
+                                          >
+                                            {exhibition.type}
+                                          </Badge>
+                                        </div>
+                                        <div className="text-ink dark:text-gray-100 font-medium leading-relaxed">
+                                          <div className="font-semibold text-green-700 dark:text-green-300 mb-1">
+                                            {exhibition.title}
+                                          </div>
+                                          {exhibition.venue && (
+                                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                              {exhibition.venue}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
                                   ))}
-                                </ul>
+                                </div>
                               </div>
                             )}
-                          </>
+                          </div>
                         );
                       })()}
                     </div>

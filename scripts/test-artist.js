@@ -1,45 +1,60 @@
+require("dotenv").config({ path: ".env.local" });
 const Airtable = require("airtable");
 
-// 환경 변수 로드
-require("dotenv").config({ path: ".env.local" });
+const apiKey = process.env.AIRTABLE_API_KEY;
+const baseId = process.env.AIRTABLE_BASE_ID;
+
+if (!apiKey || !baseId) {
+  console.error("❌ Missing environment variables");
+  process.exit(1);
+}
+
+const base = Airtable.base(baseId);
 
 async function testArtistData() {
   try {
-    console.log("Testing Airtable Artist connection...");
-    console.log("API Key:", process.env.AIRTABLE_API_KEY ? "Set" : "Not set");
-    console.log("Base ID:", process.env.AIRTABLE_BASE_ID ? "Set" : "Not set");
+    console.log("🎭 Artist 테이블의 모든 레코드를 확인합니다...");
 
-    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
-      throw new Error("Missing Airtable credentials");
-    }
+    const records = await base("Artist").select().all();
 
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-      process.env.AIRTABLE_BASE_ID
-    );
+    console.log(`📊 Found ${records.length} artist record(s)`);
 
-    console.log("\nFetching Artist data...");
-    const records = await base("Artists")
-      .select({
-        maxRecords: 1,
-      })
-      .all();
+    // 모든 레코드 확인
+    records.forEach((artist, index) => {
+      console.log(`\n🎨 Artist Record ${index + 1}:`);
+      console.log("Name:", artist.get("name"));
+      console.log("ID:", artist.get("id"));
 
-    if (records.length === 0) {
-      console.log("No artist data found");
-      return;
-    }
+      // 모든 필드 확인
+      const fields = artist.fields;
+      console.log("All fields:", Object.keys(fields));
 
-    const fields = records[0].fields;
-    console.log("\nArtist data found:");
-    console.log("Name:", fields.name || fields.Name);
-    console.log("Bio:", fields.bio || fields.Bio);
-    console.log("Birth Year:", fields.birthYear || fields.BirthYear);
-    console.log("Education:", fields.education || fields.Education);
-    console.log("Exhibitions:", fields.exhibitions || fields.Exhibitions);
-    console.log("Awards:", fields.awards || fields.Awards);
-    console.log("Collections:", fields.collections || fields.Collections);
+      // awards 관련 필드들 확인
+      const awards = artist.get("awards");
+      const Awards = artist.get("Awards");
+      const award = artist.get("award");
+
+      console.log("\n🏆 Awards related fields:");
+      console.log("awards:", awards);
+      console.log("Awards:", Awards);
+      console.log("award:", award);
+
+      if (awards) {
+        console.log("Awards type:", typeof awards);
+        console.log(
+          "Awards length:",
+          Array.isArray(awards) ? awards.length : "Not an array"
+        );
+        if (Array.isArray(awards)) {
+          awards.forEach((item, i) => {
+            console.log(`  ${i + 1}. ${item}`);
+          });
+        }
+      }
+    });
   } catch (error) {
-    console.error("Error:", error.message);
+    console.error("❌ Error:", error.message);
+    console.error("Full error:", error);
   }
 }
 

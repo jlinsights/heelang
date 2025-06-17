@@ -1,73 +1,82 @@
-'use client'
+"use client";
 
-import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
-import { ArtworkGrid } from '@/components/artwork-card'
-import { SectionHeader, Stats } from '@/components/section-header'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import type { Artwork } from '@/lib/types'
-import { ArrowRight, Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { ArtNavigation, NavigationSpacer } from "@/components/art-navigation";
+import { ArtworkGrid } from "@/components/artwork-card";
+import { SectionHeader, Stats } from "@/components/section-header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { Artwork } from "@/lib/types";
+import {
+  ArrowRight,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // 히어로 섹션 컴포넌트
 function HeroSection() {
-  const [featuredArtworks, setFeaturedArtworks] = useState<Artwork[]>([])
-  const [loading, setLoading] = useState(true)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [featuredArtworks, setFeaturedArtworks] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     async function loadFeaturedArtworks() {
       try {
-        const { fallbackArtworksData } = await import('@/lib/artworks')
+        const { fallbackArtworksData } = await import("@/lib/artworks");
         const fallbackFeatured = fallbackArtworksData
-          .filter(artwork => artwork.featured)
-          .slice(0, 6)
-        
-        const initialArtworks = fallbackFeatured.length > 0 
-          ? fallbackFeatured 
-          : fallbackArtworksData.slice(0, 6)
-        
-        setFeaturedArtworks(initialArtworks)
-        setLoading(false)
-        
+          .filter((artwork) => artwork.featured)
+          .slice(0, 6);
+
+        const initialArtworks =
+          fallbackFeatured.length > 0
+            ? fallbackFeatured
+            : fallbackArtworksData.slice(0, 6);
+
+        setFeaturedArtworks(initialArtworks);
+        setLoading(false);
+
         try {
-          const { getFeaturedArtworks } = await import('@/lib/artworks')
-          const airtableArtworks = await getFeaturedArtworks(6)
-          
+          const { getFeaturedArtworks } = await import("@/lib/artworks");
+          const airtableArtworks = await getFeaturedArtworks(6);
+
           if (airtableArtworks && airtableArtworks.length > 0) {
-            setFeaturedArtworks(airtableArtworks)
+            setFeaturedArtworks(airtableArtworks);
           }
         } catch (airtableError) {
-          console.log('Using fallback data')
+          console.log("Using fallback data");
         }
       } catch (error) {
-        console.error('Failed to load data:', error)
-        setLoading(false)
+        console.error("Failed to load data:", error);
+        setLoading(false);
       }
     }
 
-    loadFeaturedArtworks()
-  }, [])
+    loadFeaturedArtworks();
+  }, []);
 
   useEffect(() => {
     if (featuredArtworks.length > 0) {
       const interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % featuredArtworks.length)
-      }, 8000)
-      
-      return () => clearInterval(interval)
+        setCurrentImageIndex((prev) => (prev + 1) % featuredArtworks.length);
+      }, 8000);
+
+      return () => clearInterval(interval);
     }
-  }, [featuredArtworks.length])
+  }, [featuredArtworks.length]);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % featuredArtworks.length)
-  }
+    setCurrentImageIndex((prev) => (prev + 1) % featuredArtworks.length);
+  };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + featuredArtworks.length) % featuredArtworks.length)
-  }
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + featuredArtworks.length) % featuredArtworks.length
+    );
+  };
 
   if (loading || featuredArtworks.length === 0) {
     return (
@@ -81,10 +90,10 @@ function HeroSection() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
-  const currentArtwork = featuredArtworks[currentImageIndex]
+  const currentArtwork = featuredArtworks[currentImageIndex];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -94,9 +103,9 @@ function HeroSection() {
           <div
             key={artwork.id}
             className={`absolute inset-0 transition-all duration-[2000ms] ease-in-out ${
-              index === currentImageIndex 
-                ? 'opacity-100 scale-100' 
-                : 'opacity-0 scale-105'
+              index === currentImageIndex
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-105"
             }`}
           >
             {artwork.imageUrl && (
@@ -105,20 +114,21 @@ function HeroSection() {
                 alt={artwork.title}
                 fill
                 className={`object-cover transition-transform duration-[8000ms] ease-linear ${
-                  index === currentImageIndex ? 'scale-110' : 'scale-100'
+                  index === currentImageIndex ? "scale-110" : "scale-100"
                 }`}
                 priority={index === 0}
                 style={{
-                  filter: index === currentImageIndex 
-                    ? 'brightness(0.7) contrast(1.1) saturate(1.1)' 
-                    : 'brightness(0.5) contrast(1.0) saturate(1.0)',
-                  transition: 'filter 2s ease-in-out, transform 8s ease-out',
+                  filter:
+                    index === currentImageIndex
+                      ? "brightness(0.7) contrast(1.1) saturate(1.1)"
+                      : "brightness(0.5) contrast(1.0) saturate(1.0)",
+                  transition: "filter 2s ease-in-out, transform 8s ease-out",
                 }}
               />
             )}
           </div>
         ))}
-        
+
         {/* 오버레이 */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
@@ -155,9 +165,9 @@ function HeroSection() {
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-700 hover:scale-150 focus-art ${
-                  index === currentImageIndex 
-                    ? 'bg-white shadow-lg scale-125' 
-                    : 'bg-white/50 hover:bg-white/75'
+                  index === currentImageIndex
+                    ? "bg-white shadow-lg scale-125"
+                    : "bg-white/50 hover:bg-white/75"
                 }`}
                 aria-label={`이미지 ${index + 1}로 이동`}
               />
@@ -178,7 +188,7 @@ function HeroSection() {
               @heelang_calligraphy
             </p>
           </div>
-          
+
           {/* 메인 타이틀 */}
           <div className="mb-12 md:mb-16 hover-scale">
             <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold mb-6 tracking-wider text-shadow-strong hover:text-shadow-glow transition-all duration-1000">
@@ -188,13 +198,13 @@ function HeroSection() {
               WAY
             </p>
           </div>
-          
+
           {/* 서브타이틀 */}
           <div className="mb-12">
             <p className="text-lg md:text-xl lg:text-2xl text-white/80 mb-8 text-shadow-medium hover:text-white/95 transition-colors duration-700">
               희랑 공경순 개인전
             </p>
-            
+
             {/* 전시 정보 카드 */}
             <Card className="glass-strong border-white/20 max-w-md mx-auto hover:bg-white/10 hover:border-white/30 hover-lift">
               <CardContent className="p-6 space-y-4">
@@ -203,77 +213,94 @@ function HeroSection() {
                   <span className="font-medium">2025년 6월 18일 - 24일</span>
                 </div>
                 <p className="text-sm text-white/70">오전 10시 - 오후 6시</p>
-                
+
                 <div className="w-12 h-px bg-white/30 mx-auto" />
-                
+
                 <div className="flex items-center justify-center space-x-2 text-white/90">
                   <MapPin className="w-4 h-4" />
                   <span className="font-medium">인사동 한국미술관 2층</span>
                 </div>
-                <p className="text-xs text-white/70">후원: 사단법인 동양서예협회</p>
+                <p className="text-xs text-white/70">
+                  후원: 사단법인 동양서예협회
+                </p>
               </CardContent>
             </Card>
           </div>
 
           {/* CTA 버튼 */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild size="lg" className="btn-art bg-white text-ink hover:bg-white/90">
+            <Button
+              asChild
+              size="lg"
+              className="btn-art bg-white text-ink hover:bg-white/90"
+            >
               <Link href="/gallery">
                 작품 감상하기
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="btn-art-outline border-white text-white hover:bg-white hover:text-ink">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="btn-art-outline border-white text-white hover:bg-white hover:text-ink"
+            >
               <Link href="/exhibition">전시 정보</Link>
             </Button>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // 작품 소개 섹션
 function FeaturedWorksSection() {
-  const [featuredArtworks, setFeaturedArtworks] = useState<Artwork[]>([])
-  const [loading, setLoading] = useState(true)
+  const [featuredArtworks, setFeaturedArtworks] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadArtworks() {
       try {
         // API를 통해 안전하게 Featured 작품들을 가져옴
-        const response = await fetch('/api/artworks')
+        const response = await fetch("/api/artworks");
         if (!response.ok) {
-          throw new Error('Failed to fetch artworks')
+          throw new Error("Failed to fetch artworks");
         }
-        
-        const result = await response.json()
-        const allArtworks = result.data || []
-        
+
+        const result = await response.json();
+        const allArtworks = result.data || [];
+
         // Featured 작품들만 필터링
-        const featured = allArtworks.filter((artwork: Artwork) => artwork.featured).slice(0, 8)
-        
-        setFeaturedArtworks(featured)
-        setLoading(false)
+        const featured = allArtworks
+          .filter((artwork: Artwork) => artwork.featured)
+          .slice(0, 8);
+
+        setFeaturedArtworks(featured);
+        setLoading(false);
       } catch (error) {
-        console.error('Failed to load featured artworks:', error)
+        console.error("Failed to load featured artworks:", error);
         // 에러 발생 시 fallback 데이터 사용
         try {
-          const { fallbackArtworksData } = await import('@/lib/artworks')
+          const { fallbackArtworksData } = await import("@/lib/artworks");
           const fallbackFeatured = fallbackArtworksData
-            .filter(artwork => artwork.featured)
-            .slice(0, 8)
-          
-          setFeaturedArtworks(fallbackFeatured.length > 0 ? fallbackFeatured : fallbackArtworksData.slice(0, 8))
+            .filter((artwork) => artwork.featured)
+            .slice(0, 8);
+
+          setFeaturedArtworks(
+            fallbackFeatured.length > 0
+              ? fallbackFeatured
+              : fallbackArtworksData.slice(0, 8)
+          );
         } catch (fallbackError) {
-          console.error('Failed to load fallback artworks:', fallbackError)
+          console.error("Failed to load fallback artworks:", fallbackError);
         }
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    loadArtworks()
-  }, [])
+    loadArtworks();
+  }, []);
 
   return (
     <section className="section-padding bg-background">
@@ -288,7 +315,7 @@ function FeaturedWorksSection() {
           action={{
             label: "전체 작품 보기",
             href: "/gallery",
-            variant: "outline"
+            variant: "outline",
           }}
         />
 
@@ -316,7 +343,7 @@ function FeaturedWorksSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // 작가 소개 섹션
@@ -335,7 +362,7 @@ function ArtistSection() {
               action={{
                 label: "작가 소개 더보기",
                 href: "/artist",
-                variant: "default"
+                variant: "default",
               }}
             />
 
@@ -345,7 +372,7 @@ function ArtistSection() {
                 { label: "개인전", value: "15+", description: "회" },
                 { label: "단체전", value: "50+", description: "회" },
                 { label: "수상", value: "10+", description: "회" },
-                { label: "경력", value: "20+", description: "년" }
+                { label: "경력", value: "20+", description: "년" },
               ]}
             />
           </div>
@@ -353,13 +380,16 @@ function ArtistSection() {
           <div className="relative">
             <Card className="card-art-elevated overflow-hidden">
               <CardContent className="p-0">
-                <div className="aspect-[4/5] relative">
+                <div className="aspect-[4/5] relative bg-stone-100">
                   <Image
-                    src="/Images/Artist/공경순 작가 프로필.png"
-                    alt="희랑 공경순 작가"
+                    src="/Images/Artist/Artist-medium.jpg"
+                    alt="희랑 공경순 작가 프로필"
                     fill
                     className="object-cover hover-scale"
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5N4Q5Ox4DfveMEEAAkAAEAAA="
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
@@ -369,7 +399,7 @@ function ArtistSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // 전시 정보 섹션
@@ -392,7 +422,9 @@ function ExhibitionSection() {
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-ink">전시 기간</h3>
+              <h3 className="font-display text-xl font-semibold text-ink">
+                전시 기간
+              </h3>
               <div className="space-y-2">
                 <p className="font-medium text-ink">2025년 6월 18일 - 24일</p>
                 <p className="text-sm text-ink-light">오전 10시 - 오후 6시</p>
@@ -406,11 +438,15 @@ function ExhibitionSection() {
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
                 <MapPin className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-ink">전시 장소</h3>
+              <h3 className="font-display text-xl font-semibold text-ink">
+                전시 장소
+              </h3>
               <div className="space-y-2">
                 <p className="font-medium text-ink">인사동 한국미술관</p>
                 <p className="text-sm text-ink-light">2층 전시실</p>
-                <p className="text-xs text-ink-lighter">서울시 종로구 인사동길</p>
+                <p className="text-xs text-ink-lighter">
+                  서울시 종로구 인사동길
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -420,7 +456,9 @@ function ExhibitionSection() {
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
                 <ArrowRight className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-ink">관람 안내</h3>
+              <h3 className="font-display text-xl font-semibold text-ink">
+                관람 안내
+              </h3>
               <div className="space-y-2">
                 <p className="font-medium text-ink">무료 관람</p>
                 <p className="text-sm text-ink-light">사전 예약 불필요</p>
@@ -440,7 +478,7 @@ function ExhibitionSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // 메인 페이지 컴포넌트
@@ -454,5 +492,5 @@ export default function HomePage() {
       <ArtistSection />
       <ExhibitionSection />
     </main>
-  )
-} 
+  );
+}

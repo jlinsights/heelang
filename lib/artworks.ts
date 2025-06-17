@@ -9,6 +9,7 @@ import { getArtistImageUrl, getArtworkImageUrl } from "./image-utils";
 
 // 로컬 fallback 데이터
 export const fallbackArtistData: Artist = {
+  id: "artist-heelang",
   name: "희랑 공경순 (孔敬順, Kong KyongSun)",
   bio: "서울에서 활동하는 현대 서예가입니다. 전통 서예의 정신을 계승하면서도 현대적인 미감을 탐구하며, 문자의 조형성과 먹의 물성을 통해 내면의 세계를 표현합니다. 사단법인 동양서예협회 초대작가로 활동하며, 다수의 개인전과 그룹전에 참여하였습니다. 그의 작품은 여러 미술관과 개인 컬렉션에 소장되어 있으며, 서예 교육을 통해 전통 문화의 계승에도 힘쓰고 있습니다.",
   statement:

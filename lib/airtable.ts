@@ -458,7 +458,13 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       materials: parseTagsField(
         fields.materials || fields.Materials || fields.재료
       ),
-      awards: parseTagsField(fields.awards || fields.Awards || fields.수상경력),
+      awards: [
+        "2024 | 국제공모전 Art Beyond Boundaries | 국제예술상",
+        "2023 | 제63회 Kaishin 서법원대전 | 우수상",
+        "2022 | 동양서예협회 신인전 | 신인상",
+        "2021 | 제1회 아시아서예대전 | 장려상",
+        "2020 | 김포시 문화예술제 | 대상",
+      ], // 임시 하드코딩 (에어테이블 동기화 완료 후 원복 예정)
       exhibitions: parseTagsField(
         fields.exhibitions || fields.Exhibitions || fields.전시경력
       ),

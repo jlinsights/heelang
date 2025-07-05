@@ -26,7 +26,7 @@ export default function ArtistClient({ initialArtist }: ArtistClientProps) {
           <div className="lg:col-span-1">
             <div className="relative aspect-square rounded-2xl overflow-hidden shadow-lg">
               <Image
-                src={artist.profileImageUrl}
+                src={artist.profileImageUrl || "/images/artist-profile.jpg"}
                 alt={artist.name}
                 fill
                 className="object-cover"

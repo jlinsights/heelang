@@ -872,3 +872,30 @@ export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
 // 기존 export들 (하위 호환성)
 export const artistData = fallbackArtistData;
 export const artworksData = fallbackArtworksData;
+
+/**
+ * Server-side helper to fetch artworks via internal API with Next.js cache tags.
+ * This enables ISR using revalidateTag("artworks") from the webhook.
+ */
+export async function fetchArtworksWithTag(revalidateSeconds: number = 3600) {
+  // Ensure absolute URL – fallback to localhost during development
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : undefined) ||
+    `http://localhost:${process.env.PORT || 3000}`;
+
+  const url = `${baseUrl}/api/artworks`;
+
+  const res = await fetch(url, {
+    // force-cache + tag enables efficient ISR
+    next: {
+      tags: ["artworks"],
+      revalidate: revalidateSeconds,
+    },
+  });
+
+  const json = await res.json();
+  return (json.data || []) as Artwork[];
+}

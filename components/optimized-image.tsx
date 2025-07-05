@@ -30,6 +30,27 @@ export function OptimizedArtworkImage({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
+  // artwork가 undefined이거나 필수 필드가 없으면 에러 상태로 처리
+  if (!artwork || !artwork.slug || !artwork.year) {
+    console.error(
+      "OptimizedArtworkImage: artwork, slug, or year is missing",
+      artwork
+    );
+    return (
+      <div
+        className={cn(
+          "relative overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center",
+          aspectRatio || "aspect-[3/4]",
+          className
+        )}
+      >
+        <div className="text-gray-500 dark:text-gray-400 text-sm">
+          이미지를 불러올 수 없습니다
+        </div>
+      </div>
+    );
+  }
+
   // artwork.slug와 artwork.year를 사용해서 최적화된 이미지 메타데이터 생성
   const imageMeta = getArtworkImageMeta(artwork.slug, artwork.year, usage);
   const altText = generateAltText(artwork.title, "artwork");

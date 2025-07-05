@@ -1,4 +1,12 @@
+import { getBase as getAirtableBase } from "./airtable-client";
+import {
+  clearCacheAndRevalidate,
+  getCachedData as getCachedDataGlobal,
+  setCachedData as setCachedDataGlobal,
+} from "./cache";
+import { captureError } from "./error-logger";
 import { getArtworkImageUrl } from "./image-utils";
+import { ArtistSchema, ArtworkSchema } from "./schemas";
 import type { Artist, Artwork } from "./types";
 
 // Airtable 설정
@@ -7,7 +15,7 @@ const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 
 // 캐시 설정
 const CACHE_DURATION = 5 * 60 * 1000; // 5분
-const cache = new Map<string, { data: any; timestamp: number }>();
+// const cache = new Map<string, { data: any; timestamp: number }>(); // replaced by global cache
 
 // 로컬 스토리지 캐시 (클라이언트 사이드에서만 사용)
 class LocalStorageCache {
@@ -57,6 +65,7 @@ const localCache = new LocalStorageCache();
 /**
  * 안전한 Airtable 인스턴스 생성 (재시도 로직 포함)
  */
+/*
 async function createAirtableBase() {
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
     console.error("❌ Airtable 환경 변수가 설정되지 않았습니다.");
@@ -176,7 +185,49 @@ function parseTagsField(tagValue: any): string[] {
   return [];
 }
 
+/**
+ * 📑 필드 매핑 테이블 (Airtable 컬럼명 → Canonical Key)
+ */
+const ARTWORK_FIELD_MAP: Record<string, string[]> = {
+  title: ["title", "Title", "제목"],
+  year: ["year", "Year", "년도"],
+  medium: ["medium", "Medium", "재료"],
+  dimensions: ["dimensions", "Dimensions", "크기"],
+  description: ["description", "Description", "설명"],
+  tags: ["tags", "Tags", "태그"],
+  featured: ["featured", "Featured", "추천"],
+  category: ["category", "Category", "카테고리"],
+  available: ["available", "Available", "판매여부"],
+};
+
+const ARTIST_FIELD_MAP: Record<string, string[]> = {
+  name: ["name", "Name", "작가명", "작가 이름"],
+  bio: ["bio", "Bio", "biography", "Biography", "소개", "작가 소개"],
+  statement: [
+    "statement",
+    "Statement",
+    "artistStatement",
+    "ArtistStatement",
+    "작가노트",
+    "작가 노트",
+  ],
+};
+
+function pickField<T = any>(
+  fields: any,
+  map: Record<string, string[]>,
+  key: string
+): T | undefined {
+  return getFieldValue(fields, map[key] ?? [key]) as T | undefined;
+}
+
 function getCachedData(key: string): any | null {
+  // unified cache helper
+  return getCachedDataGlobal(key);
+}
+
+// Legacy implementation removed
+/*
   // 메모리 캐시 확인
   const memoryCache = cache.get(key);
   if (memoryCache && Date.now() - memoryCache.timestamp < CACHE_DURATION) {
@@ -187,12 +238,42 @@ function getCachedData(key: string): any | null {
   return localCache.get(key);
 }
 
-function setCachedData(key: string, data: any): void {
-  // 메모리 캐시 저장
-  cache.set(key, { data, timestamp: Date.now() });
+*/
 
-  // 로컬 스토리지 캐시 저장
-  localCache.set(key, data);
+function setCachedData(key: string, data: any): void {
+  return setCachedDataGlobal(key, data);
+}
+
+/**
+ * 모든 페이지의 레코드를 가져오는 범용 헬퍼 (100개 초과 지원)
+ */
+async function fetchAllRecords(
+  base: any,
+  tableName: string,
+  selectOptions: Record<string, any> = {}
+): Promise<any[]> {
+  if (!base) return [];
+
+  return retryOperation<any[]>(
+    () =>
+      new Promise((resolve, reject) => {
+        const records: any[] = [];
+        base(tableName)
+          .select({ pageSize: 100, ...selectOptions })
+          .eachPage(
+            (pageRecords: any[], fetchNextPage: () => void) => {
+              records.push(...pageRecords);
+              fetchNextPage();
+            },
+            (err: any) => {
+              if (err) reject(err);
+              else resolve(records);
+            }
+          );
+      }),
+    3,
+    1000
+  );
 }
 
 // 재시도 로직
@@ -230,20 +311,15 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
   }
 
   try {
-    const base = await createAirtableBase();
+    const base = await getAirtableBase();
     if (!base) {
       console.warn("🚫 Airtable base not available, will use fallback data");
       return null;
     }
 
     console.log("📡 Fetching artworks from Airtable...");
-    const records = await retryOperation(async () => {
-      return await base("Artworks")
-        .select({
-          maxRecords: 100,
-          sort: [{ field: "year", direction: "desc" }],
-        })
-        .all();
+    const records = await fetchAllRecords(base, "Artworks", {
+      sort: [{ field: "year", direction: "desc" }],
     });
 
     console.log(`📊 Retrieved ${records.length} records from Airtable`);
@@ -258,8 +334,12 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
       }
 
       // 실제 Airtable 필드명 사용
-      const title = fields.title;
-      const year = fields.year;
+      const title = pickField<string>(fields, ARTWORK_FIELD_MAP, "title");
+      const year = pickField<number | string>(
+        fields,
+        ARTWORK_FIELD_MAP,
+        "year"
+      );
 
       if (!title) {
         console.warn(`⚠️ Skipping record ${index + 1}: missing title`);
@@ -278,11 +358,24 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
           fields.aspectRatio ||
           calculateAspectRatio(fields.dimensions || "70 x 140 cm"),
         description: fields.description || "",
-        imageUrl: getArtworkImageUrl(
-          fields.slug || createSlug(title, year),
-          parseInt(year?.toString() || "2024"),
-          "medium"
-        ),
+        imageUrl: (() => {
+          const attachment =
+            fields.image ||
+            fields.Image ||
+            fields["이미지"] ||
+            fields.images ||
+            fields.artworkImage ||
+            fields.ArtworkImage;
+          if (attachment && Array.isArray(attachment) && attachment[0]?.url) {
+            return attachment[0].url as string;
+          }
+          // fallback to optimized local image path
+          return getArtworkImageUrl(
+            fields.slug || createSlug(title, year),
+            parseInt(year?.toString() || "2024"),
+            "medium"
+          );
+        })(),
         imageUrlQuery: `${title} calligraphy art`,
         artistNote: fields.artistNote || "",
         featured: fields.featured === true,
@@ -300,7 +393,13 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
         updatedAt: fields.lastModifiedTime || new Date().toISOString(),
       };
 
-      artworks.push(artwork);
+      // Zod 스키마 검증 후에만 배열에 추가
+      const validation = ArtworkSchema.safeParse(artwork);
+      if (!validation.success) {
+        captureError(validation.error, { scope: "ArtworkSchema" });
+      } else {
+        artworks.push(validation.data);
+      }
 
       if (index < 3) {
         console.log(
@@ -320,7 +419,7 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
 
     return artworks;
   } catch (error) {
-    console.error("❌ Error in fetchArtworksFromAirtable:", error);
+    captureError(error, { scope: "fetchArtworksFromAirtable" });
     return null;
   }
 }
@@ -339,7 +438,7 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
   }
 
   try {
-    const base = await createAirtableBase();
+    const base = await getAirtableBase();
     if (!base) {
       console.warn("🚫 Airtable base not available for artist data");
       return null;
@@ -371,49 +470,44 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       );
     };
 
-    const getBio = () => {
-      return (
-        fields.bio ||
-        fields.Bio ||
-        fields.biography ||
-        fields.Biography ||
-        fields.소개 ||
-        fields["작가 소개"] ||
-        ""
+    // 문자열 필드 헬퍼
+    const getString = (primary: string, ...alts: string[]) =>
+      getFieldValue(fields, [primary, ...alts])?.toString() ?? "";
+
+    // 멀티라인 텍스트를 배열로 변환 (줄바꿈·세미콜론·쉼표 구분)
+    const parseMultiline = (value: any): string[] =>
+      !value
+        ? []
+        : (Array.isArray(value)
+            ? value
+            : value.toString().split(/\r?\n|[,;]|\|/)
+          )
+            .map((v: string) => v.trim())
+            .filter(Boolean);
+
+    const getBio = () =>
+      getString("bio", "Bio", "biography", "Biography", "소개", "작가 소개");
+
+    const getStatement = () =>
+      getString(
+        "statement",
+        "Statement",
+        "artistStatement",
+        "ArtistStatement",
+        "작가노트",
+        "작가 노트"
       );
-    };
 
     const getEmail = () => {
-      return fields.email || fields.Email || fields.이메일 || "";
+      return getString("email", "Email", "이메일");
     };
 
     const getPhone = () => {
-      return (
-        fields.phone ||
-        fields.Phone ||
-        fields.전화번호 ||
-        fields["연락처"] ||
-        ""
-      );
+      return getString("phone", "Phone", "전화번호", "연락처");
     };
 
     const getProfileImageUrl = () => {
-      // 에어테이블의 Attachment 필드에서 이미지 URL 가져오기
-      const profileImage =
-        fields.profileImage ||
-        fields.ProfileImage ||
-        fields["프로필 이미지"] ||
-        fields.profile_image;
-
-      if (
-        profileImage &&
-        Array.isArray(profileImage) &&
-        profileImage.length > 0
-      ) {
-        return profileImage[0].url;
-      }
-
-      // fallback으로 최적화된 로컬 이미지 사용
+      // 로컬 이미지 사용 (요청사항에 따라)
       return "/Images/Artist/Artist.png";
     };
 
@@ -421,74 +515,65 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       id: records[0].id,
       name: getName(),
       bio: getBio(),
+      statement: getStatement(),
+      profileImageUrl: getProfileImageUrl(),
+      birthYear:
+        fields.birthYear || fields.BirthYear || fields.출생년도
+          ? parseInt(
+              String(fields.birthYear || fields.BirthYear || fields.출생년도)
+            )
+          : undefined,
+      education: parseMultiline(
+        fields.education || fields.Education || fields.학력
+      ),
+      exhibitions: parseMultiline(
+        fields.exhibitions || fields.Exhibitions || fields.전시
+      ),
+      awards: parseMultiline(fields.awards || fields.Awards || fields.수상),
       email: getEmail(),
       phone: getPhone(),
-      profileImageUrl: getProfileImageUrl(),
       socialLinks: {
-        instagram: fields.instagram || fields.Instagram || "",
-        facebook: fields.facebook || fields.Facebook || "",
-        website: fields.website || fields.Website || "",
-        youtube: fields.youtube || fields.YouTube || "",
-        linkedin: fields.linkedin || fields.LinkedIn || "",
+        instagram: getString("instagram", "Instagram", "인스타그램"),
+        facebook: getString("facebook", "Facebook", "페이스북"),
+        website: getString("website", "Website", "웹사이트"),
+        youtube: getString("youtube", "YouTube", "유튜브"),
+        linkedin: getString("linkedin", "LinkedIn", "링크드인"),
       },
-      birthPlace: fields.birthPlace || fields.BirthPlace || fields.출생지 || "",
-      currentLocation:
-        fields.currentLocation || fields.CurrentLocation || fields.거주지 || "",
-      specialties: parseTagsField(
+      birthPlace: getString("birthPlace", "BirthPlace", "출생지"),
+      currentLocation: getString(
+        "currentLocation",
+        "CurrentLocation",
+        "거주지"
+      ),
+      specialties: parseMultiline(
         fields.specialties || fields.Specialties || fields.전문분야
       ),
-      influences: parseTagsField(
+      influences: parseMultiline(
         fields.influences || fields.Influences || fields.영향
       ),
-      teachingExperience: parseTagsField(
-        fields.teachingExperience ||
-          fields.TeachingExperience ||
-          fields.교육경력
-      ),
-      publications: parseTagsField(
-        fields.publications || fields.Publications || fields.출판물
-      ),
-      memberships: parseTagsField(
-        fields.memberships || fields.Memberships || fields.소속단체
-      ),
-      philosophy: fields.philosophy || fields.Philosophy || fields.철학 || "",
-      techniques: parseTagsField(
+      techniques: parseMultiline(
         fields.techniques || fields.Techniques || fields.기법
       ),
-      materials: parseTagsField(
-        fields.materials || fields.Materials || fields.재료
-      ),
-      awards: [
-        "2024 | 국제공모전 Art Beyond Boundaries | 국제예술상",
-        "2023 | 제63회 Kaishin 서법원대전 | 우수상",
-        "2022 | 동양서예협회 신인전 | 신인상",
-        "2021 | 제1회 아시아서예대전 | 장려상",
-        "2020 | 김포시 문화예술제 | 대상",
-      ], // 임시 하드코딩 (에어테이블 동기화 완료 후 원복 예정)
-      exhibitions: parseTagsField(
-        fields.exhibitions || fields.Exhibitions || fields.전시경력
-      ),
-      collections: parseTagsField(
-        fields.collections || fields.Collections || fields.소장처
-      ),
+      createdAt: fields.createdTime || new Date().toISOString(),
+      updatedAt: fields.lastModifiedTime || new Date().toISOString(),
     };
 
-    console.log("✅ Successfully fetched artist data from Airtable");
-
-    // 캐시에 저장
-    setCachedData(cacheKey, artist);
-
-    return artist;
-  } catch (error) {
-    console.error("❌ Error fetching artist from Airtable:", error);
-
-    // 권한 오류인 경우 특별 처리
-    if (error instanceof Error && error.message.includes("not authorized")) {
-      console.warn(
-        "🔒 No permission to access Artists table, will use fallback data"
-      );
+    // Zod 스키마 검증
+    const validation = ArtistSchema.safeParse(artist);
+    if (!validation.success) {
+      captureError(validation.error, { scope: "ArtistSchema" });
+      console.warn("⚠️ Artist data validation failed:", validation.error);
+      return null;
     }
 
+    console.log("✅ Successfully fetched artist from Airtable");
+
+    // 캐시에 저장
+    setCachedData(cacheKey, validation.data);
+
+    return validation.data;
+  } catch (error) {
+    captureError(error, { scope: "fetchArtistFromAirtable" });
     return null;
   }
 }
@@ -592,5 +677,5 @@ export async function fetchFeaturedArtworks(
  * 캐시 초기화 함수
  */
 export function clearAirtableCache(): void {
-  cache.clear();
+  clearCacheAndRevalidate("artworks");
 }

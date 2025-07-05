@@ -1,5 +1,8 @@
+import { fetchArtworksWithTag } from "@/lib/artworks";
 import type { Metadata } from "next";
 import GalleryClient from "./gallery-client";
+
+export const dynamic = "force-static"; // can be revalidated via tag
 
 export const metadata: Metadata = {
   title: "갤러리 | 희랑 공경순 개인전 | 길",
@@ -30,6 +33,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GalleryPage() {
-  return <GalleryClient />;
+export default async function GalleryPage() {
+  const artworks = await fetchArtworksWithTag(3600);
+  return <GalleryClient initialArtworks={artworks} />;
 }

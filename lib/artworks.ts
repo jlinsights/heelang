@@ -899,3 +899,10 @@ export async function fetchArtworksWithTag(revalidateSeconds: number = 3600) {
   const json = await res.json();
   return (json.data || []) as Artwork[];
 }
+
+/**
+ * Alias for getArtworks for backward compatibility
+ */
+export async function fetchArtworks(): Promise<Artwork[]> {
+  return await getArtworks();
+}

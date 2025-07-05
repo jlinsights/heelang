@@ -16,9 +16,7 @@ function assertAirtableEnv() {
   }
 }
 
-let basePromise: Promise<
-  ReturnType<typeof import("airtable").default>["base"]
-> | null = null;
+let basePromise: Promise<any> | null = null;
 
 /**
  * 재사용 가능한 Airtable Base 인스턴스 반환

@@ -351,7 +351,7 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
         id: record.id,
         slug: fields.slug || createSlug(title, year),
         title,
-        year: parseInt(year?.toString() || "2024"),
+        year: year ? parseInt(year.toString()) : 2024,
         medium: fields.medium || "화선지에 먹",
         dimensions: fields.dimensions || "70 x 140 cm",
         aspectRatio:

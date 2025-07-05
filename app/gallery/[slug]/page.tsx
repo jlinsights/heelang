@@ -13,8 +13,8 @@ export async function generateStaticParams() {
     console.log("🔧 generateStaticParams: Starting...");
 
     // Airtable에서 모든 작품 데이터 가져오기
-    const { fetchArtworks } = await import("@/lib/artworks");
-    const artworks = await fetchArtworks();
+    const { getArtworks } = await import("@/lib/artworks");
+    const artworks = await getArtworks();
 
     console.log(`🔧 generateStaticParams: Found ${artworks.length} artworks`);
 

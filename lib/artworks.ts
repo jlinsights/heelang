@@ -582,12 +582,13 @@ async function getArtworksFromSource(): Promise<Artwork[]> {
         );
         return airtableData;
       } else {
-        console.warn("⚠️ No artworks found in Airtable");
-        return [];
+        console.warn("⚠️ No artworks found in Airtable, using fallback data");
+        return fallbackArtworksData;
       }
     } catch (error) {
       console.error("❌ Error fetching artworks from Airtable:", error);
-      return [];
+      console.log("🔄 Using fallback data");
+      return fallbackArtworksData;
     }
   } else {
     // 클라이언트 사이드: API 라우트를 통해 접근
@@ -601,12 +602,13 @@ async function getArtworksFromSource(): Promise<Artwork[]> {
         );
         return apiData;
       } else {
-        console.warn("⚠️ No artworks found from API");
-        return [];
+        console.warn("⚠️ No artworks found from API, using fallback data");
+        return fallbackArtworksData;
       }
     } catch (error) {
       console.error("❌ Error fetching artworks from API:", error);
-      return [];
+      console.log("🔄 Using fallback data");
+      return fallbackArtworksData;
     }
   }
 }
@@ -746,8 +748,14 @@ export async function getFeaturedArtworks(
     }
   }
 
-  console.log("⚠️ No featured artworks found");
-  return [];
+  // fallback data에서 featured 작품들을 찾아서 반환
+  console.log(
+    "⚠️ No featured artworks found from external sources, using fallback data"
+  );
+  const featuredFallback = fallbackArtworksData.filter(
+    (artwork) => artwork.featured
+  );
+  return featuredFallback.slice(0, limit);
 }
 
 /**
@@ -796,8 +804,14 @@ export async function getTreasureArtworks(): Promise<Artwork[]> {
     }
   }
 
-  console.log("⚠️ No treasure artworks found");
-  return [];
+  // fallback data에서 treasure 작품들을 찾아서 반환
+  console.log(
+    "⚠️ No treasure artworks found from external sources, using fallback data"
+  );
+  const treasureFallback = fallbackArtworksData.filter(
+    (artwork) => artwork.category === "treasure"
+  );
+  return treasureFallback;
 }
 
 /**
@@ -812,8 +826,47 @@ export async function getArtworkById(id: string): Promise<Artwork | null> {
  * Slug로 특정 작품을 찾는 함수
  */
 export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
+  console.log(`🔍 getArtworkBySlug called with slug: ${slug}`);
+
   const artworks = await getArtworks();
-  return artworks.find((artwork) => artwork.slug === slug) || null;
+  console.log(`📊 Total artworks retrieved: ${artworks.length}`);
+
+  // 모든 슬러그를 로그로 출력 (처음 5개만)
+  console.log(
+    `📋 First 5 artwork slugs:`,
+    artworks.slice(0, 5).map((a) => a.slug)
+  );
+
+  // 특정 슬러그 검색
+  const found = artworks.find((artwork) => artwork.slug === slug);
+
+  if (found) {
+    console.log(`✅ Found artwork:`, {
+      id: found.id,
+      title: found.title,
+      slug: found.slug,
+      year: found.year,
+    });
+  } else {
+    console.log(`❌ No artwork found with slug: ${slug}`);
+
+    // 유사한 슬러그 찾기
+    const similar = artworks.filter(
+      (artwork) => artwork.slug && artwork.slug.includes("grandpa")
+    );
+
+    if (similar.length > 0) {
+      console.log(
+        `🔍 Similar slugs found:`,
+        similar.map((a) => ({
+          slug: a.slug,
+          title: a.title,
+        }))
+      );
+    }
+  }
+
+  return found || null;
 }
 
 // 기존 export들 (하위 호환성)

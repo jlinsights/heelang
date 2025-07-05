@@ -82,45 +82,79 @@ export default function ArtworkPage() {
 
     async function loadArtwork() {
       try {
+        console.log(`🔍 Loading artwork with slug: ${slug}`);
+
         // 즉시 fallback 데이터에서 찾기
         const { fallbackArtworksData } = await import("@/lib/artworks");
         const fallbackArtwork = fallbackArtworksData.find(
           (artwork) => artwork.slug === slug
         );
 
+        console.log(
+          `📚 Fallback data check: ${fallbackArtwork ? "FOUND" : "NOT FOUND"}`
+        );
+
         if (fallbackArtwork) {
+          console.log(`✅ Found in fallback data:`, {
+            id: fallbackArtwork.id,
+            title: fallbackArtwork.title,
+            slug: fallbackArtwork.slug,
+          });
           setArtwork(fallbackArtwork);
           setLoading(false); // 즉시 로딩 완료
         }
 
         // 백그라운드에서 Airtable 데이터 시도
         try {
+          console.log(
+            `🌐 Attempting to fetch from Airtable via getArtworkBySlug...`
+          );
           const { getArtworkBySlug } = await import("@/lib/artworks");
           const airtableArtwork = await getArtworkBySlug(slug);
 
+          console.log(
+            `🎯 Airtable data check: ${airtableArtwork ? "FOUND" : "NOT FOUND"}`
+          );
+
           // Airtable 데이터가 있으면 업데이트
           if (airtableArtwork) {
+            console.log(`✅ Found in Airtable data:`, {
+              id: airtableArtwork.id,
+              title: airtableArtwork.title,
+              slug: airtableArtwork.slug,
+            });
             setArtwork(airtableArtwork);
             console.log("Artwork updated with Airtable data");
+          } else {
+            console.log("❌ No artwork found in Airtable data");
           }
         } catch (airtableError) {
-          console.log("Airtable fetch failed for artwork:", airtableError);
+          console.error("❌ Airtable fetch failed for artwork:", airtableError);
         }
 
         // fallback에서도 찾지 못한 경우
         if (!fallbackArtwork) {
-          setError("작품을 찾을 수 없습니다.");
-          setLoading(false);
+          console.log(
+            "❌ Artwork not found in fallback data, checking if Airtable found it..."
+          );
+          // Airtable에서 찾았는지 확인하기 위해 잠시 대기
+          setTimeout(() => {
+            if (!artwork) {
+              console.log("❌ Artwork not found in any source");
+              setError("작품을 찾을 수 없습니다.");
+              setLoading(false);
+            }
+          }, 2000);
         }
       } catch (error) {
-        console.error("Failed to load artwork:", error);
+        console.error("❌ Failed to load artwork:", error);
         setError("작품을 불러오는데 실패했습니다.");
         setLoading(false);
       }
     }
 
     loadArtwork();
-  }, [slug]);
+  }, [slug, artwork]);
 
   if (loading) {
     return <ArtworkLoading />;

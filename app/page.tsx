@@ -348,49 +348,61 @@ function FeaturedWorksSection() {
 
 // 작가 소개 섹션
 function ArtistSection() {
-  const [artist, setArtist] = useState<any>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string>(
+    "/images/artist/artist-medium.jpg"
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadArtist() {
+    async function loadProfileImage() {
       try {
         const response = await fetch("/api/artist");
-        if (!response.ok) throw new Error("작가 정보를 불러오지 못했습니다");
+        if (!response.ok) throw new Error("작가 이미지를 불러오지 못했습니다");
         const result = await response.json();
-        setArtist(result.data);
+        if (
+          result.data?.profileImageUrl &&
+          typeof result.data.profileImageUrl === "string"
+        ) {
+          setProfileImageUrl(result.data.profileImageUrl);
+        }
       } catch (err: any) {
         setError(err.message || "알 수 없는 에러");
       } finally {
         setLoading(false);
       }
     }
-    loadArtist();
+    loadProfileImage();
   }, []);
-
-  const profileImageUrl =
-    artist?.profileImageUrl && typeof artist.profileImageUrl === "string"
-      ? artist.profileImageUrl
-      : "/images/artist/artist-medium.jpg";
 
   return (
     <section className="section-padding bg-gradient-zen">
       <div className="container-art">
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 justify-center">
-          <div className="relative w-48 h-60 md:w-56 md:h-72 flex-shrink-0">
-            <Card className="card-art-elevated overflow-hidden w-full h-full">
-              <CardContent className="p-0 w-full h-full">
-                <div className="aspect-[4/5] relative bg-stone-100 w-full h-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="space-y-8">
+            <SectionHeader
+              badge="Artist"
+              title="희랑 공경순"
+              subtitle="서예가"
+              description="전통 서예의 깊이와 현대적 감각을 조화시키며, 문방사우의 정신을 현대에 되살리는 작업을 하고 있습니다."
+              size="lg"
+              action={{
+                label: "작가 소개 더보기",
+                href: "/artist",
+                variant: "default",
+              }}
+            />
+          </div>
+          <div className="relative">
+            <Card className="card-art-elevated overflow-hidden">
+              <CardContent className="p-0">
+                <div className="aspect-[4/5] relative bg-stone-100">
                   {loading ? (
                     <div className="w-full h-full flex items-center justify-center animate-pulse bg-stone-200" />
                   ) : (
                     <Image
                       src={profileImageUrl}
-                      alt={
-                        artist?.name
-                          ? `${artist.name} 작가 프로필`
-                          : "희랑 공경순 작가 프로필"
-                      }
+                      alt="희랑 공경순 작가 프로필"
                       fill
                       className="object-cover hover-scale"
                       sizes="(max-width: 768px) 100vw, 50vw"
@@ -404,14 +416,6 @@ function ArtistSection() {
               </CardContent>
             </Card>
             {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-          </div>
-          <div className="text-center md:text-left space-y-2">
-            <h3 className="font-display text-2xl md:text-3xl font-bold text-ink">
-              {artist?.name || "희랑 공경순"}
-            </h3>
-            <p className="text-lg md:text-xl text-ink-light">
-              {artist?.subtitle || "서예가"}
-            </p>
           </div>
         </div>
       </div>

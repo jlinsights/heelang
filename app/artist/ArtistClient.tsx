@@ -73,7 +73,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* 왼쪽: 프로필 섹션 */}
           <div className="space-y-6">
-            {/* 프로필 이미지 */}
+            {/* 프로필 이미지: 모바일에서는 작게, 데스크탑에서는 크게 보이도록 반응형 Tailwind 클래스 적용 */}
             <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
               <div className="relative w-full h-[600px] rounded-xl overflow-hidden shadow-lg mb-6">
                 <Image
@@ -82,7 +82,13 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                   }
                   alt={artist.name}
                   fill
-                  className="object-cover"
+                  className="
+                    rounded-full object-cover
+                    w-32 h-32 mx-auto
+                    sm:w-48 sm:h-48
+                    md:w-60 md:h-60
+                    shadow-lg
+                  "
                   priority
                 />
               </div>
@@ -96,7 +102,9 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
               <h2 className="text-3xl font-bold text-foreground">
                 {artist.name}
               </h2>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mt-2">
+              {/* 연락처 정보: 항상 세로로 나열 */}
+              <div className="flex flex-col gap-2 mt-2">
+                {/* 인스타그램 */}
                 {artist.socialLinks?.instagram && (
                   <div className="flex items-center gap-2">
                     <Instagram className="h-5 w-5 text-pink-500" />
@@ -113,6 +121,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                     </Link>
                   </div>
                 )}
+                {/* 이메일 */}
                 {artist.email && (
                   <div className="flex items-center gap-2">
                     <Mail className="h-5 w-5 text-blue-500" />
@@ -124,6 +133,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                     </Link>
                   </div>
                 )}
+                {/* 전화번호 */}
                 {artist.phone && (
                   <div className="flex items-center gap-2">
                     <Phone className="h-5 w-5 text-green-500" />

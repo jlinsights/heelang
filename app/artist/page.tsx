@@ -48,5 +48,5 @@ export default async function ArtistPage() {
     );
   }
 
-  return <ArtistClient initialArtist={artist} />;
+  return <ArtistClient artist={artist} />;
 }

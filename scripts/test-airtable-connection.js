@@ -50,21 +50,21 @@ async function testAirtableConnection() {
       });
     }
 
-    // Artists 테이블 테스트 (복수형)
-    console.log("\n👨‍🎨 Testing Artists table...");
+    // Artist 테이블 테스트 (단수형)
+    console.log("\n👨‍🎨 Testing Artist table...");
     try {
-      const artistRecords = await base("Artists")
+      const artistRecords = await base("Artist")
         .select({
           maxRecords: 1,
         })
         .all();
 
       console.log(
-        `Found ${artistRecords.length} artist records in Artists table`
+        `Found ${artistRecords.length} artist records in Artist table`
       );
 
       if (artistRecords.length > 0) {
-        console.log("\n🎭 Sample artist record from Artists table:");
+        console.log("\n🎭 Sample artist record from Artist table:");
         const sample = artistRecords[0];
         console.log("ID:", sample.id);
         console.log("Fields:", Object.keys(sample.fields));
@@ -76,40 +76,46 @@ async function testAirtableConnection() {
         });
       }
     } catch (error) {
-      console.error("❌ Artists table access failed:", error.message);
+      console.error("❌ Artist table access failed:", error.message);
       if (error.statusCode) {
         console.error("Status Code:", error.statusCode);
       }
 
-      // Artist 테이블 테스트 (단수형)
-      console.log("\n👨‍🎨 Testing Artist table (singular)...");
-      try {
-        const artistRecords = await base("Artist")
-          .select({
-            maxRecords: 1,
-          })
-          .all();
+      // 다른 테이블 이름 시도
+      console.log("\n👨‍🎨 Testing alternative table names...");
+      const alternativeNames = ["artists", "작가", "Table 1"];
 
-        console.log(
-          `Found ${artistRecords.length} artist records in Artist table`
-        );
+      for (const tableName of alternativeNames) {
+        try {
+          console.log(`Trying "${tableName}" table...`);
+          const artistRecords = await base(tableName)
+            .select({
+              maxRecords: 1,
+            })
+            .all();
 
-        if (artistRecords.length > 0) {
-          console.log("\n🎭 Sample artist record from Artist table:");
-          const sample = artistRecords[0];
-          console.log("ID:", sample.id);
-          console.log("Fields:", Object.keys(sample.fields));
-          console.log("Sample data:", {
-            name: sample.fields.name || sample.fields.Name,
-            bio: sample.fields.bio || sample.fields.Bio,
-            email: sample.fields.email || sample.fields.Email,
-            id: sample.fields.id || sample.fields.ID,
-          });
-        }
-      } catch (error2) {
-        console.error("❌ Artist table access also failed:", error2.message);
-        if (error2.statusCode) {
-          console.error("Status Code:", error2.statusCode);
+          console.log(
+            `✅ Found ${artistRecords.length} artist records in "${tableName}" table`
+          );
+
+          if (artistRecords.length > 0) {
+            console.log(`\n🎭 Sample artist record from "${tableName}" table:`);
+            const sample = artistRecords[0];
+            console.log("ID:", sample.id);
+            console.log("Fields:", Object.keys(sample.fields));
+            console.log("Sample data:", {
+              name: sample.fields.name || sample.fields.Name,
+              bio: sample.fields.bio || sample.fields.Bio,
+              email: sample.fields.email || sample.fields.Email,
+              id: sample.fields.id || sample.fields.ID,
+            });
+          }
+          break; // 성공하면 중단
+        } catch (tableError) {
+          console.log(
+            `❌ "${tableName}" table access failed:`,
+            tableError.message
+          );
         }
       }
     }

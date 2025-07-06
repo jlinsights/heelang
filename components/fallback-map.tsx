@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { ExternalLink, MapPin } from "lucide-react";
 
 interface FallbackMapProps {
@@ -17,10 +18,8 @@ export default function FallbackMap({
   address,
   className = "w-full h-96",
 }: FallbackMapProps) {
-  const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(
-    placeName
-  )}`;
-  const googleMapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  // const kakaoMapUrl = `https://map.kakao.com/link/map/${placeName},${latitude},${longitude}`;
+  const googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 
   return (
     <div
@@ -59,24 +58,28 @@ export default function FallbackMap({
 
         {/* 외부 지도 링크 */}
         <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
-          <a
-            href={kakaoMapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors"
-          >
-            <ExternalLink className="w-4 h-4" />
-            카카오맵
-          </a>
-          <a
-            href={googleMapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors"
-          >
-            <ExternalLink className="w-4 h-4" />
-            구글맵
-          </a>
+          {/* <Button asChild variant="outline" size="sm">
+            <a
+              href={kakaoMapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              카카오맵
+            </a>
+          </Button> */}
+          <Button asChild variant="outline" size="sm">
+            <a
+              href={googleMapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              구글맵
+            </a>
+          </Button>
         </div>
 
         {/* 교통 정보 */}

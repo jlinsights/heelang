@@ -22,7 +22,7 @@ async function testAirtableArtist() {
     const base = new Airtable({ apiKey }).base(baseId);
 
     console.log("\nFetching Artist data from Airtable...");
-    const records = await base("Artists")
+    const records = await base("Artist")
       .select({
         maxRecords: 1,
       })

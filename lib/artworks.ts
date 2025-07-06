@@ -7,6 +7,33 @@ import {
 import type { Artist, Artwork } from "@/lib/types";
 import { getArtistImageUrl, getArtworkImageUrl } from "./image-utils";
 
+// 로컬 작품 이미지 경로 생성 함수
+export function getLocalArtworkImagePath(
+  slug: string,
+  year: number,
+  size: "thumb" | "medium" | "large" = "medium"
+): string {
+  // slug에서 heelang- 접두사 제거하고 연도 추출
+  const cleanSlug = slug.replace(/^heelang-/, "");
+  const filename = `heelang-${cleanSlug}-${size}.jpg`;
+  return `/images/Artworks/${year}/${filename}`;
+}
+
+// 작품 이미지 URL 생성 (fallback 포함)
+export function getArtworkImageWithFallback(
+  slug: string,
+  year: number,
+  size: "thumb" | "medium" | "large" = "medium"
+): string {
+  try {
+    return getLocalArtworkImagePath(slug, year, size);
+  } catch (error) {
+    console.warn(`Failed to get local image for ${slug}:`, error);
+    // fallback to placeholder
+    return "/placeholder.jpg";
+  }
+}
+
 // 로컬 fallback 데이터
 export const fallbackArtistData: Artist = {
   id: "artist-heelang",
@@ -904,5 +931,29 @@ export async function fetchArtworksWithTag(revalidateSeconds: number = 3600) {
  * Alias for getArtworks for backward compatibility
  */
 export async function fetchArtworks(): Promise<Artwork[]> {
-  return await getArtworks();
+  return await getArtworksFromSource();
+}
+
+// 무작위 추천 작품 가져오기 (현재 작품 제외)
+export async function getRandomArtworks(
+  currentSlug: string,
+  count: number = 4
+): Promise<Artwork[]> {
+  try {
+    const allArtworks = await getArtworks();
+
+    // 현재 작품 제외
+    const otherArtworks = allArtworks.filter(
+      (artwork) => artwork.slug !== currentSlug
+    );
+
+    // 무작위로 섞기
+    const shuffled = [...otherArtworks].sort(() => Math.random() - 0.5);
+
+    // 지정된 개수만큼 반환
+    return shuffled.slice(0, count);
+  } catch (error) {
+    console.error("🚨 getRandomArtworks error:", error);
+    return [];
+  }
 }

@@ -1,190 +1,271 @@
-'use client'
+"use client";
 
-import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
-import { PageHeader } from '@/components/section-header'
-import { Button } from '@/components/ui/button'
-import { fallbackArtworksData } from '@/lib/artworks'
-import type { Artwork } from '@/lib/types'
-import { Instagram, Mail, MapPin, Phone, Send } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { ArtNavigation, NavigationSpacer } from "@/components/art-navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Clock, Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
+import { useState } from "react";
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}
 
 export default function ContactPage() {
-  const [featuredArtworks, setFeaturedArtworks] = useState<Artwork[]>([])
-  const [loading, setLoading] = useState(true)
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<ContactFormData>({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
 
-  useEffect(() => {
-    async function loadFeaturedArtworks() {
-      try {
-        // getFeaturedArtworks 함수를 사용하여 안전하게 데이터 가져오기
-        const { getFeaturedArtworks } = await import('@/lib/artworks')
-        const featured = await getFeaturedArtworks(4)
-        
-        setFeaturedArtworks(featured)
-        setLoading(false)
-      } catch (error) {
-        console.error('Failed to load featured artworks:', error)
-        // 에러 발생 시 fallback 데이터 사용
-        const fallbackFeatured = fallbackArtworksData
-          .filter(artwork => artwork.featured)
-          .slice(0, 4)
-        setFeaturedArtworks(fallbackFeatured)
-        setLoading(false)
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "문의 전송 완료",
+          description:
+            "문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.",
+          duration: 5000,
+        });
+
+        // 폼 초기화
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        toast({
+          title: "전송 실패",
+          description: result.message || "문의 전송 중 오류가 발생했습니다.",
+          variant: "destructive",
+          duration: 5000,
+        });
       }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "전송 실패",
+        description: "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    loadFeaturedArtworks()
-  }, [])
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-paper via-paper-warm to-paper-cream dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-background">
       <ArtNavigation />
       <NavigationSpacer />
 
-      {/* Main Content */}
-      <main className="section-padding">
-        <div className="container-art">
-          {/* Page Header */}
-          <PageHeader
-            breadcrumb={[{ label: "홈", href: "/" }, { label: "문의하기" }]}
-            title="Contact"
-            subtitle="문의하기"
-            description="전시에 대한 문의사항이나 관람 예약을 위해 언제든지 연락 주세요."
-            badge="Contact"
-            variant="default"
-            size="lg"
-          />
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          {/* 페이지 헤더 */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
+              문의하기
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              작품 구매, 전시 관련 문의, 기타 궁금한 사항이 있으시면 언제든지
+              연락해 주세요.
+            </p>
+          </div>
 
-          {/* Contact Information */}
-          <section 
-            className="section-padding relative overflow-hidden mb-16"
-            style={{
-              backgroundImage: featuredArtworks[1] ? `url(${featuredArtworks[1].imageUrl})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="absolute inset-0 bg-slate-50/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg"></div>
-            <div className="relative z-10">
-              <h2 className="font-display text-3xl text-ink dark:text-white text-center mb-16">Contact Information</h2>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="text-center space-y-4">
-                  <Phone className="h-10 w-10 mx-auto text-ink-light dark:text-gray-300 mb-3" />
-                  <h3 className="font-body text-lg font-medium mb-2 text-ink dark:text-white">전화</h3>
-                  <p className="text-ink-light dark:text-gray-300">010-3019-1417</p>
-                </div>
-                
-                <div className="text-center space-y-4">
-                  <Mail className="h-10 w-10 mx-auto text-ink-light dark:text-gray-300 mb-3" />
-                  <h3 className="font-body text-lg font-medium mb-2 text-ink dark:text-white">이메일</h3>
-                  <p className="text-ink-light dark:text-gray-300">heelang@orientalcalligraphy.org</p>
-                </div>
-                
-                <div className="text-center space-y-4">
-                  <Instagram className="h-10 w-10 mx-auto text-ink-light dark:text-gray-300 mb-3" />
-                  <h3 className="font-body text-lg font-medium mb-2 text-ink dark:text-white">인스타그램</h3>
-                  <p className="text-ink-light dark:text-gray-300">
-                    <a href="https://instagram.com/heelang_calligraphy" target="_blank" rel="noopener noreferrer" className="hover:text-ink dark:hover:text-white transition-colors">
-                      @heelang_calligraphy
-                    </a>
-                  </p>
-                </div>
-                
-                <div className="text-center space-y-4">
-                  <MapPin className="h-10 w-10 mx-auto text-ink-light dark:text-gray-300 mb-3" />
-                  <h3 className="font-body text-lg font-medium mb-2 text-ink dark:text-white">위치</h3>
-                  <p className="text-ink-light dark:text-gray-300">경기 김포시 김포한강5로 321 (구래동)<br />김포한강듀클래스 14층 1435호 희랑글씨</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Contact Form */}
-          <section 
-            className="section-padding relative overflow-hidden"
-            style={{
-              backgroundImage: featuredArtworks[2] ? `url(${featuredArtworks[2].imageUrl})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="absolute inset-0 bg-background/85 dark:bg-gray-800/85 backdrop-blur-sm rounded-lg"></div>
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="font-display text-3xl text-ink dark:text-white text-center mb-16">문의하기</h2>
-              
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* 연락처 정보 */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-primary" />
+                  연락처 정보
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-primary mt-1" />
                   <div>
-                    <label className="block text-sm font-medium text-ink dark:text-white mb-2">이름</label>
-                    <input
+                    <p className="font-medium">이메일</p>
+                    <p className="text-muted-foreground">
+                      heelang@orientalcalligraphy.org
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary mt-1" />
+                  <div>
+                    <p className="font-medium">전화번호</p>
+                    <p className="text-muted-foreground">010-6877-0406</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary mt-1" />
+                  <div>
+                    <p className="font-medium">주소</p>
+                    <p className="text-muted-foreground">
+                      〶10068 경기 김포시 김포한강8로 173-88, 611동 602호
+                      (마산동, 한강신도시 동일스위트 더파크뷰 1단지)
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-primary mt-1" />
+                  <div>
+                    <p className="font-medium">운영시간</p>
+                    <p className="text-muted-foreground">
+                      월-금: 10:00 - 18:00
+                      <br />
+                      토-일: 10:00 - 17:00
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 문의 폼 */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Send className="w-5 h-5 text-primary" />
+                  문의 사항 입력 후 전송하기
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">이름 *</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="이름을 입력해주세요"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">전화번호</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="전화번호를 입력해주세요"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">이메일 *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="이메일을 입력해주세요"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="subject">제목 *</Label>
+                    <Input
+                      id="subject"
+                      name="subject"
                       type="text"
-                      className="w-full px-4 py-3 border border-border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ink/20 dark:focus:ring-white/20 bg-background/90 dark:bg-gray-700/90 backdrop-blur-sm text-ink dark:text-white placeholder:text-ink-light dark:placeholder:text-gray-400"
-                      placeholder="홍길동"
+                      placeholder="문의 제목을 입력해주세요"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-ink dark:text-white mb-2">연락처</label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-3 border border-border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ink/20 dark:focus:ring-white/20 bg-background/90 dark:bg-gray-700/90 backdrop-blur-sm text-ink dark:text-white placeholder:text-ink-light dark:placeholder:text-gray-400"
-                      placeholder="010-1234-5678"
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-ink dark:text-white mb-2">이메일</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 border border-border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ink/20 dark:focus:ring-white/20 bg-background/90 dark:bg-gray-700/90 backdrop-blur-sm text-ink dark:text-white placeholder:text-ink-light dark:placeholder:text-gray-400"
-                    placeholder="example@email.com"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-ink dark:text-white mb-2">문의 유형</label>
-                  <select className="w-full px-4 py-3 border border-border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ink/20 dark:focus:ring-white/20 bg-background/90 dark:bg-gray-700/90 backdrop-blur-sm text-ink dark:text-white">
-                    <option>일반 문의</option>
-                    <option>관람 예약</option>
-                    <option>단체 관람</option>
-                    <option>작품 구매</option>
-                    <option>기타</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-ink dark:text-white mb-2">문의 내용</label>
-                  <textarea
-                    rows={6}
-                    className="w-full px-4 py-3 border border-border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-ink/20 dark:focus:ring-white/20 bg-background/90 dark:bg-gray-700/90 backdrop-blur-sm resize-none text-ink dark:text-white placeholder:text-ink-light dark:placeholder:text-gray-400"
-                    placeholder="문의하실 내용을 자세히 적어주세요."
-                  ></textarea>
-                </div>
-                
-                <Button type="submit" className="w-full btn-art">
-                  <Send className="h-4 w-4 mr-2" />
-                  문의 보내기
-                </Button>
-              </form>
-            </div>
-          </section>
 
-          {/* Additional Information */}
-          <section className="mt-16 text-center">
-            <div className="bg-paper/50 dark:bg-gray-800/50 rounded-lg p-8 border border-border/30 dark:border-gray-600/30">
-              <h3 className="font-display text-xl text-ink dark:text-white mb-4">방문 안내</h3>
-              <div className="space-y-2 text-ink-light dark:text-gray-300">
-                <p>• 개인 관람: 사전 예약 없이 자유롭게 관람 가능</p>
-                <p>• 단체 관람: 10명 이상 시 사전 예약 필수</p>
-                <p>• 작가와의 만남: 매주 토요일 오후 2시 (사전 예약)</p>
-                <p>• 주차: 건물 지하 주차장 이용 가능 (2시간 무료)</p>
-              </div>
-            </div>
-          </section>
+                  <div className="space-y-2">
+                    <Label htmlFor="message">문의 내용 *</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      placeholder="문의 내용을 자세히 입력해주세요"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={6}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        전송 중...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        문의 보내기
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
-  )
-} 
+  );
+}

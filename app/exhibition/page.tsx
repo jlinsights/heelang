@@ -1,5 +1,5 @@
 import { ArtNavigation, NavigationSpacer } from "@/components/art-navigation";
-import KakaoMap from "@/components/kakao-map";
+// import KakaoMap from "@/components/kakao-map";
 import { PageHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Mail, MapPin, Phone, User } from "lucide-react";
@@ -243,12 +243,12 @@ export default function ExhibitionPage() {
               오시는 길
             </h2>
             <div className="bg-paper/50 rounded-lg p-6 border border-border/30">
-              <KakaoMap
+              {/* <KakaoMap
                 latitude={37.5735}
                 longitude={126.9854}
                 placeName="인사동 한국미술관"
                 address="서울특별시 종로구 인사동길 41-1"
-              />
+              /> */}
               <div className="mt-6 text-center">
                 <p className="text-ink-light mb-2">{exhibitionInfo.address}</p>
                 <p className="text-sm text-ink-light">

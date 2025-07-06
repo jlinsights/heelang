@@ -1,33 +1,65 @@
 import { fetchArtistFromAirtable } from "@/lib/airtable";
-import { getCachedData, setCachedData } from "@/lib/cache";
 import { Artist } from "@/lib/types";
 
 const CACHE_KEY = "artist_data";
 const CACHE_DURATION = 60 * 60 * 1000; // 1시간
 
-export async function fetchArtist(): Promise<Artist | null> {
+export async function fetchArtist(id: string): Promise<Artist | null> {
   try {
-    // 캐시된 데이터 확인
-    const cachedData = getCachedData(CACHE_KEY);
-    if (cachedData) {
-      return cachedData as Artist;
-    }
+    console.log(`Fetching artist with ID: ${id}`);
 
-    // Airtable에서 작가 데이터 가져오기
-    const artist = await fetchArtistFromAirtable();
+    // 에어테이블에서 작가 데이터 가져오기
+    const artist = await fetchArtistFromAirtable(id);
 
     if (!artist) {
-      console.warn("No artist data found in Airtable");
-      return getFallbackArtist();
+      console.log(`No artist found with ID: ${id}`);
+      return null;
     }
 
-    // 캐시에 저장
-    setCachedData(CACHE_KEY, artist, CACHE_DURATION);
-
+    console.log(`Successfully fetched artist: ${artist.name}`);
     return artist;
   } catch (error) {
     console.error("Error fetching artist:", error);
-    return getFallbackArtist();
+    return null;
+  }
+}
+
+// 모든 작가 데이터를 가져오는 함수 추가
+export async function fetchAllArtists(): Promise<Artist[]> {
+  try {
+    console.log("Fetching all artists from Airtable");
+
+    // 에어테이블에서 모든 작가 데이터 가져오기
+    const { fetchAllArtistsFromAirtable } = await import("./airtable");
+    const artists = await fetchAllArtistsFromAirtable();
+
+    console.log(`Successfully fetched ${artists.length} artists`);
+    return artists;
+  } catch (error) {
+    console.error("Error fetching all artists:", error);
+    return [];
+  }
+}
+
+// 작가 데이터 검색 함수
+export async function searchArtists(query: string): Promise<Artist[]> {
+  try {
+    const allArtists = await fetchAllArtists();
+
+    if (!query.trim()) {
+      return allArtists;
+    }
+
+    const searchTerm = query.toLowerCase();
+    return allArtists.filter(
+      (artist) =>
+        artist.name.toLowerCase().includes(searchTerm) ||
+        artist.bio.toLowerCase().includes(searchTerm) ||
+        artist.statement?.toLowerCase().includes(searchTerm)
+    );
+  } catch (error) {
+    console.error("Error searching artists:", error);
+    return [];
   }
 }
 
@@ -61,7 +93,7 @@ function getFallbackArtist(): Artist {
 }
 
 export async function fetchArtistWithTag(): Promise<Artist | null> {
-  const artist = await fetchArtist();
+  const artist = await fetchArtist("fallback-artist");
 
   // Next.js 태그 추가 (서버 사이드에서만 동작)
   if (typeof window === "undefined") {

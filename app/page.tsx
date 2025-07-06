@@ -348,6 +348,31 @@ function FeaturedWorksSection() {
 
 // 작가 소개 섹션
 function ArtistSection() {
+  const [artist, setArtist] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadArtist() {
+      try {
+        const response = await fetch("/api/artist");
+        if (!response.ok) throw new Error("작가 정보를 불러오지 못했습니다");
+        const result = await response.json();
+        setArtist(result.data);
+      } catch (err: any) {
+        setError(err.message || "알 수 없는 에러");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadArtist();
+  }, []);
+
+  const profileImageUrl =
+    artist?.profileImageUrl && typeof artist.profileImageUrl === "string"
+      ? artist.profileImageUrl
+      : "/images/artist/artist-medium.jpg";
+
   return (
     <section className="section-padding bg-gradient-zen">
       <div className="container-art">
@@ -355,9 +380,12 @@ function ArtistSection() {
           <div className="space-y-8">
             <SectionHeader
               badge="Artist"
-              title="희랑 공경순"
-              subtitle="서예가"
-              description="전통 서예의 깊이와 현대적 감각을 조화시키며, 문방사우의 정신을 현대에 되살리는 작업을 하고 있습니다."
+              title={artist?.name || "희랑 공경순"}
+              subtitle={artist?.subtitle || "서예가"}
+              description={
+                artist?.bio ||
+                "전통 서예의 깊이와 현대적 감각을 조화시키며, 문방사우의 정신을 현대에 되살리는 작업을 하고 있습니다."
+              }
               size="lg"
               action={{
                 label: "작가 소개 더보기",
@@ -365,36 +393,59 @@ function ArtistSection() {
                 variant: "default",
               }}
             />
-
             <Stats
               variant="minimal"
               stats={[
-                { label: "개인전", value: "15+", description: "회" },
-                { label: "단체전", value: "50+", description: "회" },
-                { label: "수상", value: "10+", description: "회" },
-                { label: "경력", value: "20+", description: "년" },
+                {
+                  label: "개인전",
+                  value: artist?.soloExhibitions || "15+",
+                  description: "회",
+                },
+                {
+                  label: "단체전",
+                  value: artist?.groupExhibitions || "50+",
+                  description: "회",
+                },
+                {
+                  label: "수상",
+                  value: artist?.awards || "10+",
+                  description: "회",
+                },
+                {
+                  label: "경력",
+                  value: artist?.career || "20+",
+                  description: "년",
+                },
               ]}
             />
           </div>
-
           <div className="relative">
             <Card className="card-art-elevated overflow-hidden">
               <CardContent className="p-0">
                 <div className="aspect-[4/5] relative bg-stone-100">
-                  <Image
-                    src="/images/artist/artist-medium.jpg"
-                    alt="희랑 공경순 작가 프로필"
-                    fill
-                    className="object-cover hover-scale"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
-                    placeholder="blur"
-                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5N4Q5Ox4DfveMEEAAkAAEAAA="
-                  />
+                  {loading ? (
+                    <div className="w-full h-full flex items-center justify-center animate-pulse bg-stone-200" />
+                  ) : (
+                    <Image
+                      src={profileImageUrl}
+                      alt={
+                        artist?.name
+                          ? `${artist.name} 작가 프로필`
+                          : "희랑 공경순 작가 프로필"
+                      }
+                      fill
+                      className="object-cover hover-scale"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5N4Q5Ox4DfveMEEAAkAAEAAA="
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               </CardContent>
             </Card>
+            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
           </div>
         </div>
       </div>

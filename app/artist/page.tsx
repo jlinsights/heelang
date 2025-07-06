@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 export const revalidate = 3600; // 1시간마다 재검증
 
 export async function generateMetadata(): Promise<Metadata> {
-  const artist = await fetchArtist();
+  const artist = await fetchArtist("fallback-artist");
 
   return {
     title: artist ? `${artist.name} - 작가 소개` : "작가 소개",
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ArtistPage() {
-  const artist = await fetchArtist();
+  const artist = await fetchArtist("fallback-artist");
 
   if (!artist) {
     return (

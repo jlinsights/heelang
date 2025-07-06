@@ -8,7 +8,9 @@ import {
   Calendar,
   GraduationCap,
   Instagram,
+  Mail,
   Palette,
+  Phone,
   Trophy,
   Users,
 } from "lucide-react";
@@ -94,42 +96,46 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
               <h2 className="text-3xl font-bold text-foreground">
                 {artist.name}
               </h2>
-              {artist.socialLinks?.instagram && (
-                <div className="flex items-center gap-2">
-                  <Instagram className="h-5 w-5 text-pink-500" />
-                  <Link
-                    href={`https://instagram.com/${artist.socialLinks.instagram.replace(
-                      "@",
-                      ""
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
-                  >
-                    {artist.socialLinks.instagram}
-                  </Link>
-                </div>
-              )}
-              {(artist.email || artist.phone) && (
-                <div className="flex items-center gap-4 mt-1">
-                  {artist.email && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mt-2">
+                {artist.socialLinks?.instagram && (
+                  <div className="flex items-center gap-2">
+                    <Instagram className="h-5 w-5 text-pink-500" />
+                    <Link
+                      href={`https://instagram.com/${artist.socialLinks.instagram.replace(
+                        "@",
+                        ""
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
+                    >
+                      {artist.socialLinks.instagram}
+                    </Link>
+                  </div>
+                )}
+                {artist.email && (
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-blue-500" />
                     <Link
                       href={`mailto:${artist.email}`}
                       className="text-base text-muted-foreground hover:underline"
                     >
                       {artist.email}
                     </Link>
-                  )}
-                  {artist.email && artist.phone && (
-                    <span className="text-muted-foreground">|</span>
-                  )}
-                  {artist.phone && (
-                    <span className="text-base text-muted-foreground">
+                  </div>
+                )}
+                {artist.phone && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-5 w-5 text-green-500" />
+                    <Link
+                      href={`tel:${artist.phone}`}
+                      className="text-base text-muted-foreground hover:underline"
+                    >
                       {artist.phone}
-                    </span>
-                  )}
-                </div>
-              )}
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
             {/* 작가 소개 */}
             {artist.bio && (

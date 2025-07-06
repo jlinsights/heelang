@@ -13,9 +13,13 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    domains: [
+      "imagedelivery.net",
+      // 필요시 다른 외부 도메인도 추가
+    ],
   },
   // Vercel 배포를 위해 output: export 제거
   // ...(process.env.NODE_ENV === "production" && {
@@ -25,7 +29,7 @@ const nextConfig = {
   // }),
   experimental: {
     reactCompiler: false,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
   ...(process.env.NODE_ENV === "development" && {
     onDemandEntries: {
@@ -44,19 +48,19 @@ const nextConfig = {
 
       config.watchOptions = {
         poll: false,
-        ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**'],
+        ignored: ["**/node_modules/**", "**/.git/**", "**/.next/**"],
       };
     }
 
     config.optimization = {
       ...config.optimization,
       splitChunks: {
-        chunks: 'all',
+        chunks: "all",
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
+            name: "vendors",
+            chunks: "all",
           },
         },
       },
@@ -133,11 +137,11 @@ const nextConfig = {
         ],
       },
       {
-        source: '/images/(.*)',
+        source: "/images/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

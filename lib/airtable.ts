@@ -497,6 +497,23 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
     };
 
     const getProfileImageUrl = () => {
+      // Cloudflare Images URL 등 직접 입력된 profileImageUrl 필드 우선 사용
+      const directUrl = getFieldValue(fields, [
+        "profileImageUrl",
+        "ProfileImageUrl",
+        "profileImageURL",
+        "ProfileImageURL",
+        "profile_image_url",
+        "Profile_Image_Url",
+      ]);
+      if (
+        directUrl &&
+        typeof directUrl === "string" &&
+        directUrl.startsWith("http")
+      ) {
+        return directUrl;
+      }
+      // 기존 이미지 필드(attachment)도 fallback으로 지원
       const imageField = getFieldValue(fields, [
         "profileImage",
         "Profile Image",
@@ -504,11 +521,9 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
         "프로필 이미지",
         "사진",
       ]);
-
       if (imageField && Array.isArray(imageField) && imageField.length > 0) {
         return imageField[0].url || "/images/artist/artist.jpg";
       }
-
       return "/images/artist/artist.jpg";
     };
 

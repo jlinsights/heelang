@@ -8,9 +8,7 @@ import {
   Calendar,
   GraduationCap,
   Instagram,
-  Mail,
   Palette,
-  Phone,
   Trophy,
   Users,
 } from "lucide-react";
@@ -91,7 +89,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
 
           {/* 오른쪽: 상세 정보 섹션 */}
           <div className="space-y-6">
-            {/* 이름/인스타그램 블록을 오른쪽 최상단에 추가 */}
+            {/* 이름/인스타그램/이메일/전화번호 블록을 오른쪽 최상단에 추가 */}
             <div className="text-left space-y-2">
               <h2 className="text-3xl font-bold text-foreground">
                 {artist.name}
@@ -110,6 +108,26 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                   >
                     {artist.socialLinks.instagram}
                   </Link>
+                </div>
+              )}
+              {(artist.email || artist.phone) && (
+                <div className="flex items-center gap-4 mt-1">
+                  {artist.email && (
+                    <Link
+                      href={`mailto:${artist.email}`}
+                      className="text-base text-muted-foreground hover:underline"
+                    >
+                      {artist.email}
+                    </Link>
+                  )}
+                  {artist.email && artist.phone && (
+                    <span className="text-muted-foreground">|</span>
+                  )}
+                  {artist.phone && (
+                    <span className="text-base text-muted-foreground">
+                      {artist.phone}
+                    </span>
+                  )}
                 </div>
               )}
             </div>
@@ -149,43 +167,6 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {artist.statement}
                 </p>
-              </div>
-            )}
-
-            {/* 연락처 정보: 오른쪽 영역의 가장 아래에 추가 */}
-            {(artist.phone || artist.email) && (
-              <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                    <Phone className="h-4 w-4" />
-                  </div>
-                  연락처
-                </h3>
-                <div className="space-y-3">
-                  {artist.phone && (
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                        <Phone className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <span className="text-muted-foreground">
-                        {artist.phone}
-                      </span>
-                    </div>
-                  )}
-                  {artist.email && (
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                        <Mail className="h-4 w-4 text-green-600 dark:text-green-400" />
-                      </div>
-                      <Link
-                        href={`mailto:${artist.email}`}
-                        className="text-green-600 dark:text-green-400 hover:underline"
-                      >
-                        {artist.email}
-                      </Link>
-                    </div>
-                  )}
-                </div>
               </div>
             )}
           </div>

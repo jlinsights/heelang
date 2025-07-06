@@ -116,12 +116,6 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
             {/* 작가 소개 */}
             {artist.bio && (
               <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                    <Users className="h-4 w-4" />
-                  </div>
-                  작가 소개
-                </h3>
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {artist.bio}
                 </p>

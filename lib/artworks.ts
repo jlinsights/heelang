@@ -915,16 +915,35 @@ export async function fetchArtworksWithTag(revalidateSeconds: number = 3600) {
 
   const url = `${baseUrl}/api/artworks`;
 
-  const res = await fetch(url, {
-    // force-cache + tag enables efficient ISR
-    next: {
-      tags: ["artworks"],
-      revalidate: revalidateSeconds,
-    },
-  });
+  try {
+    const res = await fetch(url, {
+      // force-cache + tag enables efficient ISR
+      next: {
+        tags: ["artworks"],
+        revalidate: revalidateSeconds,
+      },
+    });
 
-  const json = await res.json();
-  return (json.data || []) as Artwork[];
+    if (!res.ok) {
+      // fetch 성공했지만 404/500 등
+      console.error("API responded with error:", res.status);
+      return [];
+    }
+
+    // JSON 파싱 실패(HTML 등) 대비
+    let json;
+    try {
+      json = await res.json();
+    } catch (err) {
+      console.error("Failed to parse JSON from /api/artworks:", err);
+      return [];
+    }
+
+    return (json.data || []) as Artwork[];
+  } catch (error) {
+    console.error("Failed to fetch /api/artworks:", error);
+    return [];
+  }
 }
 
 /**

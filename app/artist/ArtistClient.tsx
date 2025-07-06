@@ -77,7 +77,9 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
             <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
               <div className="relative w-full h-[600px] rounded-xl overflow-hidden shadow-lg mb-6">
                 <Image
-                  src="/images/Artist/Artist-large.jpg"
+                  src={
+                    artist.profileImageUrl || "/Images/Artist/Artist-large.jpg"
+                  }
                   alt={artist.name}
                   fill
                   className="object-cover"

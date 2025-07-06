@@ -73,7 +73,7 @@ function getFallbackArtist(): Artist {
     id: "fallback-artist",
     name: "희랑 공경순",
     bio: "한국의 전통 서예와 현대적 감각을 결합한 독창적인 작품 세계를 구축하고 있는 서예 작가입니다.",
-    profileImageUrl: "/images/artist-profile.jpg",
+    profileImageUrl: "/Images/Artist/Artist-large.jpg",
     birthYear: 1970,
     email: "contact@heelang.com",
     phone: "+82-10-0000-0000",
@@ -122,7 +122,7 @@ export const defaultArtist: Artist = {
   name: "이희랑",
   bio: "전통 서예와 현대 미술의 경계를 탐구하는 작가",
   statement: "붓끝에서 피어나는 한국의 정신을 현대적 감각으로 재해석합니다.",
-  profileImageUrl: "/images/Artist/Artist-large.jpg",
+  profileImageUrl: "/Images/Artist/Artist-large.jpg",
   birthYear: 1970,
   education: [
     "서울대학교 미술대학 동양화과 졸업",

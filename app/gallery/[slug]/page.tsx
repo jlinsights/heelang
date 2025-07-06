@@ -1,9 +1,9 @@
 import { Logo } from "@/components/logo";
 import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
 import { Button } from "@/components/ui/button";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ClientEntry from "./ClientEntry";
 
 // generateStaticParams 함수 - 빌드 시점에 모든 유효한 slug 생성
 export async function generateStaticParams() {
@@ -95,7 +95,7 @@ export default async function ArtworkDetailPage({
 
         {/* Main Content */}
         <main className="container mx-auto px-4 py-8">
-          <ArtworkDetailModalClient
+          <ClientEntry
             artwork={artwork}
             recommendedArtworks={recommendedArtworks}
           />
@@ -107,8 +107,3 @@ export default async function ArtworkDetailPage({
     notFound();
   }
 }
-
-const ArtworkDetailModalClient = dynamic(
-  () => import("@/components/artwork-detail-modal-client"),
-  { ssr: false }
-);

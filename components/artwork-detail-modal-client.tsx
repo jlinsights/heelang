@@ -111,13 +111,23 @@ export default function ArtworkDetailModalClient({
           </div>
         </div>
 
+        {/* 작품 설명 */}
         {artwork.description && (
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-              작품 설명
-            </h3>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-1">작품 설명</h3>
+            <p className="text-base text-muted-foreground">
               {artwork.description}
+            </p>
+          </div>
+        )}
+
+        {/* 작가노트(artistNote): 작품 설명 아래에 artistNote가 있을 때만 표시 */}
+        {artwork.artistNote && (
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-1">작가노트</h3>
+            {/* 줄바꿈이 유지되도록 whitespace-pre-line 적용 */}
+            <p className="text-base text-muted-foreground whitespace-pre-line">
+              {artwork.artistNote}
             </p>
           </div>
         )}

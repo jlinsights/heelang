@@ -15,6 +15,7 @@ interface OptimizedArtworkImageProps {
   priority?: boolean;
   onLoad?: () => void;
   onError?: () => void;
+  onClick?: () => void;
 }
 
 export function OptimizedArtworkImage({
@@ -26,6 +27,7 @@ export function OptimizedArtworkImage({
   priority,
   onLoad,
   onError,
+  onClick,
 }: OptimizedArtworkImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -74,8 +76,10 @@ export function OptimizedArtworkImage({
       className={cn(
         "relative overflow-hidden bg-gray-100 dark:bg-gray-800",
         aspectRatio || "aspect-[3/4]",
-        className
+        className,
+        onClick && "cursor-zoom-in"
       )}
+      onClick={onClick}
     >
       {/* 로딩 스켈레톤 */}
       {isLoading && showLoadingState && (
@@ -126,9 +130,11 @@ export function GalleryGridImage({
 export function GalleryDetailImage({
   artwork,
   className,
+  onClick,
 }: {
   artwork: Artwork;
   className?: string;
+  onClick?: () => void;
 }) {
   return (
     <OptimizedArtworkImage
@@ -136,6 +142,7 @@ export function GalleryDetailImage({
       usage="gallery-detail"
       className={className}
       priority={true}
+      onClick={onClick}
     />
   );
 }

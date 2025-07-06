@@ -506,10 +506,10 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
       ]);
 
       if (imageField && Array.isArray(imageField) && imageField.length > 0) {
-        return imageField[0].url || "/images/artist-profile.jpg";
+        return imageField[0].url || "/images/artist/artist.jpg";
       }
 
-      return "/images/artist-profile.jpg";
+      return "/images/artist/artist.jpg";
     };
 
     // 작가 데이터 구성

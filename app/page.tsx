@@ -382,7 +382,7 @@ function ArtistSection() {
               <CardContent className="p-0">
                 <div className="aspect-[4/5] relative bg-stone-100">
                   <Image
-                    src="/Images/Artist/Artist-medium.jpg"
+                    src="/images/artist/artist-medium.jpg"
                     alt="희랑 공경순 작가 프로필"
                     fill
                     className="object-cover hover-scale"

@@ -78,7 +78,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
               <div className="relative w-full h-[600px] rounded-xl overflow-hidden shadow-lg mb-6">
                 <Image
                   src={
-                    artist.profileImageUrl || "/Images/Artist/Artist-large.jpg"
+                    artist.profileImageUrl || "/images/artist/artist-large.jpg"
                   }
                   alt={artist.name}
                   fill

@@ -86,36 +86,33 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                   priority
                 />
               </div>
-
-              {/* 기본 정보 */}
-              <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold text-foreground">
-                  {artist.name}
-                </h2>
-
-                {/* 인스타그램 */}
-                {artist.socialLinks?.instagram && (
-                  <div className="flex items-center justify-center gap-2">
-                    <Instagram className="h-5 w-5 text-pink-500" />
-                    <Link
-                      href={`https://instagram.com/${artist.socialLinks.instagram.replace(
-                        "@",
-                        ""
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
-                    >
-                      {artist.socialLinks.instagram}
-                    </Link>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 
           {/* 오른쪽: 상세 정보 섹션 */}
           <div className="space-y-6">
+            {/* 이름/인스타그램 블록을 오른쪽 최상단에 추가 */}
+            <div className="text-left space-y-2">
+              <h2 className="text-3xl font-bold text-foreground">
+                {artist.name}
+              </h2>
+              {artist.socialLinks?.instagram && (
+                <div className="flex items-center gap-2">
+                  <Instagram className="h-5 w-5 text-pink-500" />
+                  <Link
+                    href={`https://instagram.com/${artist.socialLinks.instagram.replace(
+                      "@",
+                      ""
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
+                  >
+                    {artist.socialLinks.instagram}
+                  </Link>
+                </div>
+              )}
+            </div>
             {/* 작가 소개 */}
             {artist.bio && (
               <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm">

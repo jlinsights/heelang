@@ -420,7 +420,7 @@ function ExhibitionSection() {
           <Card className="card-art-elevated">
             <CardContent className="p-8 text-center space-y-4">
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
-                <Calendar className="w-6 h-6 text-white" />
+                <Calendar className="w-6 h-6 text-ink dark:text-paper" />
               </div>
               <h3 className="font-display text-xl font-semibold text-ink">
                 전시 기간
@@ -436,7 +436,7 @@ function ExhibitionSection() {
           <Card className="card-art-elevated">
             <CardContent className="p-8 text-center space-y-4">
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
-                <MapPin className="w-6 h-6 text-white" />
+                <MapPin className="w-6 h-6 text-ink dark:text-paper" />
               </div>
               <h3 className="font-display text-xl font-semibold text-ink">
                 전시 장소
@@ -454,7 +454,7 @@ function ExhibitionSection() {
           <Card className="card-art-elevated md:col-span-2 lg:col-span-1">
             <CardContent className="p-8 text-center space-y-4">
               <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto">
-                <ArrowRight className="w-6 h-6 text-white" />
+                <ArrowRight className="w-6 h-6 text-ink dark:text-paper" />
               </div>
               <h3 className="font-display text-xl font-semibold text-ink">
                 관람 안내

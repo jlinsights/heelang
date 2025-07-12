@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import type { Locale } from '@/lib/types'
-import { getStoredLocale, setStoredLocale, getTranslation, formatTranslation, getPlural } from '@/lib/i18n'
+import { getStoredLocale, setStoredLocale, getTranslation, formatTranslation, getPlural } from '@/lib/i18n/index'
 
 interface I18nContextType {
   locale: Locale

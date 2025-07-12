@@ -1,14 +1,10 @@
-import { Metadata } from 'next'
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { WifiOff, RefreshCw, Home, Image } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: '오프라인 - 희랑 공경순 개인전',
-  description: '현재 인터넷 연결이 없습니다. 연결을 확인한 후 다시 시도해주세요.',
-  robots: 'noindex, nofollow',
-}
 
 export default function OfflinePage() {
   return (

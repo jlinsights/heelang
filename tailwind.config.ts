@@ -8,6 +8,41 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "*.{js,ts,jsx,tsx,mdx}"
   ],
+  safelist: [
+    // 동적으로 생성되는 클래스들을 보호
+    'animate-brush-in',
+    'animate-ink-drop', 
+    'animate-paper-fold',
+    'animate-zen-float',
+    'text-ink',
+    'text-ink-light',
+    'text-ink-lighter',
+    'text-ink-dark',
+    'bg-paper',
+    'bg-paper-warm',
+    'bg-paper-cream',
+    'bg-paper-aged',
+    'bg-stone',
+    'bg-stone-light',
+    'bg-stone-dark',
+    'text-brush',
+    'text-brush-light',
+    'text-brush-dark',
+    'text-gold',
+    'text-gold-light',
+    'text-gold-dark',
+    'bg-gold',
+    'bg-gold-light',
+    'bg-gold-dark',
+    'bg-gradient-ink',
+    'bg-gradient-paper',
+    'bg-gradient-zen',
+    'btn-art',
+    'btn-art-outline',
+    'btn-art-ghost',
+    'card-art',
+    'card-art-elevated'
+  ],
   theme: {
     extend: {
       colors: {
@@ -82,6 +117,11 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--stone))',
   				light: 'hsl(var(--stone-light))',
   				dark: 'hsl(var(--stone-dark))'
+  			},
+  			gold: {
+  				DEFAULT: 'hsl(var(--gold))',
+  				light: 'hsl(var(--gold-light))',
+  				dark: 'hsl(var(--gold-dark))'
   			}
   		},
   		fontFamily: {
@@ -210,5 +250,15 @@ const config: Config = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+  corePlugins: {
+    // 사용하지 않는 기본 플러그인 비활성화로 번들 크기 최적화
+    float: false,
+    clear: false,
+    skew: false,
+  },
+  experimental: {
+    // 최적화 실험적 기능
+    optimizeUniversalDefaults: true,
+  },
 };
 export default config;

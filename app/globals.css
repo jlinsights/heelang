@@ -2,11 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts - 서예에 최적화된 폰트 */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap");
+/* 
+ * HEELANG 프로젝트 - 통합 CSS 시스템
+ * 서예 예술에 최적화된 디자인 토큰과 스타일
+ */
+
+/* 폰트는 layout.tsx에서 Next.js Font Optimization을 통해 로드됨 */
 
 @layer base {
   :root {
+    /* ===========================================
+     * HEELANG 디자인 토큰 시스템
+     * =========================================== */
+
     /* shadcn/ui 기본 색상 */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -28,13 +36,28 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
     --radius: 0.75rem;
+
+    /* 차트 색상 */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    /* 서예 예술 전용 색상 시스템 */
+    /* 사이드바 색상 */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* ===========================================
+     * 서예 예술 전용 색상 시스템
+     * =========================================== */
+    /* 먹(墨) - 글씨의 기본 색상 */
     --ink: 222.2 47.4% 11.2%;
     --ink-light: 215.4 16.3% 46.9%;
     --ink-lighter: 210 20% 65%;
@@ -53,7 +76,14 @@
     --stone-light: 210 20% 90%;
     --stone-dark: 210 25% 75%;
 
-    /* 예술적 그라디언트 */
+    /* 금(金) - 특별한 강조 색상 */
+    --gold: 45 100% 50%;
+    --gold-light: 45 100% 70%;
+    --gold-dark: 45 100% 30%;
+
+    /* ===========================================
+     * 예술적 그라디언트 시스템
+     * =========================================== */
     --gradient-ink: linear-gradient(
       135deg,
       hsl(var(--ink-dark)) 0%,
@@ -74,6 +104,10 @@
   }
 
   .dark {
+    /* ===========================================
+     * 다크모드 색상 시스템
+     * =========================================== */
+
     /* shadcn/ui 다크모드 색상 */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -94,13 +128,28 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* 다크모드 차트 색상 */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    /* 서예 다크모드 색상 */
+    /* 다크모드 사이드바 색상 */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* ===========================================
+     * 서예 다크모드 색상 시스템
+     * =========================================== */
+    /* 다크모드 먹(墨) 색상 */
     --ink: 210 40% 98%;
     --ink-light: 215 20.2% 65.1%;
     --ink-lighter: 210 15% 55%;
@@ -119,7 +168,14 @@
     --stone-light: 217.2 15% 35%;
     --stone-dark: 217.2 25% 15%;
 
-    /* 다크모드 그라디언트 */
+    /* 다크모드 금(金) 색상 */
+    --gold: 45 100% 70%;
+    --gold-light: 45 100% 80%;
+    --gold-dark: 45 100% 50%;
+
+    /* ===========================================
+     * 다크모드 그라디언트 시스템
+     * =========================================== */
     --gradient-ink: linear-gradient(
       135deg,
       hsl(var(--ink-dark)) 0%,
@@ -147,7 +203,10 @@
 
   body {
     @apply bg-background text-foreground font-body;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -161,7 +220,9 @@
   h5,
   h6 {
     @apply font-display tracking-wide;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
   }
 
   /* 스크롤바 스타일링 */
@@ -200,7 +261,11 @@
 }
 
 @layer utilities {
-  /* 서예 전용 색상 유틸리티 */
+  /* ===========================================
+   * 서예 전용 색상 유틸리티 클래스
+   * =========================================== */
+
+  /* 먹(墨) 색상 유틸리티 */
   .text-ink {
     color: hsl(var(--ink));
   }
@@ -247,7 +312,29 @@
     background-color: hsl(var(--stone-dark));
   }
 
-  /* 그라디언트 유틸리티 */
+  /* 금(金) 색상 유틸리티 */
+  .text-gold {
+    color: hsl(var(--gold));
+  }
+  .text-gold-light {
+    color: hsl(var(--gold-light));
+  }
+  .text-gold-dark {
+    color: hsl(var(--gold-dark));
+  }
+  .bg-gold {
+    background-color: hsl(var(--gold));
+  }
+  .bg-gold-light {
+    background-color: hsl(var(--gold-light));
+  }
+  .bg-gold-dark {
+    background-color: hsl(var(--gold-dark));
+  }
+
+  /* ===========================================
+   * 그라디언트 유틸리티 클래스
+   * =========================================== */
   .bg-gradient-ink {
     background: var(--gradient-ink);
   }
@@ -258,7 +345,9 @@
     background: var(--gradient-zen);
   }
 
-  /* 레이아웃 유틸리티 */
+  /* ===========================================
+   * 레이아웃 및 컨테이너 유틸리티
+   * =========================================== */
   .container-art {
     @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
   }
@@ -271,7 +360,9 @@
     @apply py-8 md:py-12 lg:py-16;
   }
 
-  /* 예술적 텍스트 효과 */
+  /* ===========================================
+   * 예술적 텍스트 효과
+   * =========================================== */
   .text-shadow-soft {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -288,10 +379,15 @@
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
   }
 
-  /* 서예 스타일 텍스트 */
+  /* ===========================================
+   * 서예 전용 텍스트 스타일
+   * =========================================== */
   .text-calligraphy {
     @apply font-calligraphy tracking-wide;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1;
   }
 
   .text-zen {
@@ -299,7 +395,9 @@
     font-feature-settings: "kern" 1;
   }
 
-  /* 예술적 버튼 스타일 */
+  /* ===========================================
+   * 예술적 버튼 컴포넌트
+   * =========================================== */
   .btn-art {
     @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-medium transition-all duration-300;
     @apply bg-ink text-paper hover:bg-ink-light hover:shadow-medium;
@@ -321,7 +419,9 @@
     @apply active:scale-95;
   }
 
-  /* 카드 스타일 */
+  /* ===========================================
+   * 카드 컴포넌트 스타일
+   * =========================================== */
   .card-art {
     @apply bg-paper border border-stone-light rounded-xl shadow-soft;
     @apply hover:shadow-medium transition-all duration-300;
@@ -334,7 +434,9 @@
     @apply dark:bg-paper-warm dark:border-stone-dark;
   }
 
-  /* 글래스모피즘 효과 */
+  /* ===========================================
+   * 글래스모피즘 효과
+   * =========================================== */
   .glass {
     @apply backdrop-blur-md bg-white/10 border border-white/20;
     @apply dark:bg-black/10 dark:border-white/10;
@@ -345,7 +447,28 @@
     @apply dark:bg-black/20 dark:border-white/20;
   }
 
-  /* 예술적 애니메이션 클래스 */
+  /* ===========================================
+   * 예술적 애니메이션 클래스
+   * =========================================== */
+
+  /* styles/globals.css에서 통합된 애니메이션 */
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s ease-out;
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  /* 서예 전용 애니메이션 */
   .animate-brush-in {
     animation: brushIn 1.2s ease-out forwards;
   }
@@ -362,7 +485,9 @@
     animation: zenFloat 4s ease-in-out infinite;
   }
 
-  /* 호버 효과 */
+  /* ===========================================
+   * 호버 및 상호작용 효과
+   * =========================================== */
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-medium;
   }
@@ -375,12 +500,16 @@
     @apply transition-transform duration-300 hover:scale-105;
   }
 
-  /* 포커스 스타일 */
+  /* ===========================================
+   * 접근성 및 포커스 스타일
+   * =========================================== */
   .focus-art {
     @apply focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-background;
   }
 
-  /* 반응형 텍스트 크기 */
+  /* ===========================================
+   * 반응형 텍스트 크기
+   * =========================================== */
   .text-responsive-xs {
     @apply text-xs sm:text-sm;
   }
@@ -410,7 +539,56 @@
   }
 }
 
-/* 예술적 키프레임 애니메이션 */
+/* ===========================================
+ * 키프레임 애니메이션 정의
+ * =========================================== */
+
+/* styles/globals.css에서 통합된 기본 애니메이션 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 서예 전용 예술적 애니메이션 */
 @keyframes brushIn {
   0% {
     opacity: 0;
@@ -466,7 +644,9 @@
   }
 }
 
-/* 특별한 효과들 */
+/* ===========================================
+ * 특별한 시각 효과
+ * =========================================== */
 .artwork-container {
   @apply relative overflow-hidden rounded-xl;
   @apply transition-all duration-500 hover:shadow-strong;
@@ -477,7 +657,9 @@
   @apply hover:scale-110;
 }
 
-/* 모바일 최적화 */
+/* ===========================================
+ * 반응형 및 모바일 최적화
+ * =========================================== */
 @media (max-width: 768px) {
   .section-padding {
     @apply py-12;
@@ -492,7 +674,9 @@
   }
 }
 
-/* 접근성 개선 */
+/* ===========================================
+ * 접근성 및 사용성 개선
+ * =========================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -503,7 +687,9 @@
   }
 }
 
-/* 고대비 모드 지원 */
+/* ===========================================
+ * 고대비 모드 및 시각적 접근성
+ * =========================================== */
 @media (prefers-contrast: high) {
   .card-art {
     @apply border-2 border-ink;

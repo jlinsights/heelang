@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils'
 // Skip to main content link
 export function SkipToContent() {
   return (
-    <a 
-      href="#main-content"
-      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-ink text-white p-3 rounded-md z-50 transition-all"
+    <a
+      href='#main-content'
+      className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-ink text-white p-3 rounded-md z-50 transition-all'
     >
       본문으로 건너뛰기
     </a>
@@ -16,21 +16,35 @@ export function SkipToContent() {
 }
 
 // Screen reader only text
-export function ScreenReaderOnly({ children, className }: { children: ReactNode, className?: string }) {
+export function ScreenReaderOnly({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
   return <span className={cn('sr-only', className)}>{children}</span>
 }
 
 // 포커스 트랩 컴포넌트
-export function FocusTrap({ children, isActive }: { children: ReactNode, isActive: boolean }) {
+export function FocusTrap({
+  children,
+  isActive,
+}: {
+  children: ReactNode
+  isActive: boolean
+}) {
   useEffect(() => {
     if (!isActive) return
 
     const focusableElements = document.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     )
-    
+
     const firstElement = focusableElements[0] as HTMLElement
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement
 
     const handleTabKey = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return
@@ -98,12 +112,18 @@ export function useReducedMotion() {
 }
 
 // 라이브 리전 컴포넌트 (스크린 리더용 알림)
-export function LiveRegion({ children, polite = true }: { children: ReactNode, polite?: boolean }) {
+export function LiveRegion({
+  children,
+  polite = true,
+}: {
+  children: ReactNode
+  polite?: boolean
+}) {
   return (
-    <div 
+    <div
       aria-live={polite ? 'polite' : 'assertive'}
-      aria-atomic="true"
-      className="sr-only"
+      aria-atomic='true'
+      className='sr-only'
     >
       {children}
     </div>
@@ -130,9 +150,9 @@ export function AccessibleIconButton({
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center rounded-md p-2",
-        "focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        'inline-flex items-center justify-center rounded-md p-2',
+        'focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2',
+        'disabled:opacity-50 disabled:cursor-not-allowed',
         className
       )}
       aria-label={label}
@@ -152,7 +172,7 @@ export function AccessibleModal({
   title,
   description,
   children,
-  className
+  className,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -183,26 +203,26 @@ export function AccessibleModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'
       onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-describedby={description ? "modal-description" : undefined}
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='modal-title'
+      aria-describedby={description ? 'modal-description' : undefined}
     >
       <FocusTrap isActive={isOpen}>
         <div
           className={cn(
-            "bg-background rounded-lg shadow-xl max-w-md w-full mx-4 p-6",
+            'bg-background rounded-lg shadow-xl max-w-md w-full mx-4 p-6',
             className
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          <h2 id="modal-title" className="text-xl font-semibold mb-4">
+          <h2 id='modal-title' className='text-xl font-semibold mb-4'>
             {title}
           </h2>
           {description && (
-            <p id="modal-description" className="text-ink-light mb-4">
+            <p id='modal-description' className='text-ink-light mb-4'>
               {description}
             </p>
           )}
@@ -228,7 +248,7 @@ export function AccessibilityStyles() {
         .text-ink-light {
           color: hsl(var(--foreground));
         }
-        
+
         .border-border {
           border-color: hsl(var(--foreground));
         }
@@ -248,8 +268,10 @@ export function AccessibilityStyles() {
 
       /* 포커스 가시성 향상 */
       .focus\\:ring-2:focus {
-        box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--foreground));
+        box-shadow:
+          0 0 0 2px hsl(var(--background)),
+          0 0 0 4px hsl(var(--foreground));
       }
     `}</style>
   )
-} 
+}

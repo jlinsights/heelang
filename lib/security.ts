@@ -51,38 +51,38 @@ export function generateCSPHeader(isDev = false) {
 export const securityHeaders = [
   {
     key: 'X-DNS-Prefetch-Control',
-    value: 'on'
+    value: 'on',
   },
   {
     key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload'
+    value: 'max-age=63072000; includeSubDomains; preload',
   },
   {
     key: 'X-XSS-Protection',
-    value: '1; mode=block'
+    value: '1; mode=block',
   },
   {
     key: 'X-Frame-Options',
-    value: 'DENY'
+    value: 'DENY',
   },
   {
     key: 'X-Content-Type-Options',
-    value: 'nosniff'
+    value: 'nosniff',
   },
   {
     key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin'
+    value: 'origin-when-cross-origin',
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()'
-  }
+    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+  },
 ]
 
 // CSRF 토큰 생성 (필요시)
 export function generateCSRFToken(): string {
   return Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map(b => b.toString(16).padStart(2, '0'))
+    .map((b) => b.toString(16).padStart(2, '0'))
     .join('')
 }
 
@@ -102,4 +102,4 @@ export function validateEmail(email: string): boolean {
 export function validateSlug(slug: string): boolean {
   const slugRegex = /^[a-z0-9-]+$/
   return slugRegex.test(slug) && slug.length <= 100
-} 
+}

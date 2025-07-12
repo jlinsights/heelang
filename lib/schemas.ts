@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 // Artwork Schema
 export const ArtworkSchema = z.object({
@@ -26,9 +26,9 @@ export const ArtworkSchema = z.object({
   exhibition: z.string().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
-});
+})
 
-export type ArtworkValidated = z.infer<typeof ArtworkSchema>;
+export type ArtworkValidated = z.infer<typeof ArtworkSchema>
 
 // Social Links Schema
 export const SocialLinksSchema = z.object({
@@ -38,7 +38,7 @@ export const SocialLinksSchema = z.object({
   website: z.string().optional(),
   youtube: z.string().optional(),
   linkedin: z.string().optional(),
-});
+})
 
 // Artist Schema - lib/types.ts의 Artist 타입과 일치하도록 확장
 export const ArtistSchema = z.object({
@@ -68,6 +68,6 @@ export const ArtistSchema = z.object({
   philosophy: z.string().optional(),
   techniques: z.array(z.string()).optional(),
   materials: z.array(z.string()).optional(),
-});
+})
 
-export type ArtistValidated = z.infer<typeof ArtistSchema>;
+export type ArtistValidated = z.infer<typeof ArtistSchema>

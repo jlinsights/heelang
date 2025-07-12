@@ -13,33 +13,33 @@
 */
 
 // Automation 입력 변수 (Settings > Variables)
-const webhookUrl = WEBHOOK_URL; // eslint-disable-line no-undef
-const secret = WEBHOOK_SECRET; // eslint-disable-line no-undef
-const tag = "artworks";
+const webhookUrl = WEBHOOK_URL // eslint-disable-line no-undef
+const secret = WEBHOOK_SECRET // eslint-disable-line no-undef
+const tag = 'artworks'
 
 async function revalidate() {
   try {
-    const payload = JSON.stringify({ tag, secret });
+    const payload = JSON.stringify({ tag, secret })
 
     const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: payload,
-    });
+    })
 
     if (!response.ok) {
-      console.error(`Revalidate failed – ${response.status}`);
-      output.set("status", "failed");
-      return;
+      console.error(`Revalidate failed – ${response.status}`)
+      output.set('status', 'failed')
+      return
     }
 
-    const data = await response.json();
-    console.log("Revalidated:", data);
-    output.set("status", "success");
+    const data = await response.json()
+    console.log('Revalidated:', data)
+    output.set('status', 'success')
   } catch (error) {
-    console.error("Revalidate error:", error);
-    output.set("status", "error");
+    console.error('Revalidate error:', error)
+    output.set('status', 'error')
   }
 }
 
-await revalidate();
+await revalidate()

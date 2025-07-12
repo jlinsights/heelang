@@ -11,9 +11,12 @@ export function SimpleThemeToggle() {
     setMounted(true)
     // 로컬 스토리지에서 테마 설정 읽기
     const savedTheme = localStorage.getItem('theme')
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    
-    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark)
+    const systemPrefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches
+
+    const shouldBeDark =
+      savedTheme === 'dark' || (!savedTheme && systemPrefersDark)
     setIsDark(shouldBeDark)
     updateTheme(shouldBeDark)
   }, [])
@@ -37,7 +40,7 @@ export function SimpleThemeToggle() {
   // 마운트될 때까지 아무것도 렌더링하지 않음 (hydration 에러 방지)
   if (!mounted) {
     return (
-      <div className="w-9 h-9 flex items-center justify-center">
+      <div className='w-9 h-9 flex items-center justify-center'>
         {/* 빈 공간 유지 */}
       </div>
     )
@@ -46,11 +49,11 @@ export function SimpleThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="w-9 h-9 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200"
-      aria-label="테마 변경"
-      type="button"
+      className='w-9 h-9 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200'
+      aria-label='테마 변경'
+      type='button'
     >
-      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      {isDark ? <Sun className='h-4 w-4' /> : <Moon className='h-4 w-4' />}
     </button>
   )
-} 
+}

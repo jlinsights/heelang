@@ -18,14 +18,16 @@ export function generateSEOMetadata({
   path = '/',
   locale = 'ko',
   image,
-  type = 'website'
+  type = 'website',
 }: SEOProps): Metadata {
-  const fullTitle = title 
-    ? `${title} | ${APP_CONFIG.name}` 
+  const fullTitle = title
+    ? `${title} | ${APP_CONFIG.name}`
     : `${APP_CONFIG.name} | ${APP_CONFIG.nameEn}`
-  
+
   const url = `${APP_CONFIG.url}${locale === 'ko' ? '' : `/${locale}`}${path}`
-  const imageUrl = image ? `${APP_CONFIG.url}${image}` : `${APP_CONFIG.url}/images/og-image.jpg`
+  const imageUrl = image
+    ? `${APP_CONFIG.url}${image}`
+    : `${APP_CONFIG.url}/images/og-image.jpg`
 
   return {
     title: fullTitle,
@@ -43,10 +45,10 @@ export function generateSEOMetadata({
     alternates: {
       canonical: url,
       languages: {
-        'ko': '/',
-        'en': '/en',
-        'ja': '/ja',
-        'zh': '/zh',
+        ko: '/',
+        en: '/en',
+        ja: '/ja',
+        zh: '/zh',
       },
     },
     openGraph: {
@@ -62,7 +64,14 @@ export function generateSEOMetadata({
           alt: title || APP_CONFIG.name,
         },
       ],
-      locale: locale === 'ko' ? 'ko_KR' : locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_CN',
+      locale:
+        locale === 'ko'
+          ? 'ko_KR'
+          : locale === 'en'
+            ? 'en_US'
+            : locale === 'ja'
+              ? 'ja_JP'
+              : 'zh_CN',
       type,
     },
     twitter: {
@@ -118,4 +127,4 @@ export function generateArtworkJsonLd(artwork: Artwork) {
     height: artwork.dimensions,
     url: `${APP_CONFIG.url}/gallery/${artwork.slug}`,
   }
-} 
+}

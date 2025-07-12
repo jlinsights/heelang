@@ -8,7 +8,7 @@ export interface Translation {
     exhibition: string
     back: string
   }
-  
+
   // 갤러리
   gallery: {
     title: string
@@ -23,7 +23,7 @@ export interface Translation {
     noResults: string
     keyboardNavigation: string
   }
-  
+
   // 필터
   filter: {
     title: string
@@ -39,7 +39,7 @@ export interface Translation {
     byYear: string
     byMedium: string
   }
-  
+
   // 작품
   artwork: {
     year: string
@@ -53,7 +53,7 @@ export interface Translation {
     nextWork: string
     backToGallery: string
   }
-  
+
   // 공유
   share: {
     title: string
@@ -66,7 +66,7 @@ export interface Translation {
     download: string
     tip: string
   }
-  
+
   // 공통
   common: {
     loading: string
@@ -76,7 +76,7 @@ export interface Translation {
     skipToMain: string
     close: string
   }
-  
+
   // 접근성
   accessibility: {
     skipToMain: string
@@ -95,7 +95,7 @@ export const translations: Record<Locale, Translation> = {
       gallery: '갤러리',
       artist: '작가',
       exhibition: '전시',
-      back: '돌아가기'
+      back: '돌아가기',
     },
     gallery: {
       title: '갤러리',
@@ -108,7 +108,8 @@ export const translations: Record<Locale, Translation> = {
       reset: '초기화',
       results: '개 작품',
       noResults: '검색 결과가 없습니다',
-      keyboardNavigation: '키보드 네비게이션: 화살표 키로 이동, Enter/Space로 선택, Home/End로 처음/끝으로 이동'
+      keyboardNavigation:
+        '키보드 네비게이션: 화살표 키로 이동, Enter/Space로 선택, Home/End로 처음/끝으로 이동',
     },
     filter: {
       title: '작품 필터',
@@ -122,7 +123,7 @@ export const translations: Record<Locale, Translation> = {
       descending: '내림차순',
       byTitle: '작품명',
       byYear: '제작년도',
-      byMedium: '재료'
+      byMedium: '재료',
     },
     artwork: {
       year: '제작년도',
@@ -134,7 +135,7 @@ export const translations: Record<Locale, Translation> = {
       download: '다운로드',
       previousWork: '이전 작품',
       nextWork: '다음 작품',
-      backToGallery: '갤러리로 돌아가기'
+      backToGallery: '갤러리로 돌아가기',
     },
     share: {
       title: '작품 공유하기',
@@ -145,7 +146,7 @@ export const translations: Record<Locale, Translation> = {
       copy: '복사',
       copied: '복사됨',
       download: '이미지 다운로드',
-      tip: 'Instagram 공유 팁:\n📱 모바일: 이미지가 자동으로 다운로드되고 Instagram 앱이 열립니다.\n💻 데스크톱: 링크가 복사되며 Instagram 웹에서 붙여넣기하세요.\n✨ 작품에 대한 개인적인 감상을 함께 적어주시면 더욱 의미있는 공유가 됩니다.'
+      tip: 'Instagram 공유 팁:\n📱 모바일: 이미지가 자동으로 다운로드되고 Instagram 앱이 열립니다.\n💻 데스크톱: 링크가 복사되며 Instagram 웹에서 붙여넣기하세요.\n✨ 작품에 대한 개인적인 감상을 함께 적어주시면 더욱 의미있는 공유가 됩니다.',
     },
     common: {
       loading: '로딩 중...',
@@ -153,7 +154,7 @@ export const translations: Record<Locale, Translation> = {
       retry: '다시 시도',
       home: '홈',
       skipToMain: '메인 콘텐츠로 건너뛰기',
-      close: '닫기'
+      close: '닫기',
     },
     accessibility: {
       skipToMain: '메인 콘텐츠로 건너뛰기',
@@ -162,16 +163,16 @@ export const translations: Record<Locale, Translation> = {
       openFilter: '필터 열기',
       closeFilter: '필터 닫기',
       previousPage: '이전 페이지',
-      nextPage: '다음 페이지'
-    }
+      nextPage: '다음 페이지',
+    },
   },
-  
+
   en: {
     nav: {
       gallery: 'Gallery',
       artist: 'Artist',
       exhibition: 'Exhibition',
-      back: 'Back'
+      back: 'Back',
     },
     gallery: {
       title: 'Gallery',
@@ -184,7 +185,8 @@ export const translations: Record<Locale, Translation> = {
       reset: 'Reset',
       results: ' artworks',
       noResults: 'No search results found',
-      keyboardNavigation: 'Keyboard navigation: Arrow keys to move, Enter/Space to select, Home/End to go to first/last'
+      keyboardNavigation:
+        'Keyboard navigation: Arrow keys to move, Enter/Space to select, Home/End to go to first/last',
     },
     filter: {
       title: 'Filter Artworks',
@@ -198,7 +200,7 @@ export const translations: Record<Locale, Translation> = {
       descending: 'Descending',
       byTitle: 'Title',
       byYear: 'Year',
-      byMedium: 'Medium'
+      byMedium: 'Medium',
     },
     artwork: {
       year: 'Year',
@@ -210,7 +212,7 @@ export const translations: Record<Locale, Translation> = {
       download: 'Download',
       previousWork: 'Previous',
       nextWork: 'Next',
-      backToGallery: 'Back to Gallery'
+      backToGallery: 'Back to Gallery',
     },
     share: {
       title: 'Share Artwork',
@@ -221,7 +223,7 @@ export const translations: Record<Locale, Translation> = {
       copy: 'Copy',
       copied: 'Copied',
       download: 'Download Image',
-      tip: 'Instagram Sharing Tips:\n📱 Mobile: Image downloads automatically and Instagram app opens.\n💻 Desktop: Link is copied, paste it on Instagram web.\n✨ Adding your personal thoughts about the artwork makes sharing more meaningful.'
+      tip: 'Instagram Sharing Tips:\n📱 Mobile: Image downloads automatically and Instagram app opens.\n💻 Desktop: Link is copied, paste it on Instagram web.\n✨ Adding your personal thoughts about the artwork makes sharing more meaningful.',
     },
     common: {
       loading: 'Loading...',
@@ -229,25 +231,26 @@ export const translations: Record<Locale, Translation> = {
       retry: 'Retry',
       home: 'Home',
       skipToMain: 'Skip to main content',
-      close: 'Close'
+      close: 'Close',
     },
     accessibility: {
       skipToMain: 'Skip to main content',
-      artworkImage: '{title} - Calligraphy artwork by Kong Kyung Soon from {year}',
+      artworkImage:
+        '{title} - Calligraphy artwork by Kong Kyung Soon from {year}',
       keyboardInstructions: 'You can navigate artworks using keyboard',
       openFilter: 'Open filter',
       closeFilter: 'Close filter',
       previousPage: 'Previous page',
-      nextPage: 'Next page'
-    }
+      nextPage: 'Next page',
+    },
   },
-  
+
   ja: {
     nav: {
       gallery: 'ギャラリー',
       artist: '作家',
       exhibition: '展示',
-      back: '戻る'
+      back: '戻る',
     },
     gallery: {
       title: 'ギャラリー',
@@ -260,7 +263,8 @@ export const translations: Record<Locale, Translation> = {
       reset: 'リセット',
       results: '件の作品',
       noResults: '検索結果がありません',
-      keyboardNavigation: 'キーボードナビゲーション：矢印キーで移動、Enter/Spaceで選択、Home/Endで最初/最後へ移動'
+      keyboardNavigation:
+        'キーボードナビゲーション：矢印キーで移動、Enter/Spaceで選択、Home/Endで最初/最後へ移動',
     },
     filter: {
       title: '作品フィルター',
@@ -274,7 +278,7 @@ export const translations: Record<Locale, Translation> = {
       descending: '降順',
       byTitle: '作品名',
       byYear: '制作年',
-      byMedium: '素材'
+      byMedium: '素材',
     },
     artwork: {
       year: '制作年',
@@ -286,7 +290,7 @@ export const translations: Record<Locale, Translation> = {
       download: 'ダウンロード',
       previousWork: '前の作品',
       nextWork: '次の作品',
-      backToGallery: 'ギャラリーに戻る'
+      backToGallery: 'ギャラリーに戻る',
     },
     share: {
       title: '作品をシェア',
@@ -297,7 +301,7 @@ export const translations: Record<Locale, Translation> = {
       copy: 'コピー',
       copied: 'コピーしました',
       download: '画像をダウンロード',
-      tip: 'Instagramシェアのコツ：\n📱 モバイル：画像が自動ダウンロードされ、Instagramアプリが開きます。\n💻 デスクトップ：リンクがコピーされ、Instagram ウェブで貼り付けてください。\n✨ 作品についての個人的な感想を一緒に書くと、より意味のあるシェアになります。'
+      tip: 'Instagramシェアのコツ：\n📱 モバイル：画像が自動ダウンロードされ、Instagramアプリが開きます。\n💻 デスクトップ：リンクがコピーされ、Instagram ウェブで貼り付けてください。\n✨ 作品についての個人的な感想を一緒に書くと、より意味のあるシェアになります。',
     },
     common: {
       loading: '読み込み中...',
@@ -305,7 +309,7 @@ export const translations: Record<Locale, Translation> = {
       retry: '再試行',
       home: 'ホーム',
       skipToMain: 'メインコンテンツにスキップ',
-      close: '閉じる'
+      close: '閉じる',
     },
     accessibility: {
       skipToMain: 'メインコンテンツにスキップ',
@@ -314,16 +318,16 @@ export const translations: Record<Locale, Translation> = {
       openFilter: 'フィルターを開く',
       closeFilter: 'フィルターを閉じる',
       previousPage: '前のページ',
-      nextPage: '次のページ'
-    }
+      nextPage: '次のページ',
+    },
   },
-  
+
   zh: {
     nav: {
       gallery: '画廊',
       artist: '艺术家',
       exhibition: '展览',
-      back: '返回'
+      back: '返回',
     },
     gallery: {
       title: '画廊',
@@ -336,7 +340,8 @@ export const translations: Record<Locale, Translation> = {
       reset: '重置',
       results: '件作品',
       noResults: '没有找到搜索结果',
-      keyboardNavigation: '键盘导航：方向键移动，Enter/Space选择，Home/End到首/末'
+      keyboardNavigation:
+        '键盘导航：方向键移动，Enter/Space选择，Home/End到首/末',
     },
     filter: {
       title: '作品筛选',
@@ -350,7 +355,7 @@ export const translations: Record<Locale, Translation> = {
       descending: '降序',
       byTitle: '作品名',
       byYear: '创作年份',
-      byMedium: '材料'
+      byMedium: '材料',
     },
     artwork: {
       year: '创作年份',
@@ -362,7 +367,7 @@ export const translations: Record<Locale, Translation> = {
       download: '下载',
       previousWork: '上一件作品',
       nextWork: '下一件作品',
-      backToGallery: '返回画廊'
+      backToGallery: '返回画廊',
     },
     share: {
       title: '分享作品',
@@ -373,7 +378,7 @@ export const translations: Record<Locale, Translation> = {
       copy: '复制',
       copied: '已复制',
       download: '下载图片',
-      tip: 'Instagram分享技巧：\n📱 手机：图片自动下载，Instagram应用会打开。\n💻 桌面：链接已复制，请在Instagram网页版粘贴。\n✨ 添加您对作品的个人感受会让分享更有意义。'
+      tip: 'Instagram分享技巧：\n📱 手机：图片自动下载，Instagram应用会打开。\n💻 桌面：链接已复制，请在Instagram网页版粘贴。\n✨ 添加您对作品的个人感受会让分享更有意义。',
     },
     common: {
       loading: '加载中...',
@@ -381,7 +386,7 @@ export const translations: Record<Locale, Translation> = {
       retry: '重试',
       home: '首页',
       skipToMain: '跳转到主内容',
-      close: '关闭'
+      close: '关闭',
     },
     accessibility: {
       skipToMain: '跳转到主内容',
@@ -390,13 +395,16 @@ export const translations: Record<Locale, Translation> = {
       openFilter: '打开筛选器',
       closeFilter: '关闭筛选器',
       previousPage: '上一页',
-      nextPage: '下一页'
-    }
-  }
+      nextPage: '下一页',
+    },
+  },
 }
 
 // 템플릿 문자열 처리 함수
-export function interpolate(template: string, values: Record<string, string | number>): string {
+export function interpolate(
+  template: string,
+  values: Record<string, string | number>
+): string {
   return template.replace(/\{(\w+)\}/g, (match, key) => {
     return values[key]?.toString() || match
   })
@@ -405,21 +413,21 @@ export function interpolate(template: string, values: Record<string, string | nu
 // 로케일 감지 함수
 export function detectLocale(): Locale {
   if (typeof window === 'undefined') return 'ko' // SSR 기본값
-  
+
   const saved = localStorage.getItem('locale') as Locale
   if (saved && saved in translations) return saved
-  
+
   // 브라우저 언어 감지 개선 (중국어 변형 지원)
   const browserLang = navigator.language.toLowerCase()
-  
+
   // 중국어 변형들 처리
   if (browserLang.startsWith('zh')) {
     return 'zh'
   }
-  
+
   const browser = browserLang.split('-')[0] as Locale
   if (browser in translations) return browser
-  
+
   return 'ko' // 기본값
 }
 
@@ -430,9 +438,11 @@ export function saveLocale(locale: Locale): void {
 }
 
 // 번역 함수 타입
-export type TranslationKey = keyof Translation | `${keyof Translation}.${string}`
+export type TranslationKey =
+  | keyof Translation
+  | `${keyof Translation}.${string}`
 
 // 중첩된 키 접근을 위한 헬퍼 함수
 export function getNestedValue(obj: any, path: string): string {
   return path.split('.').reduce((current, key) => current?.[key], obj) || path
-} 
+}

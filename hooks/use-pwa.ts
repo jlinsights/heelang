@@ -22,10 +22,11 @@ export function usePWA() {
     isInstallable: false,
     isInstalled: false,
     isOffline: false,
-    isLoading: true
+    isLoading: true,
   })
-  
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
     // 서비스 워커 등록
@@ -34,17 +35,24 @@ export function usePWA() {
         try {
           const registration = await navigator.serviceWorker.register('/sw.js')
           console.log('📦 Service Worker registered:', registration)
-          
+
           // 업데이트 확인
           registration.addEventListener('updatefound', () => {
             console.log('🔄 Service Worker update found')
             const newWorker = registration.installing
-            
+
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                if (
+                  newWorker.state === 'installed' &&
+                  navigator.serviceWorker.controller
+                ) {
                   // 새 버전 설치됨 - 사용자에게 알림
-                  if (confirm('새 버전이 설치되었습니다. 페이지를 새로고침하시겠습니까?')) {
+                  if (
+                    confirm(
+                      '새 버전이 설치되었습니다. 페이지를 새로고침하시겠습니까?'
+                    )
+                  ) {
                     window.location.reload()
                   }
                 }
@@ -63,23 +71,23 @@ export function usePWA() {
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault()
       setDeferredPrompt(event as BeforeInstallPromptEvent)
-      setState(prev => ({ ...prev, isInstallable: true }))
+      setState((prev) => ({ ...prev, isInstallable: true }))
     }
 
     // 앱 설치 완료 이벤트
     const handleAppInstalled = () => {
       console.log('🎉 PWA installed successfully')
-      setState(prev => ({ ...prev, isInstalled: true, isInstallable: false }))
+      setState((prev) => ({ ...prev, isInstalled: true, isInstallable: false }))
       setDeferredPrompt(null)
     }
 
     // 온라인/오프라인 상태 감지
     const handleOnline = () => {
-      setState(prev => ({ ...prev, isOffline: false }))
+      setState((prev) => ({ ...prev, isOffline: false }))
     }
 
     const handleOffline = () => {
-      setState(prev => ({ ...prev, isOffline: true }))
+      setState((prev) => ({ ...prev, isOffline: true }))
     }
 
     // 이벤트 리스너 등록
@@ -89,16 +97,19 @@ export function usePWA() {
     window.addEventListener('offline', handleOffline)
 
     // 초기 상태 설정
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isOffline: !navigator.onLine,
       isInstalled: checkIfInstalled(),
-      isLoading: false
+      isLoading: false,
     }))
 
     // 클린업
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      )
       window.removeEventListener('appinstalled', handleAppInstalled)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
@@ -112,10 +123,10 @@ export function usePWA() {
     try {
       await deferredPrompt.prompt()
       const choiceResult = await deferredPrompt.userChoice
-      
+
       if (choiceResult.outcome === 'accepted') {
         console.log('✅ PWA installation accepted')
-        setState(prev => ({ ...prev, isInstallable: false }))
+        setState((prev) => ({ ...prev, isInstallable: false }))
         setDeferredPrompt(null)
         return true
       } else {
@@ -133,8 +144,9 @@ export function usePWA() {
     // 디스플레이 모드 확인
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
     // 또는 navigator.standalone (Safari)
-    const isSafariStandalone = 'standalone' in window.navigator && (window.navigator as any).standalone
-    
+    const isSafariStandalone =
+      'standalone' in window.navigator && (window.navigator as any).standalone
+
     return isStandalone || isSafariStandalone
   }
 
@@ -156,9 +168,7 @@ export function usePWA() {
   const clearCache = async (): Promise<boolean> => {
     try {
       const cacheNames = await caches.keys()
-      await Promise.all(
-        cacheNames.map(cacheName => caches.delete(cacheName))
-      )
+      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)))
       console.log('🗑️ Cache cleared successfully')
       return true
     } catch (error) {
@@ -172,7 +182,7 @@ export function usePWA() {
     installPWA,
     getCacheSize,
     clearCache,
-    canInstall: state.isInstallable && !state.isInstalled
+    canInstall: state.isInstallable && !state.isInstalled,
   }
 }
 
@@ -206,14 +216,15 @@ export function useNetworkInfo() {
     effectiveType: 'unknown',
     downlink: 0,
     rtt: 0,
-    saveData: false
+    saveData: false,
   })
 
   useEffect(() => {
     const updateNetworkInfo = () => {
-      const connection = (navigator as any).connection || 
-                        (navigator as any).mozConnection || 
-                        (navigator as any).webkitConnection
+      const connection =
+        (navigator as any).connection ||
+        (navigator as any).mozConnection ||
+        (navigator as any).webkitConnection
 
       setNetworkInfo({
         isOnline: navigator.onLine,
@@ -221,7 +232,7 @@ export function useNetworkInfo() {
         effectiveType: connection?.effectiveType || 'unknown',
         downlink: connection?.downlink || 0,
         rtt: connection?.rtt || 0,
-        saveData: connection?.saveData || false
+        saveData: connection?.saveData || false,
       })
     }
 
@@ -246,4 +257,4 @@ export function useNetworkInfo() {
   }, [])
 
   return networkInfo
-} 
+}

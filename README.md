@@ -9,7 +9,8 @@
 ## 🆕 최근 업데이트/개선 사항
 
 - **아티스트 프로필 이미지 최적화**
-  - 원본 PNG에서 배경 제거(누끼) 후, 다양한 크기의 JPG(large/medium/thumb)로 변환
+  - 원본 PNG에서 배경 제거(누끼) 후, 다양한 크기의 JPG(large/medium/thumb)로
+    변환
   - 모든 코드/경로에서 소문자 및 일관된 파일명(`artist-large.jpg` 등) 사용
   - 배포 환경(리눅스 서버)에서의 대소문자 구분 문제 예방
 - **Exhibition(전시) 아이콘 다크모드 가독성 개선**
@@ -24,11 +25,13 @@
 ### 📸 이미지 및 정적 자산 관리 가이드
 
 - **이미지 최적화**
-  - `public/Images/Artist/` 및 `public/Images/Artworks/` 내 모든 파일은 소문자, 일관된 네이밍 사용
+  - `public/Images/Artist/` 및 `public/Images/Artworks/` 내 모든 파일은 소문자,
+    일관된 네이밍 사용
   - PNG → JPG 변환 시, 배경색(흰색) 지정 및 WebP 자동 변환 지원
   - 필요시 `rembg`, `convert`(ImageMagick) 등 툴 활용
 - **경로 일관성**
-  - 코드 내 이미지 참조는 항상 소문자 경로 사용 (예: `/images/artist/artist-large.jpg`)
+  - 코드 내 이미지 참조는 항상 소문자 경로 사용 (예:
+    `/images/artist/artist-large.jpg`)
   - 대소문자 혼용 시, 배포 서버에서 404 에러 발생 가능
 - **파일 복구/관리**
   - git을 통한 파일 복구: `git checkout <commit> -- <경로>`
@@ -48,7 +51,8 @@
 
 ### 👩‍💻 Junior 개발자를 위한 실전 팁
 
-- **이미지 최적화와 경로 관리**는 배포 환경에서의 에러(404, 누락 등) 예방에 매우 중요합니다.
+- **이미지 최적화와 경로 관리**는 배포 환경에서의 에러(404, 누락 등) 예방에 매우
+  중요합니다.
 - **정적 자산은 항상 git으로 관리**하고, 불필요한 파일은 주기적으로 정리하세요.
 - **배포 전/후 체크리스트**를 습관화하면, 운영 중 장애를 크게 줄일 수 있습니다.
 
@@ -61,10 +65,14 @@
 - 📱 **반응형 디자인**: 모바일, 태블릿, 데스크톱 최적화
 - 🌙 **다크/라이트 테마**: 사용자 환경에 맞는 테마 선택
 - 🚀 **PWA 지원**: 모바일 앱처럼 설치 및 오프라인 사용 가능
-- 🖼️ **이미지 라이트박스(모달)**: 작품 상세페이지에서 작품 이미지를 클릭하면 전체화면 모달로 크게 감상 가능
-- 📝 **작가노트(artistNote) 지원**: 작품 상세페이지에서 작품 설명 아래에 작가노트가 있을 경우 함께 표시
-- 👩‍🎨 **아티스트 프로필**: Cloudflare Images + Airtable 연동, 모바일 최적화, 연락처(인스타그램/이메일/전화) 세로 정렬
-- 🛡️ **에러 처리/폴백**: Airtable 연동 실패 시 로컬 데이터 폴백, 에러 바운더리 적용
+- 🖼️ **이미지 라이트박스(모달)**: 작품 상세페이지에서 작품 이미지를 클릭하면
+  전체화면 모달로 크게 감상 가능
+- 📝 **작가노트(artistNote) 지원**: 작품 상세페이지에서 작품 설명 아래에
+  작가노트가 있을 경우 함께 표시
+- 👩‍🎨 **아티스트 프로필**: Cloudflare Images + Airtable 연동, 모바일 최적화,
+  연락처(인스타그램/이메일/전화) 세로 정렬
+- 🛡️ **에러 처리/폴백**: Airtable 연동 실패 시 로컬 데이터 폴백, 에러 바운더리
+  적용
 - 🧑‍💻 **접근성/키보드 네비게이션**: WCAG 2.1 AA, 키보드 조작 지원
 
 ## 🚀 라이브 사이트
@@ -208,7 +216,8 @@ npm run deploy:preview
 - 고해상도 작품 이미지
 - **이미지 클릭 시 전체화면 라이트박스(모달)**
 - 상세 작품 정보 (제목, 년도, 재료, 크기)
-- **작가노트(artistNote) 표시**: 작품 설명 아래에 artistNote가 있을 경우 함께 노출
+- **작가노트(artistNote) 표시**: 작품 설명 아래에 artistNote가 있을 경우 함께
+  노출
 - 이전/다음 작품 네비게이션
 
 ### 작가 소개 (`/artist`)
@@ -284,7 +293,8 @@ npm run deploy:preview
 
 ---
 
-> 🎨 **"길"이라는 주제를 통해 현대 서예의 아름다움과 철학을 전 세계와 공유합니다** 🌍
+> 🎨 **"길"이라는 주제를 통해 현대 서예의 아름다움과 철학을 전 세계와
+> 공유합니다** 🌍
 
 [![Korean Calligraphy](https://img.shields.io/badge/Korean-Calligraphy-red)](https://github.com/jlinsights/HEELANG)
 [![Modern Art](https://img.shields.io/badge/Modern-Art-blue)](https://github.com/jlinsights/HEELANG)
@@ -292,7 +302,8 @@ npm run deploy:preview
 
 ## 프로젝트 개요
 
-희랑(熙勆) 공경순 작가의 개인전 '길(Way)'을 위한 Next.js 기반 전시 웹사이트입니다.
+희랑(熙勆) 공경순 작가의 개인전 '길(Way)'을 위한 Next.js 기반 전시
+웹사이트입니다.
 
 ## 기술 스택
 
@@ -357,7 +368,6 @@ AIRTABLE_BASE_ID=your_airtable_base_id_here
 ### 3. Airtable API 키 및 Base ID 확인 방법
 
 1. **API 키 확인**:
-
    - [Airtable Account](https://airtable.com/account) 페이지 접속
    - "Generate API key" 클릭하여 API 키 생성
    - 생성된 키를 복사
@@ -428,7 +438,8 @@ Vercel을 통한 배포 시 환경 변수를 Vercel 대시보드에서 설정해
 
 ## 폴백 시스템
 
-Airtable 연동이 실패하거나 환경 변수가 설정되지 않은 경우, `lib/artworks.ts`의 로컬 데이터를 사용합니다. 이를 통해 개발 환경에서도 안정적으로 작동합니다.
+Airtable 연동이 실패하거나 환경 변수가 설정되지 않은 경우, `lib/artworks.ts`의
+로컬 데이터를 사용합니다. 이를 통해 개발 환경에서도 안정적으로 작동합니다.
 
 ## 라이선스
 

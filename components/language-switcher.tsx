@@ -1,98 +1,85 @@
-"use client";
+'use client'
 
-import { AccessibleModal } from "@/components/accessibility";
-import { Button } from "@/components/ui/button";
-import type { Locale } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { Check, Globe } from "lucide-react";
-import { useEffect, useState } from "react";
+import { AccessibleModal } from '@/components/accessibility'
+import { Button } from '@/components/ui/button'
+import { useI18n } from '@/components/i18n-provider'
+import type { Locale } from '@/lib/types'
+import { cn } from '@/lib/utils'
+import { Check, Globe } from 'lucide-react'
+import { useState } from 'react'
 
 interface Language {
-  code: Locale;
-  name: string;
-  nativeName: string;
-  flag: string;
+  code: Locale
+  name: string
+  nativeName: string
+  flag: string
 }
 
 const languages: Language[] = [
-  { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷" },
-  { code: "en", name: "English", nativeName: "English", flag: "🇺🇸" },
-  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵" },
-  { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳" },
-];
+  { code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷' },
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳' },
+]
 
 interface LanguageSwitcherProps {
-  currentLocale: Locale;
-  onLocaleChange: (locale: Locale) => void;
-  className?: string;
+  className?: string
 }
 
-export function LanguageSwitcher({
-  currentLocale,
-  onLocaleChange,
-  className,
-}: LanguageSwitcherProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
+  const { locale, changeLocale, t } = useI18n()
+  const [isOpen, setIsOpen] = useState(false)
 
-  const currentLanguage =
-    languages.find((lang) => lang.code === currentLocale) || languages[0];
+  const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0]
 
-  const handleLanguageChange = (locale: Locale) => {
-    onLocaleChange(locale);
-    setIsOpen(false);
-
-    // 언어 변경을 localStorage에 저장
-    if (typeof window !== "undefined") {
-      localStorage.setItem("locale", locale);
-
-      // 페이지 리로드로 언어 변경 적용
-      window.location.reload();
-    }
-  };
+  const handleLanguageChange = (newLocale: Locale) => {
+    changeLocale(newLocale)
+    setIsOpen(false)
+  }
 
   return (
     <div className={className}>
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         onClick={() => setIsOpen(true)}
-        className="gap-2"
-        aria-label={`언어 변경 (현재: ${currentLanguage.nativeName})`}
+        className='gap-2'
+        aria-label={t('common.changeLanguage', `언어 변경 (현재: ${currentLanguage.nativeName})`)}
       >
-        <Globe className="h-4 w-4" />
-        <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
+        <Globe className='h-4 w-4' />
+        <span className='hidden sm:inline'>{currentLanguage.nativeName}</span>
       </Button>
 
       <AccessibleModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        title="언어 선택 / Select Language / 言語選択"
-        description="원하는 언어를 선택하세요"
-        className="max-w-sm"
+        title={t('common.selectLanguage', '언어 선택 / Select Language / 言語選択')}
+        description={t('common.selectLanguageDesc', '원하는 언어를 선택하세요')}
+        className='max-w-sm'
       >
-        <div className="space-y-2">
+        <div className='space-y-2'>
           {languages.map((language) => {
-            const isSelected = language.code === currentLocale;
+            const isSelected = language.code === locale
 
             return (
               <button
                 key={language.code}
                 onClick={() => handleLanguageChange(language.code)}
                 className={cn(
-                  "w-full flex items-center justify-between p-3 rounded-lg border transition-colors",
+                  'w-full flex items-center justify-between p-3 rounded-lg border transition-colors',
                   isSelected
-                    ? "bg-ink text-white border-ink"
-                    : "bg-background border-border hover:border-ink hover:bg-stone-50 dark:hover:bg-slate-800"
+                    ? 'bg-ink text-white border-ink'
+                    : 'bg-background border-border hover:border-ink hover:bg-stone-50 dark:hover:bg-slate-800'
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">{language.flag}</span>
-                  <div className="text-left">
-                    <div className="font-medium">{language.nativeName}</div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-lg'>{language.flag}</span>
+                  <div className='text-left'>
+                    <div className='font-medium'>{language.nativeName}</div>
                     <div
                       className={cn(
-                        "text-sm",
-                        isSelected ? "text-white/80" : "text-ink-light"
+                        'text-sm',
+                        isSelected ? 'text-white/80' : 'text-ink-light'
                       )}
                     >
                       {language.name}
@@ -100,14 +87,14 @@ export function LanguageSwitcher({
                   </div>
                 </div>
 
-                {isSelected && <Check className="h-4 w-4" />}
+                {isSelected && <Check className='h-4 w-4' />}
               </button>
-            );
+            )
           })}
         </div>
 
-        <div className="mt-4 p-3 bg-stone-50 dark:bg-slate-800 rounded-lg">
-          <p className="text-xs text-ink-light">
+        <div className='mt-4 p-3 bg-stone-50 dark:bg-slate-800 rounded-lg'>
+          <p className='text-xs text-ink-light'>
             💡 언어를 변경하면 페이지가 새로고침됩니다. <br />
             The page will refresh when changing language. <br />
             言語を変更するとページが更新されます。
@@ -117,45 +104,24 @@ export function LanguageSwitcher({
         </div>
       </AccessibleModal>
     </div>
-  );
+  )
 }
 
 // 간단한 언어 표시기 (현재 언어만 표시)
 export function LanguageIndicator({ locale }: { locale: Locale }) {
   const language =
-    languages.find((lang) => lang.code === locale) || languages[0];
+    languages.find((lang) => lang.code === locale) || languages[0]
 
   return (
-    <span className="inline-flex items-center gap-1 text-sm text-ink-light">
+    <span className='inline-flex items-center gap-1 text-sm text-ink-light'>
       <span>{language.flag}</span>
       <span>{language.nativeName}</span>
     </span>
-  );
+  )
 }
 
-// 로케일 감지 및 초기화 훅
+// This function is deprecated, use useI18n hook instead
 export function useLocale() {
-  const [locale, setLocale] = useState<Locale>("ko");
-
-  useEffect(() => {
-    // 저장된 언어 확인
-    const saved = localStorage.getItem("locale") as Locale;
-    if (saved && languages.some((lang) => lang.code === saved)) {
-      setLocale(saved);
-      return;
-    }
-
-    // 브라우저 언어 감지
-    const browserLang = navigator.language.split("-")[0] as Locale;
-    if (languages.some((lang) => lang.code === browserLang)) {
-      setLocale(browserLang);
-    }
-  }, []);
-
-  const changeLocale = (newLocale: Locale) => {
-    setLocale(newLocale);
-    localStorage.setItem("locale", newLocale);
-  };
-
-  return { locale, changeLocale };
+  console.warn('useLocale is deprecated, please use useI18n hook instead')
+  return { locale: 'ko' as Locale, changeLocale: () => {} }
 }

@@ -5,11 +5,11 @@ export type { Locale }
 
 export function getTranslation(locale: Locale, key: string, fallback?: string): string {
   const keys = key.split('.')
-  let current: any = translations[locale]
+  let current: unknown = translations[locale]
   
   for (const k of keys) {
     if (current && typeof current === 'object' && k in current) {
-      current = current[k]
+      current = (current as Record<string, unknown>)[k]
     } else {
       // Fallback to Korean if translation not found
       if (locale !== 'ko') {
@@ -22,7 +22,7 @@ export function getTranslation(locale: Locale, key: string, fallback?: string): 
   return typeof current === 'string' ? current : fallback || key
 }
 
-export function formatTranslation(locale: Locale, key: string, params: Record<string, any> = {}): string {
+export function formatTranslation(locale: Locale, key: string, params: Record<string, unknown> = {}): string {
   let translation = getTranslation(locale, key)
   
   // Replace placeholders like {name} with actual values

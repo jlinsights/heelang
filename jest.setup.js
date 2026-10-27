@@ -113,9 +113,10 @@ jest.mock('next/font/google', () => ({
 }))
 
 // Mock Web APIs for API route testing
-global.Request = jest.fn()
-global.Response = jest.fn()
-global.Headers = jest.fn()
+// 런타임이 제공하는 구현이 있으면 덮어쓰지 않는다 (NextRequest가 실제 Headers를 필요로 함)
+if (typeof global.Request === 'undefined') global.Request = jest.fn()
+if (typeof global.Response === 'undefined') global.Response = jest.fn()
+if (typeof global.Headers === 'undefined') global.Headers = jest.fn()
 global.URL = URL || jest.fn()
 global.URLSearchParams = URLSearchParams || jest.fn()
 

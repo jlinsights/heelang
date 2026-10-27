@@ -8,6 +8,15 @@
 
 ## 🆕 최근 업데이트/개선 사항
 
+- **홈·갤러리·작품 상세 리디자인** (Mobbin 레퍼런스, ASCA Ink 톤 유지)
+  - 갤러리: 작품을 자르지 않는 **저스티파이드 그리드**(행 높이 맞춤, 원래 비율
+    유지) + 목록 보기, 분류·태그 필터, 정렬(전시 순서/최신/제목/분류)
+  - 홈: 자동 전환 없는 **정적 히어로**(WCAG 2.2.2), 대표 작품, 작가·전시 안내
+  - 작품 상세: 고정 이미지 무대 + 캡션 표, 이전/다음 작품, 접근 가능한
+    라이트박스(Esc·포커스 가두기·포커스 복귀)
+  - **레이아웃 밀림(CLS) 제거**: 작품 이미지의 실제 픽셀 비율을
+    `lib/gallery/image-ratios.json` 에 기록하고, 갤러리 정적 HTML 이 빌드 때
+    Airtable 데이터를 직접 담도록 변경
 - **아티스트 프로필 이미지 최적화**
   - 원본 PNG에서 배경 제거(누끼) 후, 다양한 크기의 JPG(large/medium/thumb)로
     변환
@@ -60,13 +69,13 @@
 
 ## ✨ 주요 기능
 
-- 🎨 **작품 갤러리**: 25점의 서예 작품을 4x3 그리드로 감상
-- 🔍 **작품 검색/필터**: 제목, 년도, 재료별 실시간 검색 및 필터링
+- 🎨 **작품 갤러리**: 작품 비율을 그대로 살린 저스티파이드 그리드 / 목록 보기
+- 🔍 **분류·태그 필터와 정렬**: 전시 순서, 최신순, 제목순, 분류순
 - 📱 **반응형 디자인**: 모바일, 태블릿, 데스크톱 최적화
 - 🌙 **다크/라이트 테마**: 사용자 환경에 맞는 테마 선택
 - 🚀 **PWA 지원**: 모바일 앱처럼 설치 및 오프라인 사용 가능
 - 🖼️ **이미지 라이트박스(모달)**: 작품 상세페이지에서 작품 이미지를 클릭하면
-  전체화면 모달로 크게 감상 가능
+  전체화면으로 크게 감상 (Esc 닫기, 키보드 포커스 유지)
 - 📝 **작가노트(artistNote) 지원**: 작품 상세페이지에서 작품 설명 아래에
   작가노트가 있을 경우 함께 표시
 - 👩‍🎨 **아티스트 프로필**: Cloudflare Images + Airtable 연동, 모바일 최적화,
@@ -83,26 +92,32 @@
 
 ## 🛠 기술 스택
 
-- **Framework**: Next.js 15.3.3 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: Radix UI + shadcn/ui
-- **State Management**: React 19 Hooks
-- **Build Tool**: Turbopack
+- **State Management**: React 19 Hooks + zustand (UI 상태)
+- **Images**: next/image, sharp (최적화·비율 측정 스크립트)
 - **Deployment**: Vercel
 - **Testing**: Jest + Testing Library
 
 ## 📱 갤러리 레이아웃
 
-### 반응형 그리드 시스템
+### 저스티파이드 그리드
 
-- **데스크톱 (1024px+)**: 4열 × 3행 = 12개 작품
-- **태블릿 (768px-1023px)**: 3열 × 4행 = 12개 작품
-- **모바일 (~767px)**: 2열 × 6행 = 12개 작품
+- 고정 열 대신 **행 높이**를 맞추고, 각 작품은 원래 가로/세로 비율대로 너비를
+  차지한다. 세로로 긴 족자도, 가로로 긴 횡액도 잘리지 않는다(`object-contain`).
+- 행 높이는 `--row-h` CSS 변수로 화면 폭에 따라 조정
+  (`components/gallery/justified-grid.tsx`)
+- flex 순서를 그대로 쓰므로 화면 순서 = 읽기 순서 = Tab 순서
+- 작품 비율은 `ratioFromArtwork()`(`lib/gallery/ordering.ts`)가 정한다:
+  1. `lib/gallery/image-ratios.json` 의 실제 픽셀 비율
+  2. 없으면 Airtable `aspectRatio` → `dimensions` 순으로 추정
+  3. 추정이 틀리면 이미지 로드 후 실제 비율로 교정(`useImageRatio`)
 
 ### 페이지네이션
 
-- 페이지당 12개 작품 표시
+- 페이지당 작품 수: `app/gallery/gallery-client.tsx` 의 `ARTWORKS_PER_PAGE`
 - 직관적인 이전/다음 버튼
 - 페이지 번호 네비게이션 (최대 5개)
 - 전체 작품 수 및 현재 위치 정보
@@ -117,7 +132,7 @@ HEELANG/
 │   ├── gallery/           # 갤러리 섹션
 │   │   ├── page.tsx       # 갤러리 메인
 │   │   ├── gallery-client.tsx # 클라이언트 컴포넌트
-│   │   ├── loading.tsx    # 로딩 UI
+│   │   ├── loading.tsx    # 로딩 UI (그리드와 같은 비율 상자)
 │   │   └── [slug]/        # 개별 작품 페이지
 │   ├── artists/           # 작가 소개
 │   ├── exhibition/        # 전시 정보
@@ -125,12 +140,16 @@ HEELANG/
 │   └── offline/           # 오프라인 페이지
 ├── components/            # 재사용 컴포넌트
 │   ├── ui/               # shadcn/ui 컴포넌트
-│   ├── animations/       # 애니메이션 컴포넌트
+│   ├── home/             # 홈 히어로·대표 작품·작가·전시 섹션
+│   ├── gallery/          # 저스티파이드 그리드, 목록, 툴바, 페이지네이션
+│   ├── artwork/          # 라이트박스, useImageRatio
+│   ├── artwork-detail-modal-client.tsx # 작품 상세 본문
 │   ├── optimized-image.tsx # 최적화된 이미지
 │   ├── search-filter.tsx # 검색 필터
 │   └── theme-toggle.tsx  # 테마 토글
 ├── lib/                  # 유틸리티 및 데이터
-│   ├── artworks.ts       # 작품 데이터
+│   ├── artworks.ts       # 작품 데이터 (Airtable + 폴백)
+│   ├── gallery/          # 정렬·필터·이웃 작품·비율 계산, image-ratios.json
 │   ├── utils.ts          # 공통 유틸리티
 │   └── types.ts          # 타입 정의
 ├── styles/               # 스타일 파일
@@ -138,7 +157,8 @@ HEELANG/
 │   ├── images/           # 작품 이미지
 │   └── icons/            # 아이콘
 └── scripts/              # 빌드 스크립트
-    └── optimize-images.js # 이미지 최적화
+    ├── optimize-images.js # 이미지 최적화
+    └── image-ratios.js    # 작품 이미지 픽셀 비율 → lib/gallery/image-ratios.json
 ```
 
 ## 🏃‍♂️ 로컬 개발
@@ -183,7 +203,16 @@ npm run test:coverage
 
 # 이미지 최적화
 npm run optimize-images
+
+# 작품 이미지 비율 매니페스트 갱신 (작품 이미지를 추가·교체한 뒤)
+node scripts/image-ratios.js
+
+# 타입 검사
+npm run type-check
 ```
+
+> ⚠️ `~/.claude/settings.json` 등에서 `NODE_ENV` 가 설정돼 있으면 `next build`
+> 가 깨진다. 이때는 `env -u NODE_ENV npm run build` 로 빌드한다.
 
 ### 배포 명령어
 
@@ -199,26 +228,28 @@ npm run deploy:preview
 
 ### 메인 페이지 (`/`)
 
-- 전시 소개 및 컨셉
-- 주요 작품 하이라이트
-- 전시 정보 요약
-- 갤러리 바로가기
+- 정적 히어로: 전시 제목·기간·장소 + 대표 작품 한 점(원래 비율)
+- 대표 작품(`featured`) 그리드
+- 작가 소개, 전시 안내
+- 전시 기간·장소는 `components/home/home-hero.tsx` 의 `EXHIBITION` 상수
 
 ### 갤러리 (`/gallery`)
 
-- **4x3 그리드 레이아웃**: 한 페이지에 12개 작품
-- **실시간 검색**: 제목, 년도, 재료별 필터링
-- **키보드 네비게이션**: 화살표 키로 작품 탐색
-- **페이지네이션**: 전체 작품을 페이지별로 구성
+- **저스티파이드 그리드 / 목록 보기** 전환
+- **분류·태그 필터**(분류가 '전체' 하나뿐이면 분류 칩은 숨김), 필터 초기화
+- **정렬**: 전시 순서(보물 연작 우선), 최신순, 제목순, 분류순
+- **페이지네이션**
+- 정적 HTML 에 작품 목록이 담겨 있고(빌드 시 Airtable 직접 조회, 'artworks'
+  태그로 재검증), 클라이언트는 `/api/artworks` 로 최신화만 한다
 
 ### 작품 상세 (`/gallery/[slug]`)
 
-- 고해상도 작품 이미지
+- 고정 이미지 무대(데스크톱에서 스크롤해도 작품이 화면에 남음)
 - **이미지 클릭 시 전체화면 라이트박스(모달)**
-- 상세 작품 정보 (제목, 년도, 재료, 크기)
+- 캡션 표: 제작 연도, 재료, 크기, 연작, 소장/판매 상태 → 작품 문의
 - **작가노트(artistNote) 표시**: 작품 설명 아래에 artistNote가 있을 경우 함께
   노출
-- 이전/다음 작품 네비게이션
+- 이전/다음 작품 네비게이션(갤러리 기본 순서 기준), 하단 '다른 작품' 띠
 
 ### 작가 소개 (`/artist`)
 
@@ -235,7 +266,7 @@ npm run deploy:preview
 
 ## 🎨 작품 컬렉션
 
-총 **25점**의 서예 작품으로 구성:
+작품 목록은 Airtable `Artworks` 테이블이 기준이다(작품 수는 문서에 적지 않는다):
 
 - **주제**: "길(Way)"의 다양한 해석
 - **장르**: 현대 서예, 전통 서예
@@ -277,10 +308,10 @@ npm run deploy:preview
 
 ### 테스트
 
-- **Unit Tests**: Jest + Testing Library
-- **Component Tests**: React 컴포넌트 테스트
-- **E2E Tests**: 사용자 시나리오 테스트
-- **Visual Regression**: 스크린샷 기반 테스트
+- **Unit / Component Tests**: Jest + Testing Library (`__tests__/`)
+- `__tests__/lib/gallery/image-ratios.test.ts` 는 `image-ratios.json` 이
+  `public/` 의 실제 이미지와 다르면 실패한다 → `node scripts/image-ratios.js`
+- E2E·시각 회귀 테스트는 아직 없다
 
 ## 📄 라이선스
 
@@ -326,9 +357,12 @@ Airtable에서 다음과 같은 구조로 Base를 생성하세요:
 - `year` (Number) - 제작 연도
 - `medium` (Single line text) - 재료/기법
 - `dimensions` (Single line text) - 작품 크기
-- `aspectRatio` (Single line text) - 종횡비 (예: "2/1", "1/1", "5/7")
+- `aspectRatio` (Single line text) - 종횡비 (예: "2/1", "1/1", "5/7"). 화면
+  배치에는 이미지 파일에서 잰 비율이 우선하므로, 이 값은 매니페스트에 없는
+  이미지에만 쓰인다
 - `description` (Long text) - 작품 설명
-- `imageUrl` (URL) - 작품 이미지 URL
+- `imageUrl` (URL) - 사이트는 이 값 대신 `slug`·`year` 로 로컬 경로
+  `/Images/Artworks/{year}/{slug}-medium.jpg` 를 만든다
 - `imageUrlQuery` (Single line text) - 이미지 쿼리 파라미터 (선택사항)
 - `artistNote` (Long text) - 작가 노트 (선택사항)
 - `featured` (Checkbox) - 대표작 여부

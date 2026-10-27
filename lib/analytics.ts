@@ -53,7 +53,7 @@ function sendToAnalytics(metric: WebVital) {
   try {
     // Google Analytics 4 (예시)
     if (typeof window !== 'undefined' && 'gtag' in window) {
-      ;(window as any).gtag('event', metric.name, {
+      window.gtag('event', metric.name, {
         value: Math.round(
           metric.name === 'CLS' ? metric.value * 1000 : metric.value
         ),
@@ -94,10 +94,26 @@ function sendToAnalytics(metric: WebVital) {
   }
 }
 
+// 비표준 브라우저 API (Network Information / Chrome performance.memory)
+interface NetworkConnectionInfo {
+  effectiveType?: string
+  downlink?: number
+  rtt?: number
+  saveData?: boolean
+}
+
+interface JSHeapMemoryInfo {
+  usedJSHeapSize: number
+  totalJSHeapSize: number
+  jsHeapSizeLimit: number
+}
+
 // 네트워크 연결 정보 수집
 function getConnectionInfo() {
   if ('connection' in navigator) {
-    const connection = (navigator as any).connection
+    const connection = (
+      navigator as Navigator & { connection: NetworkConnectionInfo }
+    ).connection
     return {
       effectiveType: connection.effectiveType,
       downlink: connection.downlink,
@@ -182,7 +198,9 @@ export function monitorResourceLoading() {
 // 메모리 사용량 모니터링
 export function monitorMemoryUsage() {
   if ('memory' in performance) {
-    const memory = (performance as any).memory
+    const memory = (
+      performance as Performance & { memory: JSHeapMemoryInfo }
+    ).memory
     return {
       used: Math.round(memory.usedJSHeapSize / 1024 / 1024), // MB
       total: Math.round(memory.totalJSHeapSize / 1024 / 1024), // MB
@@ -201,7 +219,7 @@ export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || ''
 // Google Analytics 4 타입 정의
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
+    gtag: (...args: unknown[]) => void
   }
 }
 
@@ -230,8 +248,10 @@ export const initGA = () => {
   window.gtag =
     window.gtag ||
     function () {
-      ;(window as any).dataLayer = (window as any).dataLayer || []
-      ;(window as any).dataLayer.push(arguments)
+      window.dataLayer = window.dataLayer || []
+      // gtag.js는 배열이 아닌 Arguments 객체를 요구하므로 rest 파라미터로 바꾸지 않는다
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments)
     }
 }
 
@@ -408,7 +428,7 @@ export const trackSession = () => {
 }
 
 // 에러 추적
-export const trackError = (error: Error, errorInfo?: any) => {
+export const trackError = (error: Error, errorInfo?: unknown) => {
   if (!GA_TRACKING_ID || typeof window === 'undefined') return
 
   window.gtag('event', 'exception', {

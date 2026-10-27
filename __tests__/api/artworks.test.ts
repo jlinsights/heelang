@@ -1,7 +1,6 @@
 /**
  * @jest-environment node
  */
-import { GET, POST } from '@/app/api/artworks/route'
 import { NextRequest } from 'next/server'
 import { mockArtworks } from '../lib/hooks/artwork.mock'
 
@@ -10,7 +9,10 @@ jest.mock('@/lib/airtable', () => ({
   fetchArtworksFromAirtable: jest.fn(),
 }))
 
-const mockFetchArtworksFromAirtable = require('@/lib/airtable').fetchArtworksFromAirtable
+// 라우트는 모듈 스코프 캐시를 가지므로 테스트마다 새로 로드한다
+let GET: typeof import('@/app/api/artworks/route').GET
+let POST: typeof import('@/app/api/artworks/route').POST
+let mockFetchArtworksFromAirtable: jest.Mock
 
 // Mock console methods to avoid cluttering test output
 const originalConsole = { ...console }
@@ -29,6 +31,9 @@ describe('/api/artworks', () => {
     jest.clearAllMocks()
     // Reset module cache to clear any cached artworks
     jest.resetModules()
+    ;({ GET, POST } = require('@/app/api/artworks/route'))
+    mockFetchArtworksFromAirtable =
+      require('@/lib/airtable').fetchArtworksFromAirtable
   })
 
   describe('GET /api/artworks', () => {

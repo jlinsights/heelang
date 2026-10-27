@@ -1,7 +1,5 @@
-import { Logo } from '@/components/logo'
-import { SimpleThemeToggle } from '@/components/simple-theme-toggle'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
+import { getNeighbors } from '@/lib/gallery/ordering'
 import { notFound } from 'next/navigation'
 import ClientEntry from './ClientEntry'
 
@@ -54,7 +52,7 @@ export default async function ArtworkDetailPage({
 
   try {
     // 서버에서 작품 데이터 가져오기
-    const { getArtworkBySlug, getRandomArtworks } = await import(
+    const { getArtworkBySlug, getArtworks, getRandomArtworks } = await import(
       '@/lib/artworks'
     )
     const artwork = await getArtworkBySlug(slug)
@@ -64,40 +62,28 @@ export default async function ArtworkDetailPage({
       notFound()
     }
 
-    // 추천 작품 가져오기
-    const recommendedArtworks = await getRandomArtworks(slug, 4)
+    // 추천 작품 + 갤러리 기본 순서 기준 이전/다음 작품
+    const [recommendedArtworks, allArtworks] = await Promise.all([
+      getRandomArtworks(slug, 8),
+      getArtworks(),
+    ])
+    const { prev, next } = getNeighbors(allArtworks, slug)
+    const neighbors = {
+      prev: prev && { slug: prev.slug, title: prev.title },
+      next: next && { slug: next.slug, title: next.title },
+    }
 
     console.log('✅ ArtworkDetailPage: Artwork loaded:', artwork.title)
 
     return (
-      <div className='min-h-screen bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800'>
-        {/* Header */}
-        <header className='border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50'>
-          <div className='container mx-auto px-4 py-4'>
-            <div className='flex items-center justify-between'>
-              <Link href='/' className='flex items-center space-x-2'>
-                <Logo className='w-8 h-8' showLink={false} />
-                <span className='text-xl font-bold text-slate-900 dark:text-white'>
-                  희랑
-                </span>
-              </Link>
-              <div className='flex items-center space-x-4'>
-                <Link href='/gallery'>
-                  <Button variant='ghost' size='sm'>
-                    갤러리로 돌아가기
-                  </Button>
-                </Link>
-                <SimpleThemeToggle />
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className='container mx-auto px-4 py-8'>
+      <div className='min-h-screen bg-background'>
+        <ArtNavigation />
+        <NavigationSpacer />
+        <main className='container-art pb-24 pt-8 md:pt-12'>
           <ClientEntry
             artwork={artwork}
             recommendedArtworks={recommendedArtworks}
+            neighbors={neighbors}
           />
         </main>
       </div>

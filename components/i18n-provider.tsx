@@ -8,7 +8,7 @@ interface I18nContextType {
   locale: Locale
   changeLocale: (locale: Locale) => void
   t: (key: string, fallback?: string) => string
-  tf: (key: string, params?: Record<string, any>) => string
+  tf: (key: string, params?: Record<string, unknown>) => string
   tp: (key: string, count: number) => string
   isLoading: boolean
 }
@@ -52,7 +52,7 @@ export function I18nProvider({ children, defaultLocale = 'ko' }: I18nProviderPro
     return getTranslation(locale, key, fallback)
   }
 
-  const tf = (key: string, params: Record<string, any> = {}) => {
+  const tf = (key: string, params: Record<string, unknown> = {}) => {
     return formatTranslation(locale, key, params)
   }
 
@@ -84,7 +84,7 @@ export function useI18n() {
 interface TProps {
   k: string // translation key
   fallback?: string
-  params?: Record<string, any>
+  params?: Record<string, unknown>
   count?: number
 }
 

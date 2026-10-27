@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 interface LogoProps {
   className?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -21,20 +23,26 @@ export function Logo({
   const logoElement = (
     <div className={`relative ${sizeClasses[size]} ${className}`}>
       {forceWhite ? (
-        <img
+        <Image
           src='/logos/Logo & Tagline_black BG.png'
+          width={500}
+          height={500}
           alt='희랑 공경순 개인전 - 길'
           className='h-full w-auto object-contain'
         />
       ) : (
         <>
-          <img
+          <Image
             src='/logos/Logo & Tagline_white BG.png'
+            width={500}
+            height={500}
             alt='희랑 공경순 개인전 - 길'
             className='h-full w-auto object-contain dark:hidden'
           />
-          <img
+          <Image
             src='/logos/Logo & Tagline_black BG.png'
+            width={500}
+            height={500}
             alt='희랑 공경순 개인전 - 길'
             className='h-full w-auto object-contain hidden dark:block'
           />

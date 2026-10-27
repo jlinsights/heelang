@@ -18,7 +18,7 @@ export function useTranslation() {
     return getTranslation(locale, key, fallback)
   }, [locale])
 
-  const tf = useCallback((key: string, params: Record<string, any> = {}) => {
+  const tf = useCallback((key: string, params: Record<string, unknown> = {}) => {
     return formatTranslation(locale, key, params)
   }, [locale])
 
@@ -52,7 +52,7 @@ export function useStaticTranslation(locale: Locale) {
     return getTranslation(locale, key, fallback)
   }, [locale])
 
-  const tf = useCallback((key: string, params: Record<string, any> = {}) => {
+  const tf = useCallback((key: string, params: Record<string, unknown> = {}) => {
     return formatTranslation(locale, key, params)
   }, [locale])
 

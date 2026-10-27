@@ -16,7 +16,7 @@ function initSentry() {
   sentryInitialized = true
 }
 
-export function captureError(error: unknown, context?: Record<string, any>) {
+export function captureError(error: unknown, context?: Record<string, unknown>) {
   // 항상 콘솔에는 출력하여 개발 중 확인 가능
   console.error(error)
 

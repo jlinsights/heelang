@@ -443,6 +443,11 @@ export type TranslationKey =
   | `${keyof Translation}.${string}`
 
 // 중첩된 키 접근을 위한 헬퍼 함수
-export function getNestedValue(obj: any, path: string): string {
-  return path.split('.').reduce((current, key) => current?.[key], obj) || path
+export function getNestedValue(obj: unknown, path: string): string {
+  return (path
+    .split('.')
+    .reduce<unknown>(
+      (current, key) => (current as Record<string, unknown> | undefined)?.[key],
+      obj
+    ) || path) as string
 }

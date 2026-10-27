@@ -92,9 +92,23 @@ export async function GET(request: NextRequest) {
   }
 }
 
+interface PerformancePayload {
+  type: string
+  data: { name: string; value: number; rating: string }
+}
+
+interface PerformanceAnalysis {
+  score: string
+  recommendations: string[]
+  issues: string[]
+  metric?: string
+  value?: number
+  rating?: string
+}
+
 // 성능 데이터 분석 함수
-function analyzePerformanceData(data: any) {
-  const analysis: any = {
+function analyzePerformanceData(data: PerformancePayload) {
+  const analysis: PerformanceAnalysis = {
     score: 'unknown',
     recommendations: [],
     issues: [],

@@ -17,26 +17,20 @@ async function getCachedArtworks(): Promise<Artwork[]> {
   }
 
   // 새로운 데이터 가져오기
-  try {
-    const artworks = await fetchArtworksFromAirtable()
+  // 오류는 캐시하지 않고 호출자(GET/POST)로 전파해 실패 응답을 내보낸다
+  const artworks = await fetchArtworksFromAirtable()
 
-    if (artworks && artworks.length > 0) {
-      cachedArtworks = artworks
-      cacheTimestamp = now
-      console.log(`✅ Cached ${artworks.length} artworks from Airtable`)
-      return artworks
-    } else {
-      console.warn('⚠️ No artworks from Airtable')
-      cachedArtworks = []
-      cacheTimestamp = now
-      return []
-    }
-  } catch (error) {
-    console.error('❌ Error fetching artworks:', error)
-    cachedArtworks = []
+  if (artworks && artworks.length > 0) {
+    cachedArtworks = artworks
     cacheTimestamp = now
-    return []
+    console.log(`✅ Cached ${artworks.length} artworks from Airtable`)
+    return artworks
   }
+
+  console.warn('⚠️ No artworks from Airtable')
+  cachedArtworks = []
+  cacheTimestamp = now
+  return []
 }
 
 // 캐시 무효화 함수

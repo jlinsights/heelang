@@ -39,6 +39,24 @@ export interface PerformanceMetrics {
   navigationTiming?: NavigationTiming
 }
 
+// 비표준 브라우저 API (Network Information / Device Memory / Chrome performance.memory)
+interface NetworkConnectionInfo {
+  type?: string
+  effectiveType?: string
+  downlink?: number
+  rtt?: number
+}
+
+interface NavigatorWithExtras extends Navigator {
+  deviceMemory?: number
+}
+
+interface JSHeapMemoryInfo {
+  usedJSHeapSize: number
+  totalJSHeapSize: number
+  jsHeapSizeLimit: number
+}
+
 interface NavigationTiming {
   dns: number
   tcp: number
@@ -172,7 +190,9 @@ export class PerformanceMonitor {
   // 네트워크 정보 수집
   private collectNetworkInfo() {
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection
+      const connection = (
+        navigator as Navigator & { connection: NetworkConnectionInfo }
+      ).connection
       this.metrics.connectionType = connection.type
       this.metrics.effectiveType = connection.effectiveType
       this.metrics.downlink = connection.downlink
@@ -182,7 +202,7 @@ export class PerformanceMonitor {
 
   // 디바이스 정보 수집
   private collectDeviceInfo() {
-    this.metrics.deviceMemory = (navigator as any).deviceMemory
+    this.metrics.deviceMemory = (navigator as NavigatorWithExtras).deviceMemory
     this.metrics.hardwareConcurrency = navigator.hardwareConcurrency
   }
 
@@ -262,7 +282,8 @@ export class PerformanceMonitor {
   private monitorMemoryUsage() {
     if ('memory' in performance) {
       const checkMemory = () => {
-        const memory = (performance as any).memory
+        const memory = (performance as Performance & { memory: JSHeapMemoryInfo })
+          .memory
         const usedMB = memory.usedJSHeapSize / (1024 * 1024)
         
         if (usedMB > PERFORMANCE_THRESHOLDS.MEMORY_CRITICAL) {
@@ -394,7 +415,7 @@ export class PerformanceMonitor {
   }
 
   // 성능 데이터를 API로 전송
-  private sendPerformanceData(type: string, data: any) {
+  private sendPerformanceData(type: string, data: Record<string, unknown>) {
     if (typeof window === 'undefined') return
 
     try {
@@ -413,7 +434,7 @@ export class PerformanceMonitor {
               height: window.innerHeight,
             },
             deviceInfo: {
-              memory: (navigator as any).deviceMemory,
+              memory: (navigator as NavigatorWithExtras).deviceMemory,
               cores: navigator.hardwareConcurrency,
             },
           },

@@ -6,7 +6,7 @@ interface TranslatedContentProps {
   textKey: string
   namespace?: string
   fallback?: string
-  params?: Record<string, any>
+  params?: Record<string, unknown>
   count?: number
 }
 

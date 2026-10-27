@@ -20,6 +20,9 @@ const customJestConfig = {
     '**/__tests__/**/*.(js|jsx|ts|tsx)',
     '**/*.(test|spec).(js|jsx|ts|tsx)',
   ],
+
+  // 테스트 픽스처(*.mock.ts)는 테스트 파일이 아님
+  testPathIgnorePatterns: ['/node_modules/', '/.next/', '\\.mock\\.(ts|tsx)$'],
   
   // 커버리지 설정
   collectCoverageFrom: [

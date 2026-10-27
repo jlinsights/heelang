@@ -3,38 +3,44 @@
 import { useEffect, useState } from 'react'
 import { Sun, Moon } from 'lucide-react'
 
+// 사용자가 토글로 직접 고른 테마만 저장한다. 예전 'theme' 키는 첫 방문 때 OS 설정을
+// 자동 저장해 둔 값이라 사용자 선택으로 볼 수 없으므로 읽지 않는다.
+export const THEME_STORAGE_KEY = 'heelang-theme-choice'
+
+function readSavedChoice(): 'light' | 'dark' | null {
+  try {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY)
+    return saved === 'dark' || saved === 'light' ? saved : null
+  } catch {
+    return null
+  }
+}
+
+function applyTheme(dark: boolean) {
+  document.documentElement.classList.toggle('dark', dark)
+}
+
+/** 기본은 라이트. 사용자가 고른 적이 있을 때만 그 선택을 따른다(OS 설정은 따르지 않는다). */
 export function SimpleThemeToggle() {
   const [isDark, setIsDark] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    // 로컬 스토리지에서 테마 설정 읽기
-    const savedTheme = localStorage.getItem('theme')
-    const systemPrefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches
-
-    const shouldBeDark =
-      savedTheme === 'dark' || (!savedTheme && systemPrefersDark)
-    setIsDark(shouldBeDark)
-    updateTheme(shouldBeDark)
+    const dark = readSavedChoice() === 'dark'
+    setIsDark(dark)
+    applyTheme(dark)
   }, [])
-
-  const updateTheme = (dark: boolean) => {
-    if (dark) {
-      document.documentElement.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    }
-  }
 
   const toggleTheme = () => {
     const newIsDark = !isDark
     setIsDark(newIsDark)
-    updateTheme(newIsDark)
+    applyTheme(newIsDark)
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, newIsDark ? 'dark' : 'light')
+    } catch {
+      // 저장소를 쓸 수 없으면(사생활 보호 모드 등) 이번 방문에만 적용된다
+    }
   }
 
   // 마운트될 때까지 아무것도 렌더링하지 않음 (hydration 에러 방지)

@@ -537,9 +537,9 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
         '사진',
       ])
       if (imageField && Array.isArray(imageField) && imageField.length > 0) {
-        return imageField[0].url || '/images/artist/artist.jpg'
+        return imageField[0].url || '/Images/Artist/artist.jpg'
       }
-      return '/images/artist/artist.jpg'
+      return '/Images/Artist/artist.jpg'
     }
 
     // 작가 데이터 구성

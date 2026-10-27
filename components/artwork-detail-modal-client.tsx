@@ -1,5 +1,6 @@
 'use client'
 
+import { ArtworkArtistAside } from '@/components/artwork/artwork-artist-aside'
 import { ArtworkLightbox } from '@/components/artwork/artwork-lightbox'
 import { ArtworkDetailClient } from '@/components/artwork-detail-client'
 import { useImageRatio } from '@/components/artwork/use-image-ratio'
@@ -23,7 +24,7 @@ interface ArtworkDetailModalClientProps {
 
 /**
  * 작품 상세 — 레퍼런스: Telescope(큰 이미지 + 좌우 이동 + 오른쪽 메타 패널),
- * Record Club(하단 '다른 작품' 띠).
+ * Record Club(하단 '다른 작품' 띠), brushways.org(작품 아래 작가 소개).
  */
 export default function ArtworkDetailModalClient({
   artwork,
@@ -82,6 +83,8 @@ export default function ArtworkDetailModalClient({
 
         <ArtworkInfo artwork={artwork} />
       </div>
+
+      <ArtworkArtistAside />
 
       {recommendedArtworks.length > 0 && (
         <MoreWorks artworks={recommendedArtworks} />

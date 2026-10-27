@@ -24,7 +24,7 @@ export function Logo({
     <div className={`relative ${sizeClasses[size]} ${className}`}>
       {forceWhite ? (
         <Image
-          src='/logos/Logo & Tagline_black BG.png'
+          src='/logos/logo-tagline-on-black.png'
           width={500}
           height={500}
           alt='희랑 공경순 개인전 - 길'
@@ -33,14 +33,14 @@ export function Logo({
       ) : (
         <>
           <Image
-            src='/logos/Logo & Tagline_white BG.png'
+            src='/logos/logo-tagline-on-white.png'
             width={500}
             height={500}
             alt='희랑 공경순 개인전 - 길'
             className='h-full w-auto object-contain dark:hidden'
           />
           <Image
-            src='/logos/Logo & Tagline_black BG.png'
+            src='/logos/logo-tagline-on-black.png'
             width={500}
             height={500}
             alt='희랑 공경순 개인전 - 길'

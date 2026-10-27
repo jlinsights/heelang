@@ -103,6 +103,12 @@ HEELANG/
 부르고, 재검증이 필요하면 `unstable_cache(..., { tags: ['artworks'] })` 로
 감싼다. (`lib/artworks.ts` 의 `fetchArtworksWithTag` 가 그 옛 방식이다.)
 
+⚠️ **public/ 경로는 대소문자까지 정확히, 파일명은 URL-safe 하게.** macOS 는
+대소문자를 무시해 로컬에서는 `/images/artist/…` 도 열리지만 Vercel(Linux)에서는
+404 다(실제로 작가 사진이 운영에서 깨져 있었다). 폴더는 `public/Images/`. 또
+`&`·공백이 든 파일명은 next/image 최적화기가 거부한다(로고가 alt 텍스트만
+보였다). `__tests__/lib/public-asset-paths.test.ts` 가 둘 다 검사한다.
+
 ⚠️ **zustand v5**: 객체를 반환하는 selector 는 `useShallow` 로 감싸야 한다.
 아니면 매 렌더 새 객체 → 무한 렌더 루프.
 
@@ -125,6 +131,9 @@ HEELANG/
 
 ## 접근성
 
+- **테마는 라이트가 기본.** OS 다크 설정을 따르지 않고, 사용자가 토글로 고른
+  값만 `heelang-theme-choice` 에 저장한다(`components/simple-theme-toggle.tsx`).
+  예전 `theme` 키는 첫 방문 때 자동 저장된 값이라 읽지 않는다.
 - 홈 히어로는 자동 전환하지 않는다(WCAG 2.2.2 — 일시정지 컨트롤 불필요).
 - 라이트박스: `role="dialog"`, `aria-modal`, Esc 닫기, 포커스 가두기, 닫으면
   포커스 복귀, 열린 동안 스크롤 잠금.

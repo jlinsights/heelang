@@ -119,7 +119,7 @@ export default function RootLayout({
         <meta name='mobile-web-app-capable' content='yes' />
         <meta name='msapplication-config' content='/browserconfig.xml' />
         <meta name='msapplication-TileColor' content='#1a1a1a' />
-        <meta name='theme-color' content='#1a1a1a' />
+        <meta name='theme-color' content='#ffffff' />
 
         {/* Apple Touch 아이콘 */}
         <link rel='apple-touch-icon' href='/icons/icon-192x192.png' />

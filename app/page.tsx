@@ -1,5 +1,6 @@
 'use client'
 
+import { ARTIST_PROFILE } from '@/lib/artist-profile'
 import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
 import { HomeHero } from '@/components/home/home-hero'
 import {
@@ -10,10 +11,10 @@ import {
 import { useFeaturedArtworks } from '@/components/home/use-featured-artworks'
 import { useEffect, useState } from 'react'
 
-const DEFAULT_PORTRAIT = '/images/artist/artist-medium.jpg'
+const DEFAULT_PORTRAIT = ARTIST_PROFILE.portraitUrl
 
 function useArtistPortrait() {
-  const [url, setUrl] = useState(DEFAULT_PORTRAIT)
+  const [url, setUrl] = useState<string>(DEFAULT_PORTRAIT)
 
   useEffect(() => {
     let cancelled = false

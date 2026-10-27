@@ -70,7 +70,7 @@ export function SiteFooter() {
           <div className='md:col-span-1 lg:col-span-1'>
             <Link href='/' className='block mb-4'>
               <Image
-                src='/logos/Logo & Tagline_black BG.png'
+                src='/logos/logo-tagline-on-black.png'
                 alt='동양서예협회 | Oriental Calligraphy Association'
                 width={200}
                 height={80}

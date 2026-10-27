@@ -1,5 +1,6 @@
 'use client'
 
+import { ARTIST_PROFILE } from '@/lib/artist-profile'
 import { JustifiedGrid } from '@/components/gallery/justified-grid'
 import type { Artwork } from '@/lib/types'
 import { ArrowRight } from 'lucide-react'
@@ -79,7 +80,7 @@ export function HomeArtist({ portraitUrl }: { portraitUrl: string }) {
         <div className='relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden bg-muted'>
           <Image
             src={portraitUrl}
-            alt='희랑 공경순 작가'
+            alt={`${ARTIST_PROFILE.name} 작가`}
             fill
             sizes='(max-width: 768px) 80vw, 33vw'
             className='object-cover'
@@ -91,11 +92,10 @@ export function HomeArtist({ portraitUrl }: { portraitUrl: string }) {
             id='artist-title'
             className='mt-3 font-display text-3xl md:text-5xl text-foreground'
           >
-            희랑 공경순
+            {ARTIST_PROFILE.name}
           </h2>
           <blockquote className='mt-8 border-l-2 border-gold pl-6 font-display text-xl leading-relaxed text-foreground/90 md:text-2xl'>
-            전통 서예의 깊이와 현대적 감각을 조화시키며, 문방사우의 정신을
-            현대에 되살리는 작업을 하고 있습니다.
+            {ARTIST_PROFILE.intro}
           </blockquote>
           <div className='mt-10'>
             <TextLink href='/artist'>작가 소개 더보기</TextLink>

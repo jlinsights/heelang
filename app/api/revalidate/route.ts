@@ -20,9 +20,10 @@ export async function POST(req: NextRequest) {
     clearCacheAndRevalidate(tag)
 
     return NextResponse.json({ revalidated: true, tag })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : undefined
     return NextResponse.json(
-      { error: error?.message || 'Invalid payload' },
+      { error: message || 'Invalid payload' },
       {
         status: 400,
       }

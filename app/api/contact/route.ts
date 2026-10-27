@@ -18,10 +18,10 @@ export async function POST(request: NextRequest) {
     const validatedData = contactSchema.parse(body)
 
     // 이메일 전송 로직 (Nodemailer 사용)
-    const nodemailer = require('nodemailer')
+    const { createTransport } = await import('nodemailer')
 
     // SMTP 설정 (환경변수 사용)
-    const transporter = nodemailer.createTransporter({
+    const transporter = createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false, // true for 465, false for other ports

@@ -113,7 +113,7 @@ export interface AppError {
   message: string
   code?: string
   statusCode?: number
-  details?: any
+  details?: unknown
 }
 
 // API 응답 타입들
@@ -153,7 +153,7 @@ export type AsyncEventHandler<T = Event> = (event: T) => Promise<void>
 // 전역 타입 확장
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
-    dataLayer: any[]
+    gtag: (...args: unknown[]) => void
+    dataLayer: unknown[]
   }
 }

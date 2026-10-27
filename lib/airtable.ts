@@ -7,8 +7,25 @@ import {
   setCachedData as setCachedDataGlobal,
 } from './cache'
 import { captureError } from './error-logger'
+import { getArtworkImageUrl } from './image-utils'
 import { ArtworkSchema } from './schemas'
 import type { Artist, Artwork } from './types'
+import type { FieldSet } from 'airtable'
+import type { AirtableBase } from 'airtable/lib/airtable_base'
+import type { QueryParams } from 'airtable/lib/query_params'
+
+// Airtable 필드 값은 스키마 없이 들어온다(문자열·숫자·배열·첨부 등).
+// 매핑 코드가 필드를 동적으로 읽으므로, any 허용을 이 별칭 하나로 모은다.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AirtableFieldValue = any
+type AirtableFields = Record<string, AirtableFieldValue>
+
+interface AirtableRecordLike {
+  id: string
+  fields: AirtableFields
+  // airtable Record 인스턴스에는 없음(_rawJson에만 존재) — 기존 동작대로 폴백됨
+  createdTime?: string
+}
 
 // Airtable 설정
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
@@ -22,7 +39,7 @@ const CACHE_DURATION = 5 * 60 * 1000 // 5분
 class LocalStorageCache {
   private isClient = typeof window !== 'undefined'
 
-  set(key: string, data: any, duration: number = CACHE_DURATION): void {
+  set(key: string, data: unknown, duration: number = CACHE_DURATION): void {
     if (!this.isClient) return
 
     const item = {
@@ -38,7 +55,7 @@ class LocalStorageCache {
     }
   }
 
-  get(key: string): any | null {
+  get(key: string): unknown {
     if (!this.isClient) return null
 
     try {
@@ -125,7 +142,10 @@ async function createAirtableBase() {
  */
 
 // 필드 값을 우선순위에 따라 가져오는 함수
-function getFieldValue(fields: any, fieldNames: string[]): any {
+function getFieldValue(
+  fields: AirtableFields,
+  fieldNames: string[]
+): AirtableFieldValue {
   for (const fieldName of fieldNames) {
     if (
       fields[fieldName] !== undefined &&
@@ -167,7 +187,7 @@ function calculateAspectRatio(dimensions: string): string {
 }
 
 // 태그 파싱 함수
-function parseTagsField(tagValue: any): string[] {
+function parseTagsField(tagValue: AirtableFieldValue): string[] {
   if (!tagValue) return []
 
   if (Array.isArray(tagValue)) {
@@ -214,17 +234,17 @@ const ARTIST_FIELD_MAP: Record<string, string[]> = {
   ],
 }
 
-function pickField<T = any>(
-  fields: any,
+function pickField<T = AirtableFieldValue>(
+  fields: AirtableFields,
   map: Record<string, string[]>,
   key: string
 ): T | undefined {
   return getFieldValue(fields, map[key] ?? [key]) as T | undefined
 }
 
-function getCachedData(key: string): any | null {
+function getCachedData<T>(key: string): T | null {
   // unified cache helper
-  return getCachedDataGlobal(key)
+  return getCachedDataGlobal<T>(key)
 }
 
 // Legacy implementation removed
@@ -241,7 +261,7 @@ function getCachedData(key: string): any | null {
 
 */
 
-function setCachedData(key: string, data: any): void {
+function setCachedData(key: string, data: unknown): void {
   return setCachedDataGlobal(key, data)
 }
 
@@ -249,24 +269,24 @@ function setCachedData(key: string, data: any): void {
  * 모든 페이지의 레코드를 가져오는 범용 헬퍼 (100개 초과 지원)
  */
 async function fetchAllRecords(
-  base: any,
+  base: AirtableBase | null,
   tableName: string,
-  selectOptions: Record<string, any> = {}
-): Promise<any[]> {
+  selectOptions: QueryParams<FieldSet> = {}
+): Promise<AirtableRecordLike[]> {
   if (!base) return []
 
-  return retryOperation<any[]>(
+  return retryOperation<AirtableRecordLike[]>(
     () =>
       new Promise((resolve, reject) => {
-        const records: any[] = []
+        const records: AirtableRecordLike[] = []
         base(tableName)
           .select({ pageSize: 100, ...selectOptions })
           .eachPage(
-            (pageRecords: any[], fetchNextPage: () => void) => {
+            (pageRecords, fetchNextPage) => {
               records.push(...pageRecords)
               fetchNextPage()
             },
-            (err: any) => {
+            (err) => {
               if (err) reject(err)
               else resolve(records)
             }
@@ -305,7 +325,7 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
   const cacheKey = 'artworks'
 
   // 캐시된 데이터 확인
-  const cachedData = getCachedData(cacheKey)
+  const cachedData = getCachedData<Artwork[]>(cacheKey)
   if (cachedData) {
     console.log(`📦 Using cached artworks data (${cachedData.length} items)`)
     return cachedData
@@ -326,7 +346,7 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
     console.log(`📊 Retrieved ${records.length} records from Airtable`)
     const artworks: Artwork[] = []
 
-    records.forEach((record: any, index: number) => {
+    records.forEach((record: AirtableRecordLike, index: number) => {
       const fields = record.fields
 
       // 디버깅을 위해 첫 번째 레코드의 필드 구조 출력
@@ -369,7 +389,6 @@ export async function fetchArtworksFromAirtable(): Promise<Artwork[] | null> {
           const yearNum = year ? parseInt(year.toString()) : 2024
 
           // Use image utility function to generate local path
-          const { getArtworkImageUrl } = require('./image-utils')
           return getArtworkImageUrl(slug, yearNum, 'medium')
         })(),
         imageUrlQuery: `${title} calligraphy art`,
@@ -429,7 +448,7 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
     console.log('🔄 Fetching artist data from Airtable...')
 
     // 캐시 확인
-    const cachedData = getCachedData('artist')
+    const cachedData = getCachedData<Artist>('artist')
     if (cachedData) {
       console.log('✅ Using cached artist data')
       return cachedData as Artist
@@ -459,7 +478,7 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
     const getString = (primary: string, ...alts: string[]) =>
       getFieldValue(fields, [primary, ...alts])?.toString() ?? ''
 
-    const parseMultiline = (value: any): string[] =>
+    const parseMultiline = (value: AirtableFieldValue): string[] =>
       !value
         ? []
         : typeof value === 'string'
@@ -619,7 +638,7 @@ export async function fetchTreasureArtworks(): Promise<Artwork[]> {
   const cacheKey = 'treasure'
 
   // 캐시된 데이터 확인
-  const cachedData = getCachedData(cacheKey)
+  const cachedData = getCachedData<Artwork[]>(cacheKey)
   if (cachedData) {
     return cachedData
   }
@@ -660,7 +679,7 @@ export async function fetchFeaturedArtworks(
   const cacheKey = `featured-artworks-${limit}`
 
   // 캐시된 데이터 확인
-  const cachedData = getCachedData(cacheKey)
+  const cachedData = getCachedData<Artwork[]>(cacheKey)
   if (cachedData) {
     return cachedData
   }

@@ -10,7 +10,7 @@
 const DEFAULT_DURATION = 5 * 60 * 1000
 
 type CacheEntry = {
-  data: any
+  data: unknown
   timestamp: number
   duration: number
 }
@@ -22,7 +22,7 @@ const memoryCache = new Map<string, CacheEntry>()
 class LocalStorageCache {
   private isClient = typeof window !== 'undefined'
 
-  get(key: string): any | null {
+  get<T = unknown>(key: string): T | null {
     if (!this.isClient) return null
     try {
       const raw = window.localStorage.getItem(`heelang_cache_${key}`)
@@ -32,13 +32,13 @@ class LocalStorageCache {
         window.localStorage.removeItem(`heelang_cache_${key}`)
         return null
       }
-      return parsed.data
+      return parsed.data as T
     } catch (_) {
       return null
     }
   }
 
-  set(key: string, data: any, duration: number = DEFAULT_DURATION) {
+  set(key: string, data: unknown, duration: number = DEFAULT_DURATION) {
     if (!this.isClient) return
     const entry: CacheEntry = { data, timestamp: Date.now(), duration }
     try {
@@ -56,15 +56,15 @@ class LocalStorageCache {
 
 const localCache = new LocalStorageCache()
 
-export function getCachedData(key: string): any | null {
+export function getCachedData<T = unknown>(key: string): T | null {
   const mem = memoryCache.get(key)
-  if (mem && Date.now() - mem.timestamp < mem.duration) return mem.data
-  return localCache.get(key)
+  if (mem && Date.now() - mem.timestamp < mem.duration) return mem.data as T
+  return localCache.get<T>(key)
 }
 
 export function setCachedData(
   key: string,
-  data: any,
+  data: unknown,
   duration: number = DEFAULT_DURATION
 ): void {
   const entry: CacheEntry = { data, timestamp: Date.now(), duration }

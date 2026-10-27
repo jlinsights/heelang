@@ -89,7 +89,8 @@ export function generateCSRFToken(): string {
 // 입력 검증 함수들
 export function sanitizeInput(input: string): string {
   return input
-    .replace(/[<>]/g, '') // HTML 태그 제거
+    .replace(/<[^>]*>/g, '') // HTML 태그 제거 (태그 이름까지 함께)
+    .replace(/[<>]/g, '') // 남은 꺾쇠 제거
     .trim()
     .slice(0, 1000) // 길이 제한
 }

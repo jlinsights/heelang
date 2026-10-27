@@ -26,7 +26,8 @@ export function PWAInstallPrompt() {
 
     const isInStandaloneMode = 
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true
+      (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+        true
 
     setIsStandalone(isInStandaloneMode)
 
@@ -107,7 +108,7 @@ export function PWAInstallPrompt() {
         {isIOS ? (
           <div className="space-y-3">
             <p className="text-sm text-ink/70">
-              Safari에서 공유 버튼 → "홈 화면에 추가"를 선택하세요
+              Safari에서 공유 버튼 → &ldquo;홈 화면에 추가&rdquo;를 선택하세요
             </p>
             <Button onClick={handleDismiss} variant="outline" className="w-full">
               확인

@@ -1,96 +1,42 @@
+import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
+
+// 작품 상세와 같은 2단 구성(왼쪽 작품 무대, 오른쪽 캡션 표)으로 자리를 잡는다
 export default function Loading() {
   return (
     <div className='min-h-screen bg-background'>
-      {/* Navigation Skeleton */}
-      <nav className='fixed top-0 w-full bg-background/95 backdrop-blur-xl border-b border-border/50 z-50'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
-          <div className='flex items-center justify-between py-4'>
-            <div className='h-6 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-            <div className='hidden md:flex items-center space-x-6'>
+      <ArtNavigation />
+      <NavigationSpacer />
+      <main
+        aria-busy='true'
+        aria-label='작품을 불러오는 중'
+        className='container-art pb-24 pt-8 md:pt-12'
+      >
+        <div className='mb-8 flex justify-between'>
+          <div className='h-4 w-20 animate-pulse rounded bg-muted' />
+          <div className='h-4 w-24 animate-pulse rounded bg-muted' />
+        </div>
+        <div className='grid gap-10 lg:grid-cols-[minmax(0,3fr)_minmax(20rem,2fr)] lg:gap-16'>
+          <div className='flex items-center justify-center bg-muted/60 px-6 py-10 lg:h-[calc(100svh-8rem)]'>
+            <div className='aspect-[1/2] h-[60svh] max-h-full animate-pulse bg-muted' />
+          </div>
+          <div className='space-y-4'>
+            <div className='h-3 w-24 animate-pulse rounded bg-muted' />
+            <div className='h-10 w-2/3 animate-pulse rounded bg-muted md:h-12' />
+            <div className='mt-8 divide-y divide-border border-y border-border'>
               {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
-                  className='h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'
-                />
+                <div key={i} className='flex gap-6 py-3'>
+                  <div className='h-4 w-16 animate-pulse rounded bg-muted' />
+                  <div className='h-4 w-32 animate-pulse rounded bg-muted' />
+                </div>
               ))}
             </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className='pt-16'>
-        {/* Breadcrumb Skeleton */}
-        <div className='fixed top-20 left-4 z-40'>
-          <div className='h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-        </div>
-
-        {/* Image Section Skeleton */}
-        <div className='relative bg-stone-50 dark:bg-slate-900 py-8'>
-          <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
-            <div className='flex items-center justify-center'>
-              <div className='relative max-w-4xl w-full bg-white dark:bg-slate-800 shadow-2xl rounded-lg overflow-hidden'>
-                <div className='w-full h-[60vh] bg-gray-200 dark:bg-gray-700 animate-pulse' />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Artwork Information Skeleton */}
-        <div className='bg-background'>
-          <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-12'>
-            <div className='max-w-4xl mx-auto'>
-              <div className='grid lg:grid-cols-2 gap-12'>
-                {/* Left: Main Info Skeleton */}
-                <div className='space-y-8'>
-                  <div className='space-y-4'>
-                    {/* Title skeleton */}
-                    <div className='h-8 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-
-                    {/* Metadata skeleton */}
-                    <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
-                      {Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className='flex items-center space-x-2'>
-                          <div className='h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                          <div className='h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Description skeleton */}
-                  <div className='space-y-2'>
-                    <div className='h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                    <div className='h-4 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                    <div className='h-4 w-4/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                  </div>
-                </div>
-
-                {/* Right: Artist Note & Actions Skeleton */}
-                <div className='space-y-8'>
-                  {/* Artist note skeleton */}
-                  <div className='bg-stone-50 dark:bg-slate-800/50 rounded-lg p-6'>
-                    <div className='h-5 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4' />
-                    <div className='space-y-2'>
-                      <div className='h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                      <div className='h-4 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                    </div>
-                  </div>
-
-                  {/* Action buttons skeleton */}
-                  <div className='flex flex-wrap gap-3'>
-                    <div className='h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                    <div className='h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                  </div>
-
-                  {/* Navigation skeleton */}
-                  <div className='pt-8 border-t border-border/20'>
-                    <div className='flex justify-between'>
-                      <div className='h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                      <div className='h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className='space-y-2 pt-6'>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className='h-4 w-full animate-pulse rounded bg-muted'
+                />
+              ))}
             </div>
           </div>
         </div>

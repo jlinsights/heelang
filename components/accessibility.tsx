@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ButtonHTMLAttributes, ReactNode, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 // Skip to main content link
@@ -144,8 +144,7 @@ export function AccessibleIconButton({
   onClick?: () => void
   className?: string
   disabled?: boolean
-  [key: string]: any
-}) {
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'>) {
   return (
     <button
       onClick={onClick}

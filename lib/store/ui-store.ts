@@ -5,6 +5,7 @@
 
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { useShallow } from 'zustand/react/shallow'
 import { useEffect } from 'react'
 
 // 테마 관련 타입
@@ -311,61 +312,75 @@ export const useUIStore = create<UIState & UIActions>()(
 
 // 선택자 함수들 (성능 최적화)
 export const useTheme = () =>
-  useUIStore((state) => ({
-    theme: state.theme,
-    resolvedTheme: state.resolvedTheme,
-    setTheme: state.setTheme,
-    toggleTheme: state.toggleTheme,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      theme: state.theme,
+      resolvedTheme: state.resolvedTheme,
+      setTheme: state.setTheme,
+      toggleTheme: state.toggleTheme,
+    }))
+  )
 
 export const useLanguage = () =>
-  useUIStore((state) => ({
-    language: state.language,
-    setLanguage: state.setLanguage,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      language: state.language,
+      setLanguage: state.setLanguage,
+    }))
+  )
 
 export const useNavigation = () =>
-  useUIStore((state) => ({
-    isMobileMenuOpen: state.isMobileMenuOpen,
-    isSearchOpen: state.isSearchOpen,
-    toggleMobileMenu: state.toggleMobileMenu,
-    closeMobileMenu: state.closeMobileMenu,
-    toggleSearch: state.toggleSearch,
-    closeSearch: state.closeSearch,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      isMobileMenuOpen: state.isMobileMenuOpen,
+      isSearchOpen: state.isSearchOpen,
+      toggleMobileMenu: state.toggleMobileMenu,
+      closeMobileMenu: state.closeMobileMenu,
+      toggleSearch: state.toggleSearch,
+      closeSearch: state.closeSearch,
+    }))
+  )
 
 export const useGallery = () =>
-  useUIStore((state) => ({
-    galleryFilter: state.galleryFilter,
-    selectedArtworkId: state.selectedArtworkId,
-    isLightboxOpen: state.isLightboxOpen,
-    setGalleryFilter: state.setGalleryFilter,
-    resetGalleryFilter: state.resetGalleryFilter,
-    setSelectedArtwork: state.setSelectedArtwork,
-    openLightbox: state.openLightbox,
-    closeLightbox: state.closeLightbox,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      galleryFilter: state.galleryFilter,
+      selectedArtworkId: state.selectedArtworkId,
+      isLightboxOpen: state.isLightboxOpen,
+      setGalleryFilter: state.setGalleryFilter,
+      resetGalleryFilter: state.resetGalleryFilter,
+      setSelectedArtwork: state.setSelectedArtwork,
+      openLightbox: state.openLightbox,
+      closeLightbox: state.closeLightbox,
+    }))
+  )
 
 export const useLoading = () =>
-  useUIStore((state) => ({
-    isLoading: state.isLoading,
-    loadingMessage: state.loadingMessage,
-    setLoading: state.setLoading,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      isLoading: state.isLoading,
+      loadingMessage: state.loadingMessage,
+      setLoading: state.setLoading,
+    }))
+  )
 
 export const useError = () =>
-  useUIStore((state) => ({
-    error: state.error,
-    setError: state.setError,
-    clearError: state.clearError,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      error: state.error,
+      setError: state.setError,
+      clearError: state.clearError,
+    }))
+  )
 
 export const usePreferences = () =>
-  useUIStore((state) => ({
-    preferences: state.preferences,
-    setPreference: state.setPreference,
-    togglePreference: state.togglePreference,
-  }))
+  useUIStore(
+    useShallow((state) => ({
+      preferences: state.preferences,
+      setPreference: state.setPreference,
+      togglePreference: state.togglePreference,
+    }))
+  )
 
 // 사용자 정의 훅 - 시스템 테마 감지
 export const useSystemTheme = () => {
@@ -394,5 +409,5 @@ export const useSystemTheme = () => {
 
 // 개발자 도구용 유틸리티
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  ;(window as any).UIStore = useUIStore
+  ;(window as Window & { UIStore?: typeof useUIStore }).UIStore = useUIStore
 }

@@ -96,11 +96,9 @@ describe('Image Utils', () => {
       process.env.NODE_ENV = originalEnv
     })
 
-    it('이미지 최적화 파라미터를 올바르게 추가한다', () => {
+    it('로컬 이미지는 Next.js 이미지 최적화에 맡기고 원본 경로를 반환한다', () => {
       const result = generateImageUrl('/image.jpg', 800, 600, 80)
-      expect(result).toContain('w=800')
-      expect(result).toContain('h=600')
-      expect(result).toContain('q=80')
+      expect(result).toBe('/image.jpg')
     })
   })
 
@@ -112,21 +110,21 @@ describe('Image Utils', () => {
       )
     })
 
-    it('프로필 이미지 사이즈를 올바르게 반환한다', () => {
-      const sizes = getImageSizes('profile')
-      expect(sizes).toBe('(max-width: 768px) 100vw, 300px')
+    it('작가 이미지 사이즈를 올바르게 반환한다', () => {
+      const sizes = getImageSizes('artist')
+      expect(sizes).toBe('(max-width: 768px) 100vw, 50vw')
     })
   })
 
   describe('generateAltText', () => {
     it('작품 alt 텍스트를 올바르게 생성한다', () => {
       const altText = generateAltText('고요한 메아리', 'artwork')
-      expect(altText).toBe('서예 작품: 고요한 메아리')
+      expect(altText).toBe('희랑 공경순 작가의 서예 작품 "고요한 메아리"')
     })
 
-    it('프로필 alt 텍스트를 올바르게 생성한다', () => {
-      const altText = generateAltText('작가명', 'profile')
-      expect(altText).toBe('작가 프로필 사진: 작가명')
+    it('작가 alt 텍스트를 올바르게 생성한다', () => {
+      const altText = generateAltText('프로필 사진', 'artist')
+      expect(altText).toBe('희랑 공경순 작가 프로필 사진')
     })
   })
 })

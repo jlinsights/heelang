@@ -6,6 +6,18 @@
   3. requestTimeout 증가 및 AbortError 방지
 */
 
+import type { AirtableBase } from 'airtable/lib/airtable_base'
+
+/** 에러 로깅에 쓰는 필드만 골라 본 형태 (Airtable·fetch 에러 공통) */
+interface LoggableError {
+  name?: string
+  message?: string
+  stack?: string
+  code?: string
+  status?: number
+  statusCode?: number
+}
+
 /** 필수 ENV 확인 */
 function assertAirtableEnv() {
   const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID } = process.env
@@ -16,7 +28,7 @@ function assertAirtableEnv() {
   }
 }
 
-let basePromise: Promise<any> | null = null
+let basePromise: Promise<AirtableBase> | null = null
 
 /**
  * 재사용 가능한 Airtable Base 인스턴스 반환
@@ -41,7 +53,8 @@ export async function getBase() {
 /**
  * 에러 객체를 상세히 로깅하는 헬퍼 함수
  */
-function logError(error: any, context: string) {
+function logError(rawError: unknown, context: string) {
+  const error = rawError as LoggableError | null | undefined
   const errorInfo = {
     name: error?.name || 'Unknown',
     message: error?.message || 'No message',
@@ -49,7 +62,7 @@ function logError(error: any, context: string) {
     code: error?.code || 'No code',
     status: error?.status || error?.statusCode || 'No status',
     type: typeof error,
-    raw: error,
+    raw: rawError,
   }
 
   console.error(`[Airtable] ${context}:`, {
@@ -74,9 +87,10 @@ export async function safeAirtableRequest<T>(
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       return await operation()
-    } catch (error: any) {
+    } catch (error: unknown) {
       // AbortError 또는 타임아웃 에러 처리
-      if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+      const { name, message } = (error ?? {}) as LoggableError
+      if (name === 'AbortError' || message?.includes('aborted')) {
         console.warn(
           `[Airtable] Request aborted, attempt ${attempt}/${retries}`
         )

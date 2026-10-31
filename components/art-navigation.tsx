@@ -160,7 +160,9 @@ export function ArtNavigation({
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
-                          aria-current={isActive(item.href) ? 'page' : undefined}
+                          aria-current={
+                            isActive(item.href) ? 'page' : undefined
+                          }
                           className={cn(
                             'flex flex-col px-4 py-4 rounded-xl transition-colors duration-300',
                             'hover:bg-paper-warm',
@@ -187,9 +189,9 @@ export function ArtNavigation({
                   <div className='py-6 border-t border-border/30'>
                     <div className='text-center'>
                       <p className='text-xs text-ink-lighter mb-2'>
-                        희랑 공경순 개인전
+                        희랑 공경순
                       </p>
-                      <p className='text-xs text-ink-lighter'>길 道 WAY</p>
+                      <p className='text-xs text-ink-lighter'>熙勆 孔慶順</p>
                     </div>
                   </div>
                 </div>

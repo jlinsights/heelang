@@ -27,7 +27,7 @@ export function Logo({
           src='/logos/logo-tagline-on-black.png'
           width={500}
           height={500}
-          alt='희랑 공경순 개인전 - 길'
+          alt='희랑 공경순'
           className='h-full w-auto object-contain'
         />
       ) : (
@@ -36,14 +36,14 @@ export function Logo({
             src='/logos/logo-tagline-on-white.png'
             width={500}
             height={500}
-            alt='희랑 공경순 개인전 - 길'
+            alt='희랑 공경순'
             className='h-full w-auto object-contain dark:hidden'
           />
           <Image
             src='/logos/logo-tagline-on-black.png'
             width={500}
             height={500}
-            alt='희랑 공경순 개인전 - 길'
+            alt='희랑 공경순'
             className='h-full w-auto object-contain hidden dark:block'
           />
         </>

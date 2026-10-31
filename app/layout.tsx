@@ -1,4 +1,10 @@
 import { ClientLayout } from '@/components/client-layout'
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE_DEFAULT,
+  SITE_TITLE_TEMPLATE,
+} from '@/lib/site'
 import type { Metadata } from 'next'
 import { Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
@@ -26,18 +32,15 @@ const notoSerifKR = Noto_Serif_KR({
 })
 
 export const metadata: Metadata = {
-  title: '희랑 공경순 개인전 | 길 道',
-  description:
-    "희랑 공경순 작가의 현대 서예 개인전 '길 道' - 인생의 여정을 담은 깊이 있는 서예 작품을 온라인으로 감상하세요. 2025. 6. 18 — 6. 24 인사동 한국미술관 2층 전시",
+  title: { default: SITE_TITLE_DEFAULT, template: SITE_TITLE_TEMPLATE },
+  description: SITE_DESCRIPTION,
   keywords: [
     '희랑',
     '공경순',
     '서예',
     '현대서예',
-    '길',
-    '道',
-    '개인전',
-    '전시',
+    '서예 작품',
+    '포트폴리오',
     '한국서예',
     '캘리그래피',
   ],
@@ -54,11 +57,10 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: '희랑 공경순 개인전 | 길 道',
-    description:
-      "희랑 공경순 작가의 현대 서예 개인전 '길 道' - 인생의 여정을 담은 깊이 있는 서예 작품을 온라인으로 감상하세요",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
     url: 'https://heelang.orientalcalligraphy.org',
-    siteName: '희랑 공경순 개인전',
+    siteName: SITE_NAME,
     images: [
       {
         url: '/Images/Artworks/2025/heelang-way-2025-large.jpg',
@@ -80,9 +82,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '희랑 공경순 개인전 | 길 道',
-    description:
-      "희랑 공경순 작가의 현대 서예 개인전 '길 道' - 인생의 여정을 담은 깊이 있는 서예 작품",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
     images: ['/Images/Artworks/2025/heelang-way-2025-large.jpg'],
     creator: '@heelang_calligraphy',
   },
@@ -169,9 +170,9 @@ export default function RootLayout({
                 '@graph': [
                   {
                     '@type': 'ExhibitionEvent',
-                    name: '희랑 공경순 개인전 - 길 道',
+                    name: '「길 道」 (Way), 2025',
                     description:
-                      '희랑 공경순 작가의 현대 서예 개인전으로, 인생의 여정을 담은 깊이 있는 서예 작품들을 선보입니다.',
+                      '희랑 공경순의 2025년 개인전. 인생의 여정을 담은 서예 작품을 선보였다.',
                     startDate: '2025-06-18',
                     endDate: '2025-06-24',
                     eventStatus: 'https://schema.org/EventScheduled',
@@ -195,13 +196,12 @@ export default function RootLayout({
                     },
                     image:
                       'https://heelang.orientalcalligraphy.org/Images/Artworks/2025/heelang-way-2025-large.jpg',
-                    url: 'https://heelang.orientalcalligraphy.org',
+                    url: 'https://heelang.orientalcalligraphy.org/exhibition',
                   },
                   {
                     '@type': 'WebSite',
-                    name: '희랑 공경순 개인전',
-                    description:
-                      "희랑 공경순 작가의 현대 서예 개인전 '길 道' 온라인 전시관",
+                    name: SITE_NAME,
+                    description: SITE_DESCRIPTION,
                     url: 'https://heelang.orientalcalligraphy.org',
                     inLanguage: 'ko-KR',
                     publisher: {

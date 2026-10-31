@@ -1,4 +1,5 @@
 import { fetchArtist } from '@/lib/artist'
+import { SITE_NAME } from '@/lib/site'
 import { Metadata } from 'next'
 import ArtistClient from './ArtistClient'
 
@@ -9,12 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const artist = await fetchArtist('fallback-artist')
 
   return {
-    title: artist ? `${artist.name} - 작가 소개` : '작가 소개',
+    title: '작가 소개',
     description:
       artist?.bio ||
       '한국의 서예 작가 희랑 공경순의 작품과 이야기를 만나보세요.',
+    // 하위 페이지의 openGraph 는 루트 값과 합쳐지지 않고 통째로 바뀌므로 siteName 을 다시 적는다.
     openGraph: {
-      title: artist ? `${artist.name} - 작가 소개` : '작가 소개',
+      siteName: SITE_NAME,
+      title: `작가 소개 | ${SITE_NAME}`,
       description:
         artist?.bio ||
         '한국의 서예 작가 희랑 공경순의 작품과 이야기를 만나보세요.',

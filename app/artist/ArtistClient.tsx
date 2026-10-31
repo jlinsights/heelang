@@ -1,6 +1,7 @@
 'use client'
 
 import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
+import { keepSeparatorWithPrevious } from '@/lib/list-item'
 import { Artist } from '@/lib/types'
 import { Instagram, Mail, Phone } from 'lucide-react'
 import Image from 'next/image'
@@ -21,17 +22,23 @@ function instagramHandle(value: string): string {
 
 /** 빈 줄로 문단을 나누고, '* ' 로 시작하는 줄은 목록으로 묶는다. */
 function BioText({ text }: { text: string }) {
-  const blocks = text.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean)
+  const blocks = text
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
   return (
     <div className='space-y-4 text-foreground/85 leading-relaxed'>
       {blocks.map((block, index) => {
-        const lines = block.split('\n').map(line => line.trim())
-        if (lines.every(line => /^[*•-]\s+/.test(line))) {
+        const lines = block.split('\n').map((line) => line.trim())
+        if (lines.every((line) => /^[*•-]\s+/.test(line))) {
           return (
             <ul key={index} className='space-y-1'>
-              {lines.map(line => (
+              {lines.map((line) => (
                 <li key={line} className='flex gap-3'>
-                  <span aria-hidden='true' className='mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-gold' />
+                  <span
+                    aria-hidden='true'
+                    className='mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-gold'
+                  />
                   {line.replace(/^[*•-]\s+/, '')}
                 </li>
               ))}
@@ -62,8 +69,11 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
         {Array.isArray(content) ? (
           <ul className='space-y-2'>
             {content.map((item, index) => (
-              <li key={index} className='text-muted-foreground leading-relaxed tabular-nums'>
-                {item}
+              <li
+                key={index}
+                className='text-muted-foreground leading-relaxed tabular-nums'
+              >
+                {keepSeparatorWithPrevious(item)}
               </li>
             ))}
           </ul>
@@ -95,17 +105,17 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
           <div className='space-y-6'>
             {/* 프로필 이미지: 모바일에서는 작게, 데스크탑에서는 크게 보이도록 반응형 Tailwind 클래스 적용 */}
             <div className='relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden bg-muted'>
-                <Image
-                  src={
-                    artist.profileImageUrl || '/Images/Artist/artist-large.jpg'
-                  }
-                  alt={artist.name}
-                  fill
-                  sizes='(max-width: 1024px) 80vw, 33vw'
-                  className='object-cover'
-                  priority
-                />
-              </div>
+              <Image
+                src={
+                  artist.profileImageUrl || '/Images/Artist/artist-large.jpg'
+                }
+                alt={artist.name}
+                fill
+                sizes='(max-width: 1024px) 80vw, 33vw'
+                className='object-cover'
+                priority
+              />
+            </div>
           </div>
 
           {/* 오른쪽: 상세 정보 섹션 */}
@@ -120,7 +130,10 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                 {/* 인스타그램 */}
                 {artist.socialLinks?.instagram && (
                   <div className='flex items-center gap-2'>
-                    <Instagram className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
+                    <Instagram
+                      className='h-5 w-5 text-muted-foreground'
+                      aria-hidden='true'
+                    />
                     <Link
                       href={`https://instagram.com/${instagramHandle(artist.socialLinks.instagram)}`}
                       target='_blank'
@@ -135,7 +148,10 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                 {/* 이메일 */}
                 {artist.email && (
                   <div className='flex items-center gap-2'>
-                    <Mail className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
+                    <Mail
+                      className='h-5 w-5 text-muted-foreground'
+                      aria-hidden='true'
+                    />
                     <Link
                       href={`mailto:${artist.email}`}
                       className='text-base text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'
@@ -147,7 +163,10 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                 {/* 전화번호 */}
                 {artist.phone && (
                   <div className='flex items-center gap-2'>
-                    <Phone className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
+                    <Phone
+                      className='h-5 w-5 text-muted-foreground'
+                      aria-hidden='true'
+                    />
                     <Link
                       href={`tel:${artist.phone}`}
                       className='text-base text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'

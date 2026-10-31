@@ -1,4 +1,5 @@
 import { getArtworks } from '@/lib/artworks'
+import { SITE_NAME } from '@/lib/site'
 import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import GalleryClient from './gallery-client'
@@ -14,7 +15,7 @@ const getCachedArtworks = unstable_cache(getArtworks, ['gallery-artworks'], {
 })
 
 export const metadata: Metadata = {
-  title: '갤러리 | 희랑 공경순 개인전 | 길',
+  title: '갤러리',
   description:
     "희랑 공경순 작가의 서예 작품을 감상하세요. '길'을 주제로 한 현대 서예 작품을 온라인으로 만나보실 수 있습니다.",
   keywords: [
@@ -29,10 +30,10 @@ export const metadata: Metadata = {
     'way',
   ],
   openGraph: {
-    title: '갤러리 | 희랑 공경순 개인전',
+    title: `갤러리 | ${SITE_NAME}`,
     description: '현대 서예 작품 컬렉션',
     url: '/gallery',
-    siteName: '길 (Way) 展',
+    siteName: SITE_NAME,
     type: 'website',
     locale: 'ko_KR',
   },

@@ -53,9 +53,12 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       })
 
-      const result = await response.json()
+      // API 는 성공 시 { message }, 실패 시 { error } 를 돌려준다 — 판정은 HTTP 상태로 한다
+      const result: { message?: string; error?: string } = await response
+        .json()
+        .catch(() => ({}))
 
-      if (result.success) {
+      if (response.ok) {
         setStatus({ ok: true, message: '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.' })
 
         // 폼 초기화
@@ -69,7 +72,7 @@ export default function ContactPage() {
       } else {
         setStatus({
           ok: false,
-          message: result.message || '문의 전송 중 오류가 발생했습니다.',
+          message: result.error || '문의 전송 중 오류가 발생했습니다.',
         })
       }
     } catch (error) {

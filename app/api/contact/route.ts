@@ -10,12 +10,29 @@ const contactSchema = z.object({
   message: z.string().min(1, '문의 내용을 입력해주세요'),
 })
 
+// 방문자 입력을 메일 HTML 에 넣기 전에 이스케이프한다(HTML 주입 방지)
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
     // 입력 데이터 검증
-    const validatedData = contactSchema.parse(body)
+    const parsed = contactSchema.parse(body)
+    const validatedData = {
+      name: escapeHtml(parsed.name),
+      email: escapeHtml(parsed.email),
+      phone: parsed.phone ? escapeHtml(parsed.phone) : undefined,
+      subject: escapeHtml(parsed.subject),
+      message: escapeHtml(parsed.message),
+    }
 
     // 이메일 전송 로직 (Nodemailer 사용)
     const { createTransport } = await import('nodemailer')
@@ -35,7 +52,7 @@ export async function POST(request: NextRequest) {
     const mailOptions = {
       from: `"희랑 갤러리 문의" <${process.env.SMTP_USER}>`,
       to: 'heelang@orientalcalligraphy.org',
-      subject: `[희랑 갤러리 문의] ${validatedData.subject}`,
+      subject: `[희랑 갤러리 문의] ${parsed.subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">

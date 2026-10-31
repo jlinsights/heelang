@@ -9,11 +9,7 @@ import Link from 'next/link'
 import { EXHIBITION } from './home-hero'
 
 function SectionLabel({ children }: { children: string }) {
-  return (
-    <p className='text-eyebrow'>
-      {children}
-    </p>
-  )
+  return <p className='text-eyebrow'>{children}</p>
 }
 
 function TextLink({ href, children }: { href: string; children: string }) {
@@ -106,14 +102,15 @@ export function HomeArtist({ portraitUrl }: { portraitUrl: string }) {
   )
 }
 
-/** 전시 안내 — 아이콘 카드 대신 전시장 캡션 판(plaque)처럼 정의 목록으로 */
+/**
+ * 전시 기록 — 전시장 캡션 판(plaque)처럼 정의 목록으로.
+ * 2025 개인전은 끝났으므로 관람 안내(시간·예약·휴관)가 아니라 지난 전시의 기록만 둔다.
+ */
 export function HomeExhibition() {
   const rows: [string, string, string?][] = [
-    ['기간', EXHIBITION.period, '월요일 휴관'],
-    ['시간', EXHIBITION.hours],
+    ['기간', EXHIBITION.period],
     ['장소', EXHIBITION.venue, '서울시 종로구 인사동길'],
-    ['관람', '무료 · 사전 예약 불필요', '단체 관람 문의 환영'],
-    ['후원', EXHIBITION.sponsor],
+    ['주최', EXHIBITION.sponsor],
   ]
 
   return (
@@ -125,14 +122,19 @@ export function HomeExhibition() {
             id='exhibition-title'
             className='mt-3 font-display text-3xl md:text-5xl text-foreground'
           >
-            전시 안내
+            전시
           </h2>
           <p className='mt-6 max-w-xs text-sm text-muted-foreground'>
-            인사동에서 열리는 {EXHIBITION.artist} 개인전 「{EXHIBITION.title}{' '}
-            {EXHIBITION.hanja}」에 초대합니다.
+            2025년 인사동에서 열린 {EXHIBITION.artist} 개인전{' '}
+            {/* 「길 道」와 조사 '의' 사이에서 줄이 바뀌지 않게 묶는다 */}
+            <span className='whitespace-nowrap'>
+              「{EXHIBITION.title} {EXHIBITION.hanja}」의
+            </span>{' '}
+            기록입니다. 출품작은 갤러리에서 볼 수 있습니다.
           </p>
-          <div className='mt-8'>
-            <TextLink href='/exhibitions/gil'>전시 상세 정보</TextLink>
+          <div className='mt-8 flex flex-col items-start gap-3'>
+            <TextLink href='/exhibitions/gil'>전시 기록 보기</TextLink>
+            <TextLink href='/exhibitions'>모든 전시</TextLink>
           </div>
         </div>
 

@@ -14,7 +14,6 @@ const read = (file: string) => fs.readFileSync(path.join(ROOT, file), 'utf8')
 
 const LINK_FILES = [
   'components/art-navigation.tsx',
-  'components/site-footer.tsx',
   'components/home/home-hero.tsx',
   'components/home/home-sections.tsx',
   'lib/constants.ts',

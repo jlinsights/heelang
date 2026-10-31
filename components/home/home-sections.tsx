@@ -132,7 +132,7 @@ export function HomeExhibition() {
             {EXHIBITION.hanja}」에 초대합니다.
           </p>
           <div className='mt-8'>
-            <TextLink href='/exhibition'>전시 상세 정보</TextLink>
+            <TextLink href='/exhibitions/gil'>전시 상세 정보</TextLink>
           </div>
         </div>
 

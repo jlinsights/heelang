@@ -40,7 +40,7 @@ describe('사이트 이름', () => {
 describe('페이지별 제목', () => {
   // 전시 페이지만은 2025 개인전 기록이라 전시 이름을 제목으로 쓴다.
   it('전시 페이지 제목은 지난 개인전 이름이다', async () => {
-    const { metadata } = await import('@/app/exhibition/page')
+    const { metadata } = await import('@/app/exhibitions/gil/page')
     expect(metadata.title).toBe('2025 개인전 「길 道」')
   })
 

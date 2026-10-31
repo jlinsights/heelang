@@ -83,7 +83,7 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
               <ArrowRight className='h-4 w-4' aria-hidden='true' />
             </Link>
             <Link
-              href='/exhibition'
+              href='/exhibitions/gil'
               className='text-sm text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
             >
               전시 안내

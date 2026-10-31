@@ -33,7 +33,7 @@ const navigationItems: NavigationItem[] = [
     description: '작가 소개',
   },
   {
-    href: '/exhibition',
+    href: '/exhibitions',
     label: '전시',
     description: '전시 정보',
   },

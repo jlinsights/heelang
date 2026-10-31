@@ -196,7 +196,7 @@ export default function RootLayout({
                     },
                     image:
                       'https://heelang.orientalcalligraphy.org/Images/Artworks/2025/heelang-way-2025-large.jpg',
-                    url: 'https://heelang.orientalcalligraphy.org/exhibition',
+                    url: 'https://heelang.orientalcalligraphy.org/exhibitions/gil',
                   },
                   {
                     '@type': 'WebSite',

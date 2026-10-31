@@ -76,7 +76,10 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   async redirects() {
-    return [];
+    return [
+      // 2025 개인전 페이지가 전시 아카이브 아래로 옮겨갔다 (2026-10-31).
+      { source: '/exhibition', destination: '/exhibitions/gil', permanent: true },
+    ];
   },
   async headers() {
     return [

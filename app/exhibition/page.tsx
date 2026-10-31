@@ -1,6 +1,7 @@
 import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
 import imageRatios from '@/lib/gallery/image-ratios.json'
 import { ArrowRight } from 'lucide-react'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -67,6 +68,12 @@ const details: Array<[string, string]> = [
   ['입장료', exhibitionInfo.admission],
   ['주최', exhibitionInfo.sponsor],
 ]
+
+export const metadata: Metadata = {
+  title: '2025 개인전 「길 道」',
+  description:
+    '희랑 공경순 개인전 「길 道」 (2025. 6. 18 — 6. 24, 인사동 한국미술관 2층) 기록. 출품작은 갤러리에서 볼 수 있습니다.',
+}
 
 export default function ExhibitionPage() {
   return (

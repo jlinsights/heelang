@@ -58,10 +58,7 @@ export function ArtworkLightbox({
       className='fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4 md:p-10'
       onClick={onClose}
     >
-      <div
-        className='relative h-full w-full'
-        onClick={(event) => event.stopPropagation()}
-      >
+      <div className='relative h-full w-full'>
         <Image
           src={src}
           alt={`희랑 공경순, 「${title}」`}
@@ -74,7 +71,7 @@ export function ArtworkLightbox({
         ref={closeRef}
         type='button'
         onClick={onClose}
-        className='absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white'
+        className='absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white'
         aria-label='닫기'
       >
         <X className='h-6 w-6' aria-hidden='true' />

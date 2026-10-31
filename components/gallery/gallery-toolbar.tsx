@@ -178,7 +178,7 @@ function ViewToggle({
             aria-pressed={viewMode === value}
             onClick={() => onChange(value)}
             className={cn(
-              'px-1 underline-offset-4 focus-art',
+              'min-h-11 px-2 underline-offset-4 focus-art',
               viewMode === value
                 ? 'text-foreground underline decoration-gold'
                 : 'text-muted-foreground hover:text-foreground'

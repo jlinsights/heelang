@@ -71,6 +71,7 @@ export function ArtNavigation({
 
   return (
     <nav
+      aria-label='주 메뉴'
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300',
         navVariants[variant],
@@ -98,19 +99,17 @@ export function ArtNavigation({
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
                 className={cn(
-                  'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300',
-                  'hover:bg-paper-warm hover:text-ink hover:shadow-soft',
+                  'px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300',
+                  'hover:bg-paper-warm hover:text-ink',
                   'focus-art',
                   isActive(item.href)
-                    ? 'text-ink bg-paper-warm shadow-soft'
+                    ? 'text-ink bg-paper-warm'
                     : 'text-ink-light hover:text-ink'
                 )}
               >
-                <span className='relative z-10'>{item.label}</span>
-                {isActive(item.href) && (
-                  <div className='absolute inset-0 bg-gradient-zen rounded-lg opacity-50' />
-                )}
+                {item.label}
               </Link>
             ))}
 
@@ -128,7 +127,7 @@ export function ArtNavigation({
                 <Button
                   variant='ghost'
                   size='sm'
-                  className='p-2 hover:bg-paper-warm focus-art'
+                  className='h-11 w-11 p-0 hover:bg-paper-warm focus-art'
                   aria-label='메뉴 열기'
                 >
                   <Menu className='h-5 w-5 text-ink' />
@@ -146,7 +145,7 @@ export function ArtNavigation({
                       variant='ghost'
                       size='sm'
                       onClick={() => setIsOpen(false)}
-                      className='p-2 hover:bg-paper-warm focus-art'
+                      className='h-11 w-11 p-0 hover:bg-paper-warm focus-art'
                       aria-label='메뉴 닫기'
                     >
                       <X className='h-5 w-5 text-ink' />
@@ -161,12 +160,13 @@ export function ArtNavigation({
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
+                          aria-current={isActive(item.href) ? 'page' : undefined}
                           className={cn(
-                            'flex flex-col px-4 py-4 rounded-xl transition-all duration-300',
-                            'hover:bg-paper-warm hover:shadow-soft hover:translate-x-1',
+                            'flex flex-col px-4 py-4 rounded-xl transition-colors duration-300',
+                            'hover:bg-paper-warm',
                             'focus-art group',
                             isActive(item.href)
-                              ? 'bg-gradient-zen text-ink shadow-soft'
+                              ? 'bg-paper-warm text-ink'
                               : 'text-ink-light hover:text-ink'
                           )}
                         >
@@ -202,7 +202,14 @@ export function ArtNavigation({
   )
 }
 
-// 네비게이션 스페이서 컴포넌트
+// 네비게이션 스페이서 컴포넌트. 고정 내비게이션 바로 뒤에 오므로
+// '본문으로 건너뛰기' 링크의 도착점(#content)을 겸한다.
 export function NavigationSpacer({ className }: { className?: string }) {
-  return <div className={cn('h-24 md:h-28', className)} />
+  return (
+    <div
+      id='content'
+      tabIndex={-1}
+      className={cn('h-24 md:h-28 outline-none', className)}
+    />
+  )
 }

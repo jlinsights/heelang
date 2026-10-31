@@ -25,7 +25,7 @@ export function GalleryPagination({
   if (totalPages <= 1) return null
 
   const navButton =
-    'inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-art'
+    'inline-flex min-h-11 items-center gap-2 px-1 text-sm text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-art'
 
   return (
     <nav
@@ -50,7 +50,7 @@ export function GalleryPagination({
               onClick={() => onPageChange(page)}
               aria-current={page === currentPage ? 'page' : undefined}
               className={cn(
-                'h-9 min-w-9 rounded-full px-2 text-sm tabular-nums focus-art',
+                'h-11 min-w-11 rounded-full px-2 text-sm tabular-nums focus-art',
                 page === currentPage
                   ? 'bg-foreground text-background'
                   : 'text-muted-foreground hover:text-foreground'

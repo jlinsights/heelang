@@ -82,9 +82,9 @@ export default function ExhibitionPage() {
             <div className='absolute inset-0 bg-black/40 dark:bg-black/60'></div>
             <div className='relative z-10 h-full flex items-center justify-center'>
               <div className='text-center space-y-4'>
-                <h2 className='font-display text-4xl lg:text-5xl text-white drop-shadow-lg'>
+                <h1 className='font-display text-4xl lg:text-5xl text-white drop-shadow-lg'>
                   {exhibitionInfo.title}
-                </h2>
+                </h1>
                 <p className='font-english text-xl text-white/90 drop-shadow-md'>
                   {exhibitionInfo.titleEn}
                 </p>

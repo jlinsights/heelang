@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T03:55:42.934696+00:00",
+  "title": "Design System: 희랑 공경순",
+  "extensions": {
+    "colorMeta": {
+      "ink-black": {
+        "role": "primary",
+        "displayName": "Ink Black",
+        "tonalRamp": [
+          "oklch(15% 0.008 45)",
+          "oklch(25% 0.008 45)",
+          "oklch(35% 0.008 45)",
+          "oklch(48% 0.008 45)",
+          "oklch(60% 0.008 45)",
+          "oklch(72% 0.008 45)",
+          "oklch(85% 0.008 45)",
+          "oklch(95% 0.008 45)"
+        ]
+      },
+      "ink-slate": {
+        "role": "primary",
+        "displayName": "Ink Slate",
+        "tonalRamp": [
+          "oklch(15% 0.008 40)",
+          "oklch(25% 0.008 40)",
+          "oklch(35% 0.008 40)",
+          "oklch(48% 0.008 40)",
+          "oklch(60% 0.008 40)",
+          "oklch(72% 0.008 40)",
+          "oklch(85% 0.008 40)",
+          "oklch(95% 0.008 40)"
+        ]
+      },
+      "paper-white": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "tonalRamp": [
+          "oklch(15% 0.008 80)",
+          "oklch(25% 0.008 80)",
+          "oklch(35% 0.008 80)",
+          "oklch(48% 0.008 80)",
+          "oklch(60% 0.008 80)",
+          "oklch(72% 0.008 80)",
+          "oklch(85% 0.008 80)",
+          "oklch(95% 0.008 80)"
+        ]
+      },
+      "warm-paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "tonalRamp": [
+          "oklch(15% 0.008 75)",
+          "oklch(25% 0.008 75)",
+          "oklch(35% 0.008 75)",
+          "oklch(48% 0.008 75)",
+          "oklch(60% 0.008 75)",
+          "oklch(72% 0.008 75)",
+          "oklch(85% 0.008 75)",
+          "oklch(95% 0.008 75)"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "tonalRamp": [
+          "oklch(15% 0.008 80)",
+          "oklch(25% 0.008 80)",
+          "oklch(35% 0.008 80)",
+          "oklch(48% 0.008 80)",
+          "oklch(60% 0.008 80)",
+          "oklch(72% 0.008 80)",
+          "oklch(85% 0.008 80)",
+          "oklch(95% 0.008 80)"
+        ]
+      },
+      "stone-gray": {
+        "role": "neutral",
+        "displayName": "Stone Gray",
+        "tonalRamp": [
+          "oklch(15% 0.008 55)",
+          "oklch(25% 0.008 55)",
+          "oklch(35% 0.008 55)",
+          "oklch(48% 0.008 55)",
+          "oklch(60% 0.008 55)",
+          "oklch(72% 0.008 55)",
+          "oklch(85% 0.008 55)",
+          "oklch(95% 0.008 55)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "tonalRamp": [
+          "oklch(15% 0.008 75)",
+          "oklch(25% 0.008 75)",
+          "oklch(35% 0.008 75)",
+          "oklch(48% 0.008 75)",
+          "oklch(60% 0.008 75)",
+          "oklch(72% 0.008 75)",
+          "oklch(85% 0.008 75)",
+          "oklch(95% 0.008 75)"
+        ]
+      },
+      "seal-gold": {
+        "role": "secondary",
+        "displayName": "Seal Gold",
+        "tonalRamp": [
+          "oklch(15% 0.12 80)",
+          "oklch(25% 0.12 80)",
+          "oklch(35% 0.12 80)",
+          "oklch(48% 0.12 80)",
+          "oklch(60% 0.12 80)",
+          "oklch(72% 0.12 80)",
+          "oklch(85% 0.12 80)",
+          "oklch(95% 0.12 80)"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "tonalRamp": [
+          "oklch(15% 0.008 50)",
+          "oklch(25% 0.008 50)",
+          "oklch(35% 0.008 50)",
+          "oklch(48% 0.008 50)",
+          "oklch(60% 0.008 50)",
+          "oklch(72% 0.008 50)",
+          "oklch(85% 0.008 50)",
+          "oklch(95% 0.008 50)"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Night Paper",
+        "tonalRamp": [
+          "oklch(15% 0.008 80)",
+          "oklch(25% 0.008 80)",
+          "oklch(35% 0.008 80)",
+          "oklch(48% 0.008 80)",
+          "oklch(60% 0.008 80)",
+          "oklch(72% 0.008 80)",
+          "oklch(85% 0.008 80)",
+          "oklch(95% 0.008 80)"
+        ]
+      },
+      "night-stone": {
+        "role": "neutral",
+        "displayName": "Night Stone",
+        "tonalRamp": [
+          "oklch(15% 0.008 60)",
+          "oklch(25% 0.008 60)",
+          "oklch(35% 0.008 60)",
+          "oklch(48% 0.008 60)",
+          "oklch(60% 0.008 60)",
+          "oklch(72% 0.008 60)",
+          "oklch(85% 0.008 60)",
+          "oklch(95% 0.008 60)"
+        ]
+      },
+      "night-hairline": {
+        "role": "neutral",
+        "displayName": "Night Hairline",
+        "tonalRamp": [
+          "oklch(15% 0.008 55)",
+          "oklch(25% 0.008 55)",
+          "oklch(35% 0.008 55)",
+          "oklch(48% 0.008 55)",
+          "oklch(60% 0.008 55)",
+          "oklch(72% 0.008 55)",
+          "oklch(85% 0.008 55)",
+          "oklch(95% 0.008 55)"
+        ]
+      },
+      "night-gold": {
+        "role": "secondary",
+        "displayName": "Night Gold",
+        "tonalRamp": [
+          "oklch(15% 0.11 80)",
+          "oklch(25% 0.11 80)",
+          "oklch(35% 0.11 80)",
+          "oklch(48% 0.11 80)",
+          "oklch(60% 0.11 80)",
+          "oklch(72% 0.11 80)",
+          "oklch(85% 0.11 80)",
+          "oklch(95% 0.11 80)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "전시 제목 하나뿐인 표제."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "섹션·페이지 제목."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "작품명."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "설명·소개 본문."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "라틴 대문자 머리표."
+      },
+      "label-ko": {
+        "displayName": "Label KO",
+        "purpose": "한글 머리표."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hung-scroll",
+        "value": "0 30px 60px -30px rgba(0,0,0,0.45)",
+        "purpose": "홈 히어로 대표 작품."
+      },
+      {
+        "name": "stage-drop",
+        "value": "drop-shadow(0 24px 40px rgba(0,0,0,0.25))",
+        "purpose": "작품 상세 이미지(filter)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-fade",
+        "value": "200–300ms ease",
+        "purpose": "hover 색·불투명도 변화. prefers-reduced-motion 에서 제거."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "먹색 알약. 화면당 주 행동 하나.",
+      "html": "<button class=\"ds-btn-primary\">작품 보기 <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;background:hsl(var(--foreground));color:hsl(var(--background));border:0;border-radius:9999px;padding:12px 24px;font:500 14px/1.6 'Noto Sans KR',sans-serif;cursor:pointer;transition:opacity .2s} .ds-btn-primary:hover{opacity:.85} .ds-btn-primary:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+    },
+    {
+      "name": "Quiet Link",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "회색 글자 + 화살표 보조 링크.",
+      "html": "<a class=\"ds-link-quiet\" href=\"#\">작가 소개 더보기 <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
+      "css": ".ds-link-quiet{display:inline-flex;align-items:center;gap:6px;color:hsl(var(--muted-foreground));font:400 14px/1.6 'Noto Sans KR',sans-serif;text-decoration:none;transition:color .2s} .ds-link-quiet svg{transition:transform .2s} .ds-link-quiet:hover{color:hsl(var(--foreground))} .ds-link-quiet:hover svg{transform:translateX(2px)} .ds-link-quiet:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));border-radius:4px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "갤러리 분류 필터. 선택 시 먹색 채움.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">전체 <span>37</span></button><button class=\"ds-chip\" aria-pressed=\"false\">서예 <span>21</span></button></div>",
+      "css": ".ds-chips{display:flex;gap:8px} .ds-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));border-radius:9999px;padding:6px 14px;font:400 14px/1.6 'Noto Sans KR',sans-serif;cursor:pointer;transition:color .2s,border-color .2s} .ds-chip span{font-size:13px;opacity:.6;font-variant-numeric:tabular-nums} .ds-chip:hover{color:hsl(var(--foreground));border-color:hsl(var(--foreground)/.4)} .ds-chip[aria-pressed=true]{background:hsl(var(--foreground));border-color:hsl(var(--foreground));color:hsl(var(--background))} .ds-chip:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "description": "반투명 흰 상단 바, 회색 메뉴, 활성은 먹색+옅은 종이 배경.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"주 메뉴\"><span class=\"ds-nav-logo\">희랑</span><a href=\"#\" aria-current=\"page\">홈</a><a href=\"#\">갤러리</a><a href=\"#\">작가</a><a href=\"#\">전시</a><a href=\"#\">문의</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:4px;padding:16px 24px;background:hsl(var(--background)/.95);backdrop-filter:blur(24px);border-bottom:1px solid hsl(var(--border)/.5)} .ds-nav-logo{font:400 20px 'Noto Serif KR',serif;color:hsl(var(--foreground));margin-right:auto} .ds-nav a{padding:8px 16px;border-radius:8px;color:hsl(var(--ink-light));font:500 14px 'Noto Sans KR',sans-serif;text-decoration:none;transition:background .3s,color .3s} .ds-nav a:hover,.ds-nav a[aria-current=page]{color:hsl(var(--ink));background:hsl(var(--paper-warm))} .ds-nav a:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+    },
+    {
+      "name": "Section Heading",
+      "kind": "custom",
+      "description": "라틴 대문자 머리표 + 명조 400 제목 + 금빛 짧은 선.",
+      "html": "<header class=\"ds-section\"><p class=\"ds-eyebrow\">Featured Works</p><h2>대표 작품</h2><div class=\"ds-seal\"></div></header>",
+      "css": ".ds-eyebrow{font:400 13px/1.55 'Noto Sans KR',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:hsl(var(--muted-foreground));margin:0} .ds-section h2{font:400 48px/1.3 'Noto Serif KR',serif;letter-spacing:-.01em;color:hsl(var(--foreground));margin:12px 0 0} .ds-seal{width:64px;height:1px;background:hsl(var(--gold));margin-top:24px}"
+    },
+    {
+      "name": "Artwork Tile",
+      "kind": "card",
+      "refersTo": "artwork-tile",
+      "description": "실제 비율 상자, 직각, 아래 캡션. 이미지 확대 없음.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><div class=\"ds-tile-img\"></div><p class=\"ds-tile-title\">윤동주 시인 - 눈 감고 간다</p><p class=\"ds-tile-meta\">2023 · 화선지에 먹</p></a>",
+      "css": ".ds-tile{display:block;width:140px;text-decoration:none;border-radius:2px} .ds-tile-img{aspect-ratio:1/3.2;background:linear-gradient(hsl(var(--muted)),hsl(var(--paper-cream)));} .ds-tile-title{font:400 16px/1.7 'Noto Serif KR',serif;color:hsl(var(--foreground));margin:12px 0 0;transition:color .2s} .ds-tile-meta{font:400 13px/1.55 'Noto Sans KR',sans-serif;color:hsl(var(--muted-foreground));margin:2px 0 0} .ds-tile:hover .ds-tile-title{color:hsl(var(--muted-foreground))} .ds-tile:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+    },
+    {
+      "name": "Lightbox Close",
+      "kind": "button",
+      "refersTo": "lightbox-close",
+      "description": "검정 90% 위 흰 닫기 버튼.",
+      "html": "<div class=\"ds-lb\"><button class=\"ds-lb-close\" aria-label=\"닫기\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/></svg></button></div>",
+      "css": ".ds-lb{position:relative;height:120px;background:rgba(0,0,0,.9)} .ds-lb-close{position:absolute;top:16px;right:16px;display:inline-flex;padding:8px;border:0;border-radius:9999px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer} .ds-lb-close:hover{background:rgba(255,255,255,.2)} .ds-lb-close:focus-visible{outline:none;box-shadow:0 0 0 2px #fff}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Scroll Room",
+    "overview": "이 사이트는 조용한 전시실이다. 흰 벽(종이색 배경) 위에 먹빛 글자가 놓이고,\n작품은 족자든 횡액이든 원래 비율 그대로 걸린다. 인터페이스는 관람객과 작품\n사이에서 한 걸음 물러선다. 장식은 작품이 하고, 화면은 캡션·여백·정렬로만\n말한다.\n\n밀도는 낮다. 한 화면에 하나의 주인공(작품 또는 제목)을 두고, 나머지는 작은\n회색 캡션과 넓은 여백으로 받친다. 색은 거의 흑백이며, 금빛은 낙관(인장)처럼\n드물게 찍힌다. 깊이는 작품에만 있다 — 벽에서 살짝 떠 있는 족자처럼 작품만\n그림자를 갖고, UI 면은 평평하다.\n\n라이트(흰 벽)가 기본이고 다크(밤의 전시실)는 선택이다. 다크는 같은 역할의\n색을 뒤집은 것이며, 별도의 세계가 아니다.",
+    "keyCharacteristics": [
+      "작품은 자르지 않는다 — 항상 원래 비율, `object-contain`",
+      "명조(Noto Serif KR) 제목 + 고딕(Noto Sans KR) 본문, 같은 Noto 계열",
+      "거의 흑백, 금빛은 가는 선과 표식에만",
+      "평평한 UI, 그림자는 작품에만",
+      "버튼·칩은 알약 모양, 작품 타일은 직각"
+    ],
+    "rules": [
+      {
+        "name": "The Seal Rule",
+        "body": "금빛은 인장이다. 1–2px 선, 8px 이하 점, 밑줄에만 쓴다. 면을 채우거나 글자색·버튼 배경으로 쓰지 않는다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink-on-Paper Rule",
+        "body": "새 색을 들이지 않는다. 의미가 필요하면 먹의 농담(검정→회색)으로 위계를 만든다. 브랜드색 하드코딩(`text-pink-500` 등)은 쓰지 않는다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast Floor Rule",
+        "body": "글자는 배경과 4.5:1 이상. 가장 옅은 글자 토큰 `ink-lighter` 도 종이 위 4.7:1(다크 5.4:1)로 맞춰 두었다. 먹색 면(푸터) 위 글자는 회색 토큰이 아니라 `paper` 의 불투명도(75%)로 만든다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Axis Rule",
+        "body": "새 무채색을 들일 때 차가운 회색(slate·gray·zinc)을 쓰지 않는다. 기존 토큰 축 위에서 명도만 바꾼다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Keep-All Rule",
+        "body": "한글은 어절 단위로 줄바꿈한다(`word-break: keep-all`). 제목은 `text-wrap: balance`, 문단은 `pretty`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Latin-Only Tracking Rule",
+        "body": "넓은 자간(0.2em 이상)은 라틴 대문자에만 쓴다. 한글에 넓은 자간을 주면 글자가 흩어져 읽힌다.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Headline Rule",
+        "body": "명조 제목은 400(많아야 500). 700은 Display 하나만 쓴다.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lifted Artwork Rule",
+        "body": "그림자는 작품 이미지에만 준다. 카드·패널·버튼에 `shadow-soft`/`medium`/`strong` 을 새로 쓰지 않는다(옛 컴포넌트에 남아 있는 것은 정리 대상).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 작품을 항상 원래 비율로 보여 준다(`object-contain`, 비율은 `lib/gallery/image-ratios.json`).",
+      "Do 색은 시맨틱 토큰(`foreground`, `muted-foreground`, `border`, `gold`) 으로만 쓴다.",
+      "Do 금빛은 1–2px 선과 작은 점에만 쓴다(The Seal Rule).",
+      "Do 한글 머리표는 `.text-eyebrow-ko`, 라틴 대문자 머리표는 `.text-eyebrow` 를 쓴다.",
+      "Do 새 화면을 라이트와 다크 둘 다에서 대비 4.5:1 이상으로 확인한다."
+    ],
+    "donts": [
+      "Don't 작품을 정사각 썸네일로 자르거나 hover 에서 확대하지 않는다.",
+      "Don't 명조 제목을 700 으로 쓰지 않는다(Display 하나만 예외).",
+      "Don't 한글에 0.2em 이상의 자간을 주지 않는다.",
+      "Don't 카드·버튼·패널에 그림자를 새로 주지 않는다. 그림자는 작품 몫이다.",
+      "Don't 금빛·분홍·보라 같은 색을 면이나 글자색으로 들이지 않는다.",
+      "Don't 장식용 그라디언트나 반복 애니메이션(`animate-bounce` 등)을 쓰지 않는다."
+    ]
+  }
+}

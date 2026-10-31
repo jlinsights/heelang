@@ -45,8 +45,12 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
 
       <div className='container-art grid min-h-[calc(100svh-4rem)] items-center gap-12 py-16 md:grid-cols-[1.1fr_1fr] md:gap-16 md:py-24'>
         <div className='text-center md:text-left'>
-          <p className='text-xs tracking-[0.3em] uppercase text-muted-foreground'>
-            {EXHIBITION.artist} 개인전 · Contemporary Calligraphy
+          <p className='text-eyebrow-ko'>
+            {EXHIBITION.artist} 개인전
+            <span aria-hidden='true' className='mx-2'>
+              ·
+            </span>
+            <span className='text-eyebrow'>Contemporary Calligraphy</span>
           </p>
 
           <h1
@@ -63,7 +67,7 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
             {EXHIBITION.english}
           </p>
 
-          <dl className='mx-auto mt-10 grid max-w-sm grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-left text-sm md:mx-0'>
+          <dl className='mx-auto mt-10 grid max-w-sm grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-left text-sm tabular-nums md:mx-0'>
             <dt className='text-muted-foreground'>기간</dt>
             <dd className='text-foreground'>{EXHIBITION.period}</dd>
             <dt className='text-muted-foreground'>장소</dt>

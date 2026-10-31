@@ -10,7 +10,7 @@ import { EXHIBITION } from './home-hero'
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className='text-xs tracking-[0.3em] uppercase text-muted-foreground'>
+    <p className='text-eyebrow'>
       {children}
     </p>
   )

@@ -149,7 +149,7 @@ export default function GalleryClient({
       <main className='container-art pb-24 pt-10 md:pt-16'>
         <header className='mb-10 md:mb-14 flex flex-col gap-3 md:flex-row md:items-end md:justify-between'>
           <div>
-            <p className='text-xs tracking-[0.3em] uppercase text-muted-foreground'>
+            <p className='text-eyebrow'>
               Gallery
             </p>
             <h1 className='mt-3 font-display text-4xl md:text-6xl text-foreground'>

@@ -24,7 +24,7 @@ export function ArtworkArtistAside() {
         />
       </div>
       <div>
-        <p className='text-xs tracking-[0.3em] uppercase text-muted-foreground'>
+        <p className='text-eyebrow'>
           About the Artist
         </p>
         <h2

@@ -126,24 +126,24 @@ const config: Config = {
   		},
   		fontFamily: {
   			display: ['var(--font-noto-serif-kr)', 'Noto Serif KR', 'serif'],
-  			body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+  			body: ['var(--font-noto-sans-kr)', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
   			mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
   			calligraphy: ['var(--font-noto-serif-kr)', 'Noto Serif KR', 'serif']
   		},
   		fontSize: {
-  			'xs': ['0.75rem', { lineHeight: '1.5', letterSpacing: '0.025em' }],
-  			'sm': ['0.875rem', { lineHeight: '1.6', letterSpacing: '0.025em' }],
-  			'base': ['1rem', { lineHeight: '1.7', letterSpacing: '0.025em' }],
-  			'lg': ['1.125rem', { lineHeight: '1.7', letterSpacing: '0.025em' }],
-  			'xl': ['1.25rem', { lineHeight: '1.7', letterSpacing: '0.025em' }],
-  			'2xl': ['1.5rem', { lineHeight: '1.6', letterSpacing: '0.025em' }],
-  			'3xl': ['1.875rem', { lineHeight: '1.5', letterSpacing: '0.025em' }],
-  			'4xl': ['2.25rem', { lineHeight: '1.4', letterSpacing: '0.025em' }],
-  			'5xl': ['3rem', { lineHeight: '1.3', letterSpacing: '0.025em' }],
-  			'6xl': ['3.75rem', { lineHeight: '1.2', letterSpacing: '0.025em' }],
-  			'7xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '0.025em' }],
-  			'8xl': ['6rem', { lineHeight: '1', letterSpacing: '0.025em' }],
-  			'9xl': ['8rem', { lineHeight: '1', letterSpacing: '0.025em' }]
+  			'xs': ['0.8125rem', { lineHeight: '1.55' }],
+  			'sm': ['0.875rem', { lineHeight: '1.6' }],
+  			'base': ['1rem', { lineHeight: '1.7' }],
+  			'lg': ['1.125rem', { lineHeight: '1.7' }],
+  			'xl': ['1.25rem', { lineHeight: '1.7' }],
+  			'2xl': ['1.5rem', { lineHeight: '1.6' }],
+  			'3xl': ['1.875rem', { lineHeight: '1.5' }],
+  			'4xl': ['2.25rem', { lineHeight: '1.4' }],
+  			'5xl': ['3rem', { lineHeight: '1.3' }],
+  			'6xl': ['3.75rem', { lineHeight: '1.2' }],
+  			'7xl': ['4.5rem', { lineHeight: '1.1' }],
+  			'8xl': ['6rem', { lineHeight: '1' }],
+  			'9xl': ['8rem', { lineHeight: '1' }]
   		},
   		spacing: {
   			'18': '4.5rem',

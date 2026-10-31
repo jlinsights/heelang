@@ -19,36 +19,33 @@ export function ClientLayout({ children }: ClientLayoutProps) {
     setMounted(true)
   }, [])
 
-  // 서버 사이드에서는 기본 레이아웃만 렌더링
-  if (!mounted) {
-    return (
-      <div className='min-h-screen bg-background text-foreground'>
-        {children}
-      </div>
-    )
-  }
-
-  // 클라이언트 사이드에서는 완전한 레이아웃 렌더링
+  // 프로바이더는 서버·클라이언트 모두 같은 트리로 렌더링한다. 마운트 전후로
+  // 트리 모양이 바뀌면 React 가 페이지 전체를 버리고 다시 그린다.
+  // 브라우저 전용 위젯만 마운트 뒤에 붙인다.
   return (
     <I18nProvider>
       <AnalyticsProvider>
         <div className='min-h-screen bg-background text-foreground'>
           {children}
           
-          {/* PWA 기능 */}
-          <ServiceWorkerRegistration />
-          <PWAInstallPrompt />
-          
-          {/* 성능 모니터링 플로팅 버튼 (개발 환경에서만 표시) */}
-          <PerformanceFloatingButton 
-            onClick={() => setShowPerformanceDashboard(true)} 
-          />
-          
-          {/* 성능 모니터링 대시보드 */}
-          <PerformanceDashboard
-            isVisible={showPerformanceDashboard}
-            onClose={() => setShowPerformanceDashboard(false)}
-          />
+          {mounted && (
+            <>
+              {/* PWA 기능 */}
+              <ServiceWorkerRegistration />
+              <PWAInstallPrompt />
+
+              {/* 성능 모니터링 플로팅 버튼 (개발 환경에서만 표시) */}
+              <PerformanceFloatingButton
+                onClick={() => setShowPerformanceDashboard(true)}
+              />
+
+              {/* 성능 모니터링 대시보드 */}
+              <PerformanceDashboard
+                isVisible={showPerformanceDashboard}
+                onClose={() => setShowPerformanceDashboard(false)}
+              />
+            </>
+          )}
         </div>
       </AnalyticsProvider>
     </I18nProvider>

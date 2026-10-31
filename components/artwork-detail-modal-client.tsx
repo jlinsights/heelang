@@ -104,7 +104,7 @@ export default function ArtworkDetailModalClient({
 
 function NeighborLinks({ neighbors }: { neighbors: ArtworkNeighbors }) {
   const link =
-    'inline-flex items-center gap-1.5 hover:text-foreground focus-art'
+    'inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full hover:text-foreground focus-art'
   return (
     <div className='flex items-center gap-5'>
       {neighbors.prev ? (
@@ -150,7 +150,7 @@ function ArtworkInfo({ artwork }: { artwork: Artwork }) {
 
   return (
     <div>
-      <p className='text-xs tracking-[0.3em] uppercase text-muted-foreground'>
+      <p className='text-eyebrow-ko'>
         희랑 공경순
       </p>
       <h1 className='mt-3 font-display text-3xl leading-tight text-foreground md:text-5xl'>
@@ -189,7 +189,7 @@ function ArtworkInfo({ artwork }: { artwork: Artwork }) {
 
       {artwork.artistNote && (
         <figure className='mt-8 border-l-2 border-gold pl-5'>
-          <figcaption className='text-xs tracking-[0.2em] uppercase text-muted-foreground'>
+          <figcaption className='text-eyebrow-ko'>
             작가 노트
           </figcaption>
           <blockquote className='mt-3 whitespace-pre-line font-display leading-relaxed text-foreground/90'>

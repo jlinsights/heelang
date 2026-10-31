@@ -16,25 +16,25 @@
      * =========================================== */
 
     /* shadcn/ui 기본 색상 */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --background: 40 42.9% 98.6%;
+    --foreground: 24 9.8% 10%;
+    --card: 40 42.9% 98.6%;
+    --card-foreground: 24 9.8% 10%;
+    --popover: 40 42.9% 98.6%;
+    --popover-foreground: 24 9.8% 10%;
+    --primary: 24 9.8% 10%;
+    --primary-foreground: 40 42.9% 98.6%;
+    --secondary: 40 27.3% 93.5%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 40 27.3% 93.5%;
+    --muted-foreground: 27 5.4% 39.8%;
+    --accent: 40 27.3% 93.5%;
+    --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 38 18.6% 88.4%;
+    --input: 38 18.6% 88.4%;
+    --ring: 24 9.8% 10%;
     --radius: 0.75rem;
 
     /* 차트 색상 */
@@ -57,29 +57,29 @@
     /* ===========================================
      * 서예 예술 전용 색상 시스템
      * =========================================== */
-    /* 먹(墨) - 글씨의 기본 색상 */
-    --ink: 222.2 47.4% 11.2%;
-    --ink-light: 215.4 16.3% 46.9%;
-    --ink-lighter: 210 20% 65%;
-    --ink-dark: 222.2 84% 4.9%;
+    /* 먹(墨) - 따뜻한 먹색. 종이(한지)·회색(돌)도 같은 따뜻한 축에 둔다 */
+    --ink: 12 6.5% 15.1%;
+    --ink-light: 27 5.4% 39.8%;
+    --ink-lighter: 25 5.3% 44.7%;
+    --ink-dark: 24 9.8% 10%;
 
-    --paper: 0 0% 100%;
-    --paper-warm: 30 40% 98%;
-    --paper-cream: 45 25% 96%;
-    --paper-aged: 40 15% 92%;
+    --paper: 40 42.9% 98.6%;
+    --paper-warm: 38 33.3% 95.3%;
+    --paper-cream: 40 30% 92.2%;
+    --paper-aged: 39 27.9% 88%;
 
     --brush: 25 30% 25%;
     --brush-light: 25 20% 45%;
     --brush-dark: 25 40% 15%;
 
-    --stone: 210 15% 85%;
-    --stone-light: 210 20% 90%;
-    --stone-dark: 210 25% 75%;
+    --stone: 37 16.3% 80.8%;
+    --stone-light: 38 18.6% 88.4%;
+    --stone-dark: 36 13.2% 70.2%;
 
     /* 금(金) - 특별한 강조 색상 */
-    --gold: 45 100% 50%;
-    --gold-light: 45 100% 70%;
-    --gold-dark: 45 100% 30%;
+    --gold: 40 61.4% 44.7%;
+    --gold-light: 40 61.6% 56.1%;
+    --gold-dark: 39 62.8% 33.7%;
 
     /* ===========================================
      * 예술적 그라디언트 시스템
@@ -109,25 +109,25 @@
      * =========================================== */
 
     /* shadcn/ui 다크모드 색상 */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 30 12.5% 6.3%;
+    --foreground: 40 27.3% 93.5%;
+    --card: 30 12.5% 6.3%;
+    --card-foreground: 40 27.3% 93.5%;
+    --popover: 30 12% 9.8%;
+    --popover-foreground: 40 27.3% 93.5%;
+    --primary: 40 27.3% 93.5%;
+    --primary-foreground: 30 12.5% 6.3%;
+    --secondary: 30 9.7% 12.2%;
+    --secondary-foreground: 40 27.3% 93.5%;
+    --muted: 30 9.7% 12.2%;
+    --muted-foreground: 34 7.4% 63.1%;
+    --accent: 30 9.7% 12.2%;
+    --accent-foreground: 40 27.3% 93.5%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 30 10.5% 14.9%;
+    --input: 30 10.5% 14.9%;
+    --ring: 37 16.3% 80.8%;
 
     /* 다크모드 차트 색상 */
     --chart-1: 220 70% 50%;
@@ -150,28 +150,28 @@
      * 서예 다크모드 색상 시스템
      * =========================================== */
     /* 다크모드 먹(墨) 색상 */
-    --ink: 210 40% 98%;
-    --ink-light: 215 20.2% 65.1%;
-    --ink-lighter: 210 15% 55%;
-    --ink-dark: 210 40% 98%;
+    --ink: 40 27.3% 93.5%;
+    --ink-light: 34 7.4% 63.1%;
+    --ink-lighter: 32 7.1% 52.7%;
+    --ink-dark: 40 27.3% 93.5%;
 
-    --paper: 222.2 84% 4.9%;
-    --paper-warm: 217.2 32.6% 17.5%;
-    --paper-cream: 220 25% 12%;
-    --paper-aged: 215 20% 8%;
+    --paper: 30 12.5% 6.3%;
+    --paper-warm: 30 12% 9.8%;
+    --paper-cream: 30 9.7% 12.2%;
+    --paper-aged: 20 14.3% 4.1%;
 
-    --brush: 210 30% 75%;
-    --brush-light: 210 20% 85%;
-    --brush-dark: 210 40% 65%;
+    --brush: 30 20% 75%;
+    --brush-light: 30 15% 85%;
+    --brush-dark: 30 25% 65%;
 
-    --stone: 217.2 20% 25%;
-    --stone-light: 217.2 15% 35%;
-    --stone-dark: 217.2 25% 15%;
+    --stone: 30 9.4% 20.8%;
+    --stone-light: 30 8.8% 26.7%;
+    --stone-dark: 30 10.5% 14.9%;
 
     /* 다크모드 금(金) 색상 */
-    --gold: 45 100% 70%;
-    --gold-light: 45 100% 80%;
-    --gold-dark: 45 100% 50%;
+    --gold: 40 61.6% 56.1%;
+    --gold-light: 41 66.7% 65.9%;
+    --gold-dark: 40 61.4% 44.7%;
 
     /* ===========================================
      * 다크모드 그라디언트 시스템
@@ -210,6 +210,17 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* 한글은 어절 단위로 줄바꿈한다. 긴 URL·영문만 예외로 끊는다. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  p,
+  li,
+  dd,
+  figcaption,
+  blockquote {
+    text-wrap: pretty;
   }
 
   /* 서예에 맞는 기본 타이포그래피 */
@@ -219,7 +230,10 @@
   h4,
   h5,
   h6 {
-    @apply font-display tracking-wide;
+    @apply font-display;
+    /* 명조 제목은 크게 쓸수록 자간을 살짝 좁힌다. 라틴식 자간 확장은 한글을 흩어 놓는다. */
+    letter-spacing: -0.01em;
+    text-wrap: balance;
     font-feature-settings:
       "kern" 1,
       "liga" 1;
@@ -388,6 +402,17 @@
       "kern" 1,
       "liga" 1,
       "calt" 1;
+  }
+
+  /* 섹션 머리표. 라틴 대문자용(넓은 자간)과 한글용(좁은 자간)을 나눈다 */
+  .text-eyebrow {
+    @apply text-xs uppercase text-muted-foreground;
+    letter-spacing: 0.24em;
+  }
+
+  .text-eyebrow-ko {
+    @apply text-xs font-medium text-muted-foreground;
+    letter-spacing: 0.06em;
   }
 
   .text-zen {
@@ -652,10 +677,6 @@
   @apply transition-all duration-500 hover:shadow-strong;
 }
 
-.artwork-image {
-  @apply w-full h-full object-cover transition-transform duration-700;
-  @apply hover:scale-110;
-}
 
 /* ===========================================
  * 반응형 및 모바일 최적화

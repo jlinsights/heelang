@@ -180,7 +180,15 @@ REVALIDATE_SECRET=your_secret
 
 ## 배포
 
-- Vercel. 환경 변수는 Vercel 대시보드(Production·Preview·Development)에 설정
+- Vercel 팀 **goodman-ksways**(Pro) 의 `heelang` 프로젝트
+  (https://vercel.com/goodman-ksways/heelang). 2026-10-31 개인 팀
+  jlinsights-projects 에서 이관했다 — 프로젝트 ID 는 그대로다.
+- `main` 푸시 = 프로덕션 배포(GitHub `jlinsights/heelang` 연동). CLI 는
+  `--scope goodman-ksways` 로 쓰고, 처음 한 번 `vercel link --yes --team
+  goodman-ksways --project heelang` 으로 연결한다(`.vercel/` 은 git 제외)
+- 도메인: heelang.orientalcalligraphy.org, heelang.vercel.app
+- 환경 변수는 Vercel 대시보드(Production·Preview·Development)에 설정.
+  Airtable 키는 Production 에만 있어 Preview 배포는 로컬 폴백 데이터를 쓴다
 - ISR: Airtable 웹훅이 `POST /api/revalidate` 에
   `{ "tag": "artworks", "secret": … }` 를 보내면 `revalidateTag('artworks')` 로
   갤러리 정적 페이지가 갱신된다 (`REVALIDATE_SECRET` 이 설정돼 있으면 secret

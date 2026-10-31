@@ -243,7 +243,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href='/exhibition'
+                  href='/exhibitions'
                   className='text-xs text-paper/70 dark:text-paper/70 hover:text-paper dark:hover:text-white transition-colors'
                 >
                   전시 정보

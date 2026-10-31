@@ -62,6 +62,6 @@ export const SITE_CONFIG = {
 export const NAVIGATION = [
   { label: '작가 소개', href: '/artist' },
   { label: '작품 갤러리', href: '/gallery' },
-  { label: '전시 정보', href: '/exhibition' },
+  { label: '전시 정보', href: '/exhibitions' },
   { label: '문의하기', href: '/contact' },
 ] as const

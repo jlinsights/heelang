@@ -1,6 +1,6 @@
 import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
 import imageRatios from '@/lib/gallery/image-ratios.json'
-import { ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -82,6 +82,18 @@ export default function ExhibitionPage() {
       <NavigationSpacer />
 
       <main className='container-art pb-24 pt-10 md:pt-16'>
+        <nav
+          aria-label='이동 경로'
+          className='mb-8 text-sm text-muted-foreground'
+        >
+          <Link
+            href='/exhibitions'
+            className='inline-flex items-center gap-1.5 hover:text-foreground focus-art'
+          >
+            <ArrowLeft className='h-4 w-4' aria-hidden='true' />
+            전시 목록
+          </Link>
+        </nav>
         <header className='mb-10 md:mb-14 flex flex-col gap-3 md:flex-row md:items-end md:justify-between'>
           <div>
             <p className='text-eyebrow'>Exhibition</p>

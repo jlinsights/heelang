@@ -1,11 +1,10 @@
 import {
-  fetchArtistFromAirtable,
   fetchArtworksFromAirtable,
   fetchFeaturedArtworks,
   fetchTreasureArtworks,
 } from '@/lib/airtable'
-import type { Artist, Artwork } from '@/lib/types'
-import { getArtistImageUrl, getArtworkImageUrl } from './image-utils'
+import type { Artwork } from '@/lib/types'
+import { getArtworkImageUrl } from './image-utils'
 
 // 로컬 작품 이미지 경로 생성 함수
 export function getLocalArtworkImagePath(
@@ -35,48 +34,6 @@ export function getArtworkImageWithFallback(
 }
 
 // 로컬 fallback 데이터
-export const fallbackArtistData: Artist = {
-  id: 'artist-heelang',
-  name: '희랑 공경순 (孔敬順, Kong KyongSun)',
-  bio: '서울에서 활동하는 현대 서예가입니다. 전통 서예의 정신을 계승하면서도 현대적인 미감을 탐구하며, 문자의 조형성과 먹의 물성을 통해 내면의 세계를 표현합니다. 사단법인 동양서예협회 초대작가로 활동하며, 다수의 개인전과 그룹전에 참여하였습니다. 그의 작품은 여러 미술관과 개인 컬렉션에 소장되어 있으며, 서예 교육을 통해 전통 문화의 계승에도 힘쓰고 있습니다.',
-  statement:
-    '나의 작업은 선과 공간, 여백의 관계를 탐구하는 과정입니다. 각 획은 순간의 호흡이며, 전체 구성은 우주적 질서와 조응하고자 하는 염원을 담고 있습니다. 전통에 뿌리를 두되, 동시대의 감성과 소통하는 새로운 서예의 가능성을 모색합니다. 문방사우(文房四友)를 통해 표현되는 서예의 본질과 현대적 해석을 통해 과거와 현재를 잇는 다리 역할을 하고자 합니다.',
-  profileImageUrl: getArtistImageUrl('others/공경순 작가 프로필.png'),
-  birthYear: 1980,
-  education: [
-    '일본 교토예술대학교 미술과 서예코스 졸업 (2025)',
-    '일본 교토외국어대학교 외국어학부 졸업 (2003)',
-  ],
-  exhibitions: [
-    "2025 개인전 '길(Way)' - 인사동 한국미술관",
-    '2025 중국•닝보 제25회 중일 난정서법 교류전 - 닝보미술관',
-    '2025 제65회 魁心書法院展 - 일본 긴자 요쿄홀',
-    "2024 제5회 희랑글씨 회원전 '쉼소리' 전 - 제주민속촌",
-    '2024 Art Beyond Boundaries - 일본 롯폰기 국립신미술관',
-    '2023 제4회 희랑글씨 회원전 이분법전 - 김포아트홀',
-    '2022 제3회 희랑글씨 회원전 쓰임전 - 김포아트빌리지',
-    '2022 제2회 희랑글씨 회원전 울림전 - 김포 장기도서관',
-    '2021년 제1회 희랑글씨 회원전 시간을여행하다전 - 김포 마산도서관',
-  ],
-  awards: [
-    '2024 제21회 대한민국동양서예대전 대상',
-    '2021 제14회 낙동예술대전 캘리그라피부문 대상',
-    '2025 Art Beyond Boundaries 국제예술상',
-    '2020 경기도지사 표창장- 사회복지 유공',
-  ],
-  collections: [
-    '인사동 한국미술관 영구소장',
-    '제주민속촌 미술관 소장',
-    '김포시립미술관 소장',
-    '개인 컬렉션 다수',
-  ],
-  website: 'https://heelang.orientalcalligraphy.org',
-  socialLinks: {
-    instagram: 'https://instagram.com/heelang_calligraphy',
-    website: 'https://heelang.orientalcalligraphy.org',
-  },
-}
-
 export const fallbackArtworksData: Artwork[] = [
   // 2025년 작품
   {
@@ -648,84 +605,6 @@ export async function getArtworks(): Promise<Artwork[]> {
 }
 
 /**
- * 클라이언트 사이드에서 API를 통해 작가 데이터를 가져오는 함수
- */
-async function fetchArtistFromAPI(): Promise<Artist | null> {
-  try {
-    const response = await fetch('/api/artist', {
-      cache: 'no-store', // 항상 최신 데이터 가져오기
-    })
-
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    if (result.success && result.data) {
-      return result.data
-    } else {
-      console.warn('API returned no artist data:', result.message)
-      return null
-    }
-  } catch (error) {
-    console.error('Failed to fetch artist from API:', error)
-    return null
-  }
-}
-
-/**
- * 환경에 따라 적절한 데이터 소스에서 작가 정보를 가져오는 함수
- */
-async function getArtistFromSource(): Promise<Artist | null> {
-  // 서버 사이드인지 확인
-  const isServer = typeof window === 'undefined'
-
-  if (isServer) {
-    // 서버 사이드: Airtable에 직접 접근
-    try {
-      console.log('🔍 Server-side: Attempting to fetch artist from Airtable...')
-      const airtableData = await fetchArtistFromAirtable()
-
-      if (airtableData) {
-        console.log('✅ Successfully fetched artist data from Airtable')
-        return airtableData
-      } else {
-        console.warn('⚠️ No artist found in Airtable')
-        return null
-      }
-    } catch (error) {
-      console.error('❌ Error fetching artist from Airtable:', error)
-      return null
-    }
-  } else {
-    // 클라이언트 사이드: API 라우트를 통해 접근
-    try {
-      console.log('🔍 Client-side: Attempting to fetch artist from API...')
-      const apiData = await fetchArtistFromAPI()
-
-      if (apiData) {
-        console.log('✅ Successfully fetched artist data from API')
-        return apiData
-      } else {
-        console.warn('⚠️ No artist found from API')
-        return null
-      }
-    } catch (error) {
-      console.error('❌ Error fetching artist from API:', error)
-      return null
-    }
-  }
-}
-
-/**
- * 작가 정보를 가져오는 함수 (환경에 따라 적절한 소스 선택)
- */
-export async function getArtist(): Promise<Artist | null> {
-  return await getArtistFromSource()
-}
-
-/**
  * 추천 작품들을 가져오는 통합 함수 (환경에 따라 적절한 소스 선택)
  */
 export async function getFeaturedArtworks(
@@ -895,7 +774,6 @@ export async function getArtworkBySlug(slug: string): Promise<Artwork | null> {
 }
 
 // 기존 export들 (하위 호환성)
-export const artistData = fallbackArtistData
 export const artworksData = fallbackArtworksData
 
 /**

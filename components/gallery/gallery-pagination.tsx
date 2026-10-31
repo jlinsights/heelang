@@ -25,7 +25,7 @@ export function GalleryPagination({
   if (totalPages <= 1) return null
 
   const navButton =
-    'inline-flex min-h-11 items-center gap-2 px-1 text-sm text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-art'
+    'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-1 text-sm text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-art'
 
   return (
     <nav
@@ -39,7 +39,8 @@ export function GalleryPagination({
         disabled={currentPage === 1}
       >
         <ArrowLeft className='h-4 w-4' aria-hidden='true' />
-        이전
+        {/* 320px 에서 번호 4개 + 이전/다음 글자가 넘치므로 좁은 화면은 화살표만 */}
+        <span className='sr-only sm:not-sr-only'>이전</span>
       </button>
 
       <ol className='flex items-center gap-1'>
@@ -68,7 +69,7 @@ export function GalleryPagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        다음
+        <span className='sr-only sm:not-sr-only'>다음</span>
         <ArrowRight className='h-4 w-4' aria-hidden='true' />
       </button>
     </nav>

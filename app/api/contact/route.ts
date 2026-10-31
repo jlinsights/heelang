@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { CONTACT_EMAIL } from '@/lib/site'
 
 // 문의 폼 데이터 스키마
 const contactSchema = z.object({
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     // 이메일 내용 구성
     const mailOptions = {
       from: `"희랑 갤러리 문의" <${process.env.SMTP_USER}>`,
-      to: 'heelang@orientalcalligraphy.org',
+      to: CONTACT_EMAIL,
       subject: `[희랑 갤러리 문의] ${parsed.subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">

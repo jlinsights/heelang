@@ -9,3 +9,6 @@ export const SITE_TITLE_TEMPLATE = `%s | ${SITE_NAME}`
 
 export const SITE_DESCRIPTION =
   '서예가 희랑 공경순(熙勆 孔慶順)의 공식 포트폴리오. 작품을 자르지 않은 원래 비율로 감상하고, 작가 이력과 작품 문의 방법을 확인하세요.'
+
+// 작가 문의 이메일. 문의 페이지에 보이는 주소와 문의 폼이 보내는 주소가 같아야 한다.
+export const CONTACT_EMAIL = 'hrks.417@gmail.com'

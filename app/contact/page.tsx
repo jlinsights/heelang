@@ -4,6 +4,7 @@ import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { CONTACT_EMAIL } from '@/lib/site'
 import { Loader2, Send } from 'lucide-react'
 import { useState } from 'react'
 
@@ -59,7 +60,11 @@ export default function ContactPage() {
         .catch(() => ({}))
 
       if (response.ok) {
-        setStatus({ ok: true, message: '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.' })
+        setStatus({
+          ok: true,
+          message:
+            '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.',
+        })
 
         // 폼 초기화
         setFormData({
@@ -115,10 +120,10 @@ export default function ContactPage() {
                 <dt className='text-muted-foreground'>이메일</dt>
                 <dd>
                   <a
-                    href='mailto:heelang@orientalcalligraphy.org'
+                    href={`mailto:${CONTACT_EMAIL}`}
                     className='break-all text-foreground underline-offset-4 hover:underline focus-art'
                   >
-                    heelang@orientalcalligraphy.org
+                    {CONTACT_EMAIL}
                   </a>
                 </dd>
               </div>
@@ -136,8 +141,8 @@ export default function ContactPage() {
               <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
                 <dt className='text-muted-foreground'>주소</dt>
                 <dd className='text-foreground'>
-                  〶10068 경기 김포시 김포한강8로 173-88, 611동 602호
-                  (마산동, 한강신도시 동일스위트 더파크뷰 1단지)
+                  〶10068 경기 김포시 김포한강8로 173-88, 611동 602호 (마산동,
+                  한강신도시 동일스위트 더파크뷰 1단지)
                 </dd>
               </div>
               <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
@@ -159,58 +164,16 @@ export default function ContactPage() {
               <span aria-hidden='true'>*</span> 표시는 꼭 적어 주세요.
             </p>
             <div className='mt-6'>
-                <form onSubmit={handleSubmit} className='space-y-6'>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='name'>이름 *</Label>
-                      <Input
-                        id='name'
-                        name='name'
-                        type='text'
-                        placeholder='이름을 입력해주세요'
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        disabled={isSubmitting}
-                      />
-                    </div>
-
-                    <div className='space-y-2'>
-                      <Label htmlFor='phone'>전화번호</Label>
-                      <Input
-                        id='phone'
-                        name='phone'
-                        type='tel'
-                        placeholder='전화번호를 입력해주세요'
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        disabled={isSubmitting}
-                      />
-                    </div>
-                  </div>
-
+              <form onSubmit={handleSubmit} className='space-y-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div className='space-y-2'>
-                    <Label htmlFor='email'>이메일 *</Label>
+                    <Label htmlFor='name'>이름 *</Label>
                     <Input
-                      id='email'
-                      name='email'
-                      type='email'
-                      placeholder='이메일을 입력해주세요'
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </div>
-
-                  <div className='space-y-2'>
-                    <Label htmlFor='subject'>제목 *</Label>
-                    <Input
-                      id='subject'
-                      name='subject'
+                      id='name'
+                      name='name'
                       type='text'
-                      placeholder='문의 제목을 입력해주세요'
-                      value={formData.subject}
+                      placeholder='이름을 입력해주세요'
+                      value={formData.name}
                       onChange={handleInputChange}
                       required
                       disabled={isSubmitting}
@@ -218,53 +181,98 @@ export default function ContactPage() {
                   </div>
 
                   <div className='space-y-2'>
-                    <Label htmlFor='message'>문의 내용 *</Label>
-                    <Textarea
-                      id='message'
-                      name='message'
-                      placeholder='문의 내용을 자세히 입력해주세요'
-                      value={formData.message}
+                    <Label htmlFor='phone'>전화번호</Label>
+                    <Input
+                      id='phone'
+                      name='phone'
+                      type='tel'
+                      placeholder='전화번호를 입력해주세요'
+                      value={formData.phone}
                       onChange={handleInputChange}
-                      rows={6}
-                      required
                       disabled={isSubmitting}
                     />
                   </div>
+                </div>
 
-                  <button
-                    type='submit'
+                <div className='space-y-2'>
+                  <Label htmlFor='email'>이메일 *</Label>
+                  <Input
+                    id='email'
+                    name='email'
+                    type='email'
+                    placeholder='이메일을 입력해주세요'
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
                     disabled={isSubmitting}
-                    className='inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50 focus-art sm:w-auto'
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className='h-4 w-4 animate-spin' aria-hidden='true' />
-                        전송 중...
-                      </>
-                    ) : (
-                      <>
-                        문의 보내기
-                        <Send className='h-4 w-4' aria-hidden='true' />
-                      </>
-                    )}
-                  </button>
-                  <p
-                    role='status'
-                    aria-live='polite'
-                    className='min-h-[1.5rem] text-sm text-foreground'
-                  >
-                    {status && (
-                      <>
-                        <span
-                          aria-hidden='true'
-                          className={`mr-2 inline-block h-2 w-2 rounded-full align-middle ${status.ok ? 'bg-gold' : 'bg-foreground'}`}
-                        />
-                        {status.ok ? '' : '전송 실패 — '}
-                        {status.message}
-                      </>
-                    )}
-                  </p>
-                </form>
+                  />
+                </div>
+
+                <div className='space-y-2'>
+                  <Label htmlFor='subject'>제목 *</Label>
+                  <Input
+                    id='subject'
+                    name='subject'
+                    type='text'
+                    placeholder='문의 제목을 입력해주세요'
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div className='space-y-2'>
+                  <Label htmlFor='message'>문의 내용 *</Label>
+                  <Textarea
+                    id='message'
+                    name='message'
+                    placeholder='문의 내용을 자세히 입력해주세요'
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    rows={6}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className='inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50 focus-art sm:w-auto'
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2
+                        className='h-4 w-4 animate-spin'
+                        aria-hidden='true'
+                      />
+                      전송 중...
+                    </>
+                  ) : (
+                    <>
+                      문의 보내기
+                      <Send className='h-4 w-4' aria-hidden='true' />
+                    </>
+                  )}
+                </button>
+                <p
+                  role='status'
+                  aria-live='polite'
+                  className='min-h-[1.5rem] text-sm text-foreground'
+                >
+                  {status && (
+                    <>
+                      <span
+                        aria-hidden='true'
+                        className={`mr-2 inline-block h-2 w-2 rounded-full align-middle ${status.ok ? 'bg-gold' : 'bg-foreground'}`}
+                      />
+                      {status.ok ? '' : '전송 실패 — '}
+                      {status.message}
+                    </>
+                  )}
+                </p>
+              </form>
             </div>
           </section>
         </div>

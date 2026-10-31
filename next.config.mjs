@@ -53,19 +53,8 @@ const nextConfig = {
       };
     }
 
-    config.optimization = {
-      ...config.optimization,
-      splitChunks: {
-        chunks: "all",
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: "vendors",
-            chunks: "all",
-          },
-        },
-      },
-    };
+    // splitChunks 는 Next 기본값을 쓴다. 예전의 node_modules 전체 vendors 그룹은
+    // CSS 까지 JS 청크로 묶어 모든 페이지에 <script src="….css"> 를 박았다.
 
     if (!isServer) {
       config.resolve.fallback = {

@@ -1,13 +1,10 @@
 'use client'
 
 import { ArtNavigation, NavigationSpacer } from '@/components/art-navigation'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/hooks/use-toast'
-import { Clock, Loader2, Mail, MapPin, Phone, Send } from 'lucide-react'
+import { Loader2, Send } from 'lucide-react'
 import { useState } from 'react'
 
 interface ContactFormData {
@@ -19,8 +16,11 @@ interface ContactFormData {
 }
 
 export default function ContactPage() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // 토스트를 띄울 Toaster 가 없어 결과가 보이지 않았다 → 폼 아래에 직접 알린다
+  const [status, setStatus] = useState<{ ok: boolean; message: string } | null>(
+    null
+  )
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -42,6 +42,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setStatus(null)
 
     try {
       const response = await fetch('/api/contact', {
@@ -55,12 +56,7 @@ export default function ContactPage() {
       const result = await response.json()
 
       if (result.success) {
-        toast({
-          title: '문의 전송 완료',
-          description:
-            '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.',
-          duration: 5000,
-        })
+        setStatus({ ok: true, message: '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.' })
 
         // 폼 초기화
         setFormData({
@@ -71,20 +67,16 @@ export default function ContactPage() {
           message: '',
         })
       } else {
-        toast({
-          title: '전송 실패',
-          description: result.message || '문의 전송 중 오류가 발생했습니다.',
-          variant: 'destructive',
-          duration: 5000,
+        setStatus({
+          ok: false,
+          message: result.message || '문의 전송 중 오류가 발생했습니다.',
         })
       }
     } catch (error) {
       console.error('Form submission error:', error)
-      toast({
-        title: '전송 실패',
-        description: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-        variant: 'destructive',
-        duration: 5000,
+      setStatus({
+        ok: false,
+        message: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
       })
     } finally {
       setIsSubmitting(false)
@@ -96,81 +88,74 @@ export default function ContactPage() {
       <ArtNavigation />
       <NavigationSpacer />
 
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-6xl mx-auto'>
-          {/* 페이지 헤더 */}
-          <div className='text-center mb-12'>
-            <h1 className='text-4xl text-foreground mb-4'>
+      <main className='container-art pb-24 pt-10 md:pt-16'>
+        <header className='mb-10 md:mb-14 flex flex-col gap-3 md:flex-row md:items-end md:justify-between'>
+          <div>
+            <p className='text-eyebrow'>Contact</p>
+            <h1 className='mt-3 font-display text-4xl md:text-6xl text-foreground'>
               문의하기
             </h1>
-            <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
-              작품 구매, 전시 관련 문의, 기타 궁금한 사항이 있으시면 언제든지
-              연락해 주세요.
-            </p>
           </div>
+          <p className='max-w-md text-sm md:text-base text-muted-foreground'>
+            작품 구매, 전시 관련 문의, 기타 궁금한 사항이 있으시면 언제든지
+            연락해 주세요.
+          </p>
+        </header>
 
-          <div className='grid lg:grid-cols-2 gap-8'>
-            {/* 연락처 정보 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                  <Mail className='w-5 h-5 text-primary' />
-                  연락처 정보
-                </CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-6'>
-                <div className='flex items-start gap-3'>
-                  <Mail className='w-5 h-5 text-primary mt-1' />
-                  <div>
-                    <p className='font-medium'>이메일</p>
-                    <p className='text-muted-foreground'>
-                      heelang@orientalcalligraphy.org
-                    </p>
-                  </div>
-                </div>
+        <div className='grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-16'>
+          <section aria-labelledby='contact-info-title'>
+            <h2 id='contact-info-title' className='text-eyebrow-ko'>
+              연락처
+            </h2>
+            <dl className='mt-4 divide-y divide-border border-y border-border text-sm'>
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>이메일</dt>
+                <dd>
+                  <a
+                    href='mailto:heelang@orientalcalligraphy.org'
+                    className='break-all text-foreground underline-offset-4 hover:underline focus-art'
+                  >
+                    heelang@orientalcalligraphy.org
+                  </a>
+                </dd>
+              </div>
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>전화</dt>
+                <dd className='tabular-nums'>
+                  <a
+                    href='tel:010-3019-1417'
+                    className='text-foreground underline-offset-4 hover:underline focus-art'
+                  >
+                    010-3019-1417
+                  </a>
+                </dd>
+              </div>
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>주소</dt>
+                <dd className='text-foreground'>
+                  〶10068 경기 김포시 김포한강8로 173-88, 611동 602호
+                  (마산동, 한강신도시 동일스위트 더파크뷰 1단지)
+                </dd>
+              </div>
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>운영 시간</dt>
+                <dd className='text-foreground tabular-nums'>
+                  월–금 10:00 – 18:00
+                  <br />
+                  토–일 10:00 – 17:00
+                </dd>
+              </div>
+            </dl>
+          </section>
 
-                <div className='flex items-start gap-3'>
-                  <Phone className='w-5 h-5 text-primary mt-1' />
-                  <div>
-                    <p className='font-medium'>전화번호</p>
-                    <p className='text-muted-foreground'>010-6877-0406</p>
-                  </div>
-                </div>
-
-                <div className='flex items-start gap-3'>
-                  <MapPin className='w-5 h-5 text-primary mt-1' />
-                  <div>
-                    <p className='font-medium'>주소</p>
-                    <p className='text-muted-foreground'>
-                      〶10068 경기 김포시 김포한강8로 173-88, 611동 602호
-                      (마산동, 한강신도시 동일스위트 더파크뷰 1단지)
-                    </p>
-                  </div>
-                </div>
-
-                <div className='flex items-start gap-3'>
-                  <Clock className='w-5 h-5 text-primary mt-1' />
-                  <div>
-                    <p className='font-medium'>운영시간</p>
-                    <p className='text-muted-foreground'>
-                      월-금: 10:00 - 18:00
-                      <br />
-                      토-일: 10:00 - 17:00
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 문의 폼 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                  <Send className='w-5 h-5 text-primary' />
-                  문의 사항 입력 후 전송하기
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          <section aria-labelledby='contact-form-title'>
+            <h2 id='contact-form-title' className='text-eyebrow-ko'>
+              문의 보내기
+            </h2>
+            <p className='mt-2 text-sm text-muted-foreground'>
+              <span aria-hidden='true'>*</span> 표시는 꼭 적어 주세요.
+            </p>
+            <div className='mt-6'>
                 <form onSubmit={handleSubmit} className='space-y-6'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div className='space-y-2'>
@@ -243,29 +228,44 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <Button
+                  <button
                     type='submit'
-                    className='w-full'
                     disabled={isSubmitting}
+                    className='inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50 focus-art sm:w-auto'
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                        <Loader2 className='h-4 w-4 animate-spin' aria-hidden='true' />
                         전송 중...
                       </>
                     ) : (
                       <>
-                        <Send className='w-4 h-4 mr-2' />
                         문의 보내기
+                        <Send className='h-4 w-4' aria-hidden='true' />
                       </>
                     )}
-                  </Button>
+                  </button>
+                  <p
+                    role='status'
+                    aria-live='polite'
+                    className='min-h-[1.5rem] text-sm text-foreground'
+                  >
+                    {status && (
+                      <>
+                        <span
+                          aria-hidden='true'
+                          className={`mr-2 inline-block h-2 w-2 rounded-full align-middle ${status.ok ? 'bg-gold' : 'bg-foreground'}`}
+                        />
+                        {status.ok ? '' : '전송 실패 — '}
+                        {status.message}
+                      </>
+                    )}
+                  </p>
                 </form>
-              </CardContent>
-            </Card>
-          </div>
+            </div>
+          </section>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

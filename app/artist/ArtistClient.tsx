@@ -10,6 +10,44 @@ interface ArtistClientProps {
   artist: Artist
 }
 
+/** '@id', 'id', 'https://instagram.com/id/' 어느 형태로 와도 계정 이름만 뽑는다. */
+function instagramHandle(value: string): string {
+  return value
+    .trim()
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+    .replace(/^@/, '')
+    .replace(/[/?#].*$/, '')
+}
+
+/** 빈 줄로 문단을 나누고, '* ' 로 시작하는 줄은 목록으로 묶는다. */
+function BioText({ text }: { text: string }) {
+  const blocks = text.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean)
+  return (
+    <div className='space-y-4 text-foreground/85 leading-relaxed'>
+      {blocks.map((block, index) => {
+        const lines = block.split('\n').map(line => line.trim())
+        if (lines.every(line => /^[*•-]\s+/.test(line))) {
+          return (
+            <ul key={index} className='space-y-1'>
+              {lines.map(line => (
+                <li key={line} className='flex gap-3'>
+                  <span aria-hidden='true' className='mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-gold' />
+                  {line.replace(/^[*•-]\s+/, '')}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        return (
+          <p key={index} className='whitespace-pre-line'>
+            {block}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function ArtistClient({ artist }: ArtistClientProps) {
   const renderSection = (
     title: string,
@@ -20,11 +58,11 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
 
     return (
       <section className='grid gap-3 border-t border-border py-6 md:grid-cols-[10rem_1fr] md:gap-8'>
-        <h3 className='text-lg font-medium text-foreground'>{title}</h3>
+        <h3 className='font-display text-lg text-foreground'>{title}</h3>
         {Array.isArray(content) ? (
           <ul className='space-y-2'>
             {content.map((item, index) => (
-              <li key={index} className='text-muted-foreground leading-relaxed'>
+              <li key={index} className='text-muted-foreground leading-relaxed tabular-nums'>
                 {item}
               </li>
             ))}
@@ -43,14 +81,13 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
       <ArtNavigation />
       <NavigationSpacer />
 
-      <div className='container-art py-8 md:py-12'>
-        {/* 페이지 헤더 */}
-        <div className='mb-12 text-center md:mb-16'>
-          <h1 className='font-display text-4xl md:text-5xl text-foreground'>
+      <main className='container-art pb-24 pt-10 md:pt-16'>
+        <header className='mb-10 md:mb-14'>
+          <p className='text-eyebrow'>Artist</p>
+          <h1 className='mt-3 font-display text-4xl md:text-6xl text-foreground'>
             작가 소개
           </h1>
-          <div className='mx-auto mt-6 h-px w-16 bg-gold' />
-        </div>
+        </header>
 
         {/* 메인 콘텐츠 */}
         <div className='grid items-start gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16'>
@@ -85,15 +122,13 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                   <div className='flex items-center gap-2'>
                     <Instagram className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
                     <Link
-                      href={`https://instagram.com/${artist.socialLinks.instagram.replace(
-                        '@',
-                        ''
-                      )}`}
+                      href={`https://instagram.com/${instagramHandle(artist.socialLinks.instagram)}`}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-art'
+                      className='text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-art'
                     >
-                      {artist.socialLinks.instagram}
+                      @{instagramHandle(artist.socialLinks.instagram)}
+                      <span className='sr-only'> (인스타그램, 새 창)</span>
                     </Link>
                   </div>
                 )}
@@ -103,7 +138,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                     <Mail className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
                     <Link
                       href={`mailto:${artist.email}`}
-                      className='text-base text-muted-foreground hover:underline'
+                      className='text-base text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'
                     >
                       {artist.email}
                     </Link>
@@ -115,7 +150,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
                     <Phone className='h-5 w-5 text-muted-foreground' aria-hidden='true' />
                     <Link
                       href={`tel:${artist.phone}`}
-                      className='text-base text-muted-foreground hover:underline'
+                      className='text-base text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'
                     >
                       {artist.phone}
                     </Link>
@@ -126,16 +161,14 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
             {/* 작가 소개 */}
             {artist.bio && (
               <div className='border-t border-border pt-6'>
-                <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
-                  {artist.bio}
-                </p>
+                <BioText text={artist.bio} />
               </div>
             )}
 
             {/* 작품 철학 */}
             {artist.philosophy && (
               <div className='border-t border-border pt-6'>
-                <h3 className='mb-3 text-lg font-medium text-foreground'>
+                <h3 className='mb-3 font-display text-lg text-foreground'>
                   작품 철학
                 </h3>
                 <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
@@ -147,7 +180,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
             {/* 경력 */}
             {artist.statement && (
               <div className='border-t border-border pt-6'>
-                <h3 className='mb-3 text-lg font-medium text-foreground'>
+                <h3 className='mb-3 font-display text-lg text-foreground'>
                   작가 노트
                 </h3>
                 <p className='text-muted-foreground leading-relaxed whitespace-pre-wrap'>
@@ -181,7 +214,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
           {/* 컬렉션 */}
           {renderSection('컬렉션', artist.collections)}
         </div>
-      </div>
+      </main>
     </div>
   )
 }

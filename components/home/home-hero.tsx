@@ -1,6 +1,7 @@
 'use client'
 
 import { useImageRatio } from '@/components/artwork/use-image-ratio'
+import { ARTIST_PROFILE } from '@/lib/artist-profile'
 import { ratioFromArtwork } from '@/lib/gallery/ordering'
 import type { Artwork } from '@/lib/types'
 import { ArrowDown, ArrowRight } from 'lucide-react'
@@ -46,35 +47,33 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
       <div className='container-art grid min-h-[calc(100svh-4rem)] items-center gap-12 py-16 md:grid-cols-[1.1fr_1fr] md:gap-16 md:py-24'>
         <div className='text-center md:text-left'>
           <p className='text-eyebrow-ko'>
-            {EXHIBITION.artist} 개인전
+            현대 서예
             <span aria-hidden='true' className='mx-2'>
               ·
             </span>
             <span className='text-eyebrow'>Contemporary Calligraphy</span>
           </p>
 
+          {/* 사이트에 하나뿐인 Display 표제 (DESIGN.md). 이름 여섯 글자가 320px 에서도
+              넘치지 않도록 전시 제목 두 글자일 때보다 크기·자간을 줄였다. */}
           <h1
             id='hero-title'
-            className='mt-8 font-display font-bold leading-none tracking-[0.08em] text-foreground text-[clamp(4.5rem,14vw,10rem)]'
+            className='mt-8 font-display font-bold leading-[1.05] tracking-[0.04em] text-foreground text-[clamp(3rem,11vw,6.5rem)]'
           >
-            {EXHIBITION.title}{' '}
-            <span lang='zh-Hant' className='text-ink-light'>
-              {EXHIBITION.hanja}
+            {ARTIST_PROFILE.name}
+            <span
+              lang='zh-Hant'
+              className='mt-4 block text-[0.32em] font-normal tracking-[0.12em] text-ink-light'
+            >
+              {ARTIST_PROFILE.hanja}
             </span>
           </h1>
-          <div className='mx-auto mt-6 h-px w-16 bg-gold md:mx-0' />
-          <p className='mt-6 font-display text-2xl tracking-[0.4em] text-foreground/80 md:text-3xl'>
-            {EXHIBITION.english}
+          <div className='mx-auto mt-8 h-px w-16 bg-gold md:mx-0' />
+          <p className='mx-auto mt-6 max-w-sm text-lg leading-relaxed text-muted-foreground md:mx-0'>
+            {ARTIST_PROFILE.tagline}
           </p>
 
-          <dl className='mx-auto mt-10 grid max-w-sm grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-left text-sm tabular-nums md:mx-0'>
-            <dt className='text-muted-foreground'>기간</dt>
-            <dd className='text-foreground'>{EXHIBITION.period}</dd>
-            <dt className='text-muted-foreground'>장소</dt>
-            <dd className='text-foreground'>{EXHIBITION.venue}</dd>
-          </dl>
-
-          <div className='mt-10 flex flex-col items-center gap-4 sm:flex-row md:items-start'>
+          <div className='mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:justify-start'>
             <Link
               href='/gallery'
               className='inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85 focus-art'
@@ -83,10 +82,10 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
               <ArrowRight className='h-4 w-4' aria-hidden='true' />
             </Link>
             <Link
-              href='/exhibitions/gil'
+              href='/artist'
               className='text-sm text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
             >
-              전시 안내
+              작가 소개
             </Link>
           </div>
         </div>

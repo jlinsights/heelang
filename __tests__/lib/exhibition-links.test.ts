@@ -39,10 +39,8 @@ describe('전시 페이지 주소', () => {
     expect(read('lib/constants.ts')).toMatch(/href: '\/exhibitions' \}/)
   })
 
-  it('홈의 전시 안내 링크는 2025 개인전 기록으로 간다', () => {
-    expect(read('components/home/home-hero.tsx')).toMatch(
-      /href='\/exhibitions\/gil'/
-    )
+  // 히어로는 작가가 주인공이라 전시 링크를 두지 않는다 — 홈 '전시' 섹션이 맡는다.
+  it('홈의 전시 섹션 링크는 2025 개인전 기록으로 간다', () => {
     expect(read('components/home/home-sections.tsx')).toMatch(
       /href='\/exhibitions\/gil'/
     )

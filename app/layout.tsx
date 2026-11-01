@@ -249,7 +249,7 @@ export default function RootLayout({
           <footer className='bg-ink text-paper py-8'>
             <div className='container-art text-center'>
               <p className='text-responsive-sm text-paper/75'>
-                © 2025 The Asian Society of Calligraphic Arts (ASCA)
+                © {new Date().getFullYear()} {SITE_NAME}. 작품 이미지의 저작권은 작가에게 있습니다.
               </p>
             </div>
           </footer>

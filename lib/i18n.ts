@@ -139,7 +139,7 @@ export const translations: Record<Locale, Translation> = {
     },
     share: {
       title: '작품 공유하기',
-      description: '이 작품을 다른 사람들과 공유해보세요',
+      description: '이 작품을 다른 사람들과 공유해 보세요',
       socialMedia: '소셜 미디어',
       copyLink: '링크 복사',
       saveImage: '이미지 저장',

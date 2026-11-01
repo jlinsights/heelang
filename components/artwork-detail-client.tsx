@@ -9,53 +9,67 @@ interface ArtworkDetailClientProps {
   slug: string
 }
 
+type CopyStatus = 'idle' | 'copied' | 'failed'
+
+// 공유 결과는 브라우저 대화상자(alert) 대신 버튼 옆 문구로 알린다 (COPY.md).
+const STATUS_TEXT: Record<CopyStatus, string> = {
+  idle: '',
+  copied: '링크를 복사했습니다.',
+  failed: '링크를 복사하지 못했습니다. 주소창의 주소를 복사해 주세요.',
+}
+
 export function ArtworkDetailClient({ title, slug }: ArtworkDetailClientProps) {
   const [mounted, setMounted] = useState(false)
+  const [status, setStatus] = useState<CopyStatus>('idle')
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  const copyLink = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url)
+      setStatus('copied')
+    } catch {
+      setStatus('failed')
+    }
+  }
+
   const handleShare = async () => {
     const shareData = {
       title: `${title} - 희랑 공경순`,
-      text: `희랑 공경순 작가의 작품 "${title}"을 감상해보세요.`,
+      text: `희랑 공경순 작가의 작품 「${title}」을 감상해 보세요.`,
       url: `${window.location.origin}/gallery/${slug}`,
     }
 
+    if (!navigator.share) {
+      await copyLink(shareData.url)
+      return
+    }
+
     try {
-      if (navigator.share && mounted) {
-        await navigator.share(shareData)
-      } else {
-        // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(shareData.url)
-        alert('링크가 클립보드에 복사되었습니다!')
-      }
+      await navigator.share(shareData)
     } catch (error) {
-      console.error('공유 실패:', error)
-      // Fallback: copy to clipboard
-      try {
-        await navigator.clipboard.writeText(shareData.url)
-        alert('링크가 클립보드에 복사되었습니다!')
-      } catch (clipboardError) {
-        console.error('클립보드 복사 실패:', clipboardError)
-      }
+      // 사용자가 공유 창을 닫은 것은 실패가 아니다
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      await copyLink(shareData.url)
     }
   }
 
-  if (!mounted) {
-    return (
-      <Button variant='outline' size='sm' disabled>
-        <Share className='w-4 h-4 mr-2' />
+  return (
+    <span className='inline-flex flex-wrap items-center gap-3'>
+      <Button
+        variant='outline'
+        size='sm'
+        onClick={handleShare}
+        disabled={!mounted}
+      >
+        <Share className='w-4 h-4 mr-2' aria-hidden='true' />
         공유하기
       </Button>
-    )
-  }
-
-  return (
-    <Button variant='outline' size='sm' onClick={handleShare}>
-      <Share className='w-4 h-4 mr-2' />
-      공유하기
-    </Button>
+      <span role='status' className='text-sm text-muted-foreground'>
+        {STATUS_TEXT[status]}
+      </span>
+    </span>
   )
 }

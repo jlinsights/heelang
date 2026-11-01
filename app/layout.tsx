@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: '희랑 공경순' }],
   creator: '희랑 공경순',
-  publisher: 'The Asian Society of Calligraphic Arts (ASCA)',
+  publisher: '사단법인 동양서예협회',
   formatDetection: {
     email: false,
     address: false,
@@ -115,10 +115,10 @@ export default function RootLayout({
         <link rel='manifest' href='/manifest.json' />
 
         {/* PWA 메타 태그 */}
-        <meta name='application-name' content='묵향 서예전' />
+        <meta name='application-name' content={SITE_NAME} />
         <meta name='apple-mobile-web-app-capable' content='yes' />
         <meta name='apple-mobile-web-app-status-bar-style' content='default' />
-        <meta name='apple-mobile-web-app-title' content='묵향 서예전' />
+        <meta name='apple-mobile-web-app-title' content={SITE_NAME} />
         <meta name='mobile-web-app-capable' content='yes' />
         <meta name='msapplication-config' content='/browserconfig.xml' />
         <meta name='msapplication-TileColor' content='#292524' />
@@ -185,14 +185,15 @@ export default function RootLayout({
                     },
                     organizer: {
                       '@type': 'Organization',
-                      name: 'The Asian Society of Calligraphic Arts (ASCA)',
-                      url: 'https://heelang.orientalcalligraphy.org',
+                      name: '사단법인 동양서예협회',
+                      alternateName:
+                        'The Asian Society of Calligraphic Arts (ASCA)',
+                      url: 'https://orientalcalligraphy.org',
                     },
                     performer: {
                       '@type': 'Person',
                       name: '희랑 공경순',
                       jobTitle: '서예가',
-                      description: '현대 서예의 새로운 지평을 여는 작가',
                     },
                     image:
                       'https://heelang.orientalcalligraphy.org/Images/Artworks/2025/heelang-way-2025-large.jpg',
@@ -206,7 +207,9 @@ export default function RootLayout({
                     inLanguage: 'ko-KR',
                     publisher: {
                       '@type': 'Organization',
-                      name: 'The Asian Society of Calligraphic Arts (ASCA)',
+                      name: '사단법인 동양서예협회',
+                      alternateName:
+                        'The Asian Society of Calligraphic Arts (ASCA)',
                     },
                   },
                   {
@@ -249,7 +252,8 @@ export default function RootLayout({
           <footer className='bg-ink text-paper py-8'>
             <div className='container-art text-center'>
               <p className='text-responsive-sm text-paper/75'>
-                © {new Date().getFullYear()} {SITE_NAME}. 작품 이미지의 저작권은 작가에게 있습니다.
+                © {new Date().getFullYear()} {SITE_NAME}. 작품 이미지의 저작권은
+                작가에게 있습니다.
               </p>
             </div>
           </footer>

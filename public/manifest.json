@@ -1,7 +1,7 @@
 {
-  "name": "희랑 공경순 개인전 - 길",
-  "short_name": "길",
-  "description": "희랑 공경순 작가의 '길' 전시 - 인생의 여정을 담은 현대 서예 작품 온라인 갤러리",
+  "name": "희랑 공경순",
+  "short_name": "희랑",
+  "description": "서예가 희랑 공경순의 공식 포트폴리오",
   "lang": "ko",
   "start_url": "/",
   "display": "standalone",

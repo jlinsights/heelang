@@ -4,11 +4,11 @@ import { CONTACT_EMAIL } from '@/lib/site'
 
 // 문의 폼 데이터 스키마
 const contactSchema = z.object({
-  name: z.string().min(1, '이름을 입력해주세요'),
-  email: z.string().email('유효한 이메일 주소를 입력해주세요'),
+  name: z.string().min(1, '이름을 입력해 주세요'),
+  email: z.string().email('유효한 이메일 주소를 입력해 주세요'),
   phone: z.string().optional(),
-  subject: z.string().min(1, '제목을 입력해주세요'),
-  message: z.string().min(1, '문의 내용을 입력해주세요'),
+  subject: z.string().min(1, '제목을 입력해 주세요'),
+  message: z.string().min(1, '문의 내용을 입력해 주세요'),
 })
 
 // 방문자 입력을 메일 HTML 에 넣기 전에 이스케이프한다(HTML 주입 방지)
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: '문의 전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' },
+      { error: '문의 전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' },
       { status: 500 }
     )
   }

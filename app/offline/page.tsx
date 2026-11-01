@@ -20,7 +20,7 @@ export default function OfflinePage() {
           <CardDescription className="text-ink/60">
             현재 오프라인 상태입니다.
             <br />
-            인터넷 연결을 확인한 후 다시 시도해주세요.
+            인터넷 연결을 확인한 후 다시 시도해 주세요.
           </CardDescription>
         </CardHeader>
         

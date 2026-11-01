@@ -16,6 +16,9 @@ const INVENTED = [
   '제주민속촌 미술관 소장',
   '김포시립미술관 소장',
   '동아미술제 특선',
+  // app/api/artist 폴백에 있던 지어낸 소개·이력 (2026-11-01 삭제)
+  '새로운 지평',
+  '개인전 다수',
 ]
 
 function sourceFiles(dir: string): string[] {

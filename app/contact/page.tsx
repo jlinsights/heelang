@@ -63,7 +63,7 @@ export default function ContactPage() {
         setStatus({
           ok: true,
           message:
-            '문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변드리겠습니다.',
+            '문의가 전송되었습니다. 남겨 주신 이메일로 답변드리겠습니다.',
         })
 
         // 폼 초기화
@@ -84,7 +84,7 @@ export default function ContactPage() {
       console.error('Form submission error:', error)
       setStatus({
         ok: false,
-        message: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        message: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
       })
     } finally {
       setIsSubmitting(false)
@@ -172,7 +172,7 @@ export default function ContactPage() {
                       id='name'
                       name='name'
                       type='text'
-                      placeholder='이름을 입력해주세요'
+                      placeholder='이름을 입력해 주세요'
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -186,7 +186,7 @@ export default function ContactPage() {
                       id='phone'
                       name='phone'
                       type='tel'
-                      placeholder='전화번호를 입력해주세요'
+                      placeholder='전화번호를 입력해 주세요'
                       value={formData.phone}
                       onChange={handleInputChange}
                       disabled={isSubmitting}
@@ -200,7 +200,7 @@ export default function ContactPage() {
                     id='email'
                     name='email'
                     type='email'
-                    placeholder='이메일을 입력해주세요'
+                    placeholder='이메일을 입력해 주세요'
                     value={formData.email}
                     onChange={handleInputChange}
                     required
@@ -214,7 +214,7 @@ export default function ContactPage() {
                     id='subject'
                     name='subject'
                     type='text'
-                    placeholder='문의 제목을 입력해주세요'
+                    placeholder='문의 제목을 입력해 주세요'
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
@@ -227,7 +227,7 @@ export default function ContactPage() {
                   <Textarea
                     id='message'
                     name='message'
-                    placeholder='문의 내용을 자세히 입력해주세요'
+                    placeholder='문의 내용을 자세히 입력해 주세요'
                     value={formData.message}
                     onChange={handleInputChange}
                     rows={6}

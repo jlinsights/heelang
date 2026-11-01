@@ -157,8 +157,8 @@ export default function GalleryClient({
             </h1>
           </div>
           <p className='max-w-md text-sm md:text-base text-muted-foreground'>
-            희랑 공경순 개인전 「길 道」 출품작과 문방사우 연작입니다. 작품은
-            원래 비율 그대로 보여 드립니다.
+            희랑 공경순의 서예 작품입니다. 작품은 원래 비율 그대로 보여
+            드립니다.
           </p>
         </header>
 

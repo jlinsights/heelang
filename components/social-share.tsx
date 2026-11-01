@@ -192,7 +192,7 @@ export function SocialShare({
 
       // 사용자에게 가이드 표시
       alert(
-        `📋 링크가 클립보드에 복사되었습니다!\n\nInstagram에서 새 게시물을 작성할 때 붙여넣기(Ctrl+V)로 링크를 추가해주세요.`
+        `📋 링크가 클립보드에 복사되었습니다!\n\nInstagram에서 새 게시물을 작성할 때 붙여넣기(Ctrl+V)로 링크를 추가해 주세요.`
       )
     }
   }
@@ -242,7 +242,7 @@ export function SocialShare({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title='작품 공유하기'
-        description='이 작품을 다른 사람들과 공유해보세요'
+        description='이 작품을 다른 사람들과 공유해 보세요'
         className='max-w-md'
       >
         <div className='space-y-6'>

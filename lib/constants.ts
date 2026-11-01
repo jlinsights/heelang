@@ -1,6 +1,6 @@
 // 앱 전체에서 사용하는 상수들
 export const APP_CONFIG = {
-  name: '묵향 서예전',
+  name: '희랑 공경순',
   nameEn: 'Calligraphy Catalog',
   description:
     '현대 서예가의 작품을 온라인으로 감상할 수 있는 다국어 지원 전시 카탈로그',

@@ -45,7 +45,7 @@ export default async function ArtistPage() {
           <h1 className='font-display text-2xl text-foreground mb-4'>
             작가 정보를 불러올 수 없습니다
           </h1>
-          <p className='text-muted-foreground'>잠시 후 다시 시도해주세요.</p>
+          <p className='text-muted-foreground'>잠시 후 다시 시도해 주세요.</p>
         </div>
       </div>
     )

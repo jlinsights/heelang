@@ -79,7 +79,7 @@ HEELANG/
 │   │   ├── page.tsx         # 전시 아카이브 — 연도별 이력(lib/exhibitions.ts)
 │   │   └── gil/             # 2025 개인전 「길 道」 기록 (옛 /exhibition 은 308 리다이렉트)
 │   ├── artist/ contact/ offline/
-│   └── layout.tsx
+│   └── layout.tsx           # 메타·구조화 데이터·푸터(저작권 문구)
 ├── components/
 │   ├── home/                # home-hero, home-sections(지난 전시 기록 등), use-featured-artworks
 │   ├── exhibitions/         # exhibitions-archive
@@ -112,7 +112,9 @@ HEELANG/
 2. **작품 폴백**: `lib/artworks.ts` 의 `fallbackArtworksData` — Airtable 을 못
    쓰면 사용
 3. **작가 정보는 폴백이 없다.** Airtable 이 없으면 `/artist` 는 "작가 정보를
-   불러올 수 없습니다" 를 보여 준다(Preview 배포가 그렇다 — 아래 배포 참조)
+   불러올 수 없습니다" 를 보여 준다(Preview 배포가 그렇다 — 아래 배포 참조).
+   `/api/artist` 도 같다 — 데이터가 없으면 503 을 돌려주고, 홈은 기본 작가
+   사진을 쓴다
 4. **전시 이력**: `Artist.exhibitions`(다중 선택, 한 줄 = "연도 | 구분 | 제목 |
    장소")를 `lib/exhibitions.ts` 가 파싱한다. Airtable 을 못 쓰면 같은 내용의
    사본 `EXHIBITIONS_SNAPSHOT` 을 쓴다. 기록 페이지가 있는 전시는
@@ -122,13 +124,34 @@ HEELANG/
 
 ⚠️ **작가 이력·소장처·활동지를 지어내지 말 것.** 예전 폴백 작가 데이터("먹의
 향기 - 갤러리 현대", 소장처 4곳, "서울에서 활동" 등)는 전부 가짜였고 삭제했다.
-`__tests__/lib/no-invented-artist-history.test.ts` 가 재유입을 막는다. 작가에 대한
+`/api/artist` 에 남아 있던 폴백("새로운 지평을 여는 작가", "개인전 다수" 등)도
+2026-11-01 에 지웠다. `__tests__/lib/no-invented-artist-history.test.ts` 가
+재유입을 막는다 — 지어낸 문구를 새로 찾으면 그 목록에 더한다. 작가에 대한
 문장은 Airtable 실데이터나 작가·관리자가 확인한 내용만 쓴다.
 
 ⚠️ **문의 이메일은 `lib/site.ts` 의 `CONTACT_EMAIL` 한곳에서만 정한다.** 문의
 페이지에 보이는 주소와 문의 폼(`app/api/contact/route.ts`)이 실제로 보내는
 주소가 같아야 한다(`__tests__/lib/contact-email.test.ts`). `/exhibitions/gil` 의
 연락처는 전시 당시 기록이라 따로 둔다.
+
+⚠️ **운영 문의 폼은 지금 메일을 보내지 못한다.** Vercel Production 에
+`SMTP_USER`·`SMTP_PASS` 가 없어 `/api/contact` 가 500 을 돌려준다(2026-11-01 실제
+제출로 확인). 고치려면 발신 Gmail 앱 비밀번호를 사람이 직접 등록해야 한다 —
+에이전트는 비밀번호를 다루지 않는다. 등록 전까지 실제 연락 수단은 문의
+페이지의 이메일·전화다.
+
+⚠️ **이름과 저작권 표기.** 사이트 이름·설치 앱 이름(`manifest.json`, layout 의
+`application-name`)은 `SITE_NAME`("희랑 공경순")이다. 푸터 저작권은
+"© {연도} 희랑 공경순. 작품 이미지의 저작권은 작가에게 있습니다." — 협회 이름을
+저작권자로 쓰지 않는다. 주최·발행 기관은 "사단법인 동양서예협회"(영문 ASCA 는
+구조화 데이터의 `alternateName`). `site-identity`·`footer-copyright`·`copy-rules`
+테스트가 지킨다.
+
+⚠️ **화면 문구를 바꾸면 `COPY.md` 표도 같이 고친다.** 보조용언은 띄어 쓴다
+(`…해 주세요`, `…해 보세요` — `copy-rules.test.ts` 가 `app/`·`components/` 에서
+붙여 쓴 형태를 막는다). 사용자에게 알릴 때 `alert()` 를 쓰지 않고 화면 안
+`role="status"` 문구로 보여 준다. 문구를 단언하는 테스트(`contact-page.test.tsx`
+등)는 바뀐 문구로 함께 고친다.
 
 ⚠️ **서버 컴포넌트에서 자기 `/api/*` 를 HTTP 로 부르지 말 것.** 빌드 시점엔
 서버가 없어 빈 목록이 정적 HTML 에 박힌다. 갤러리가 이 때문에 폴백 → 실데이터로
@@ -194,6 +217,7 @@ REVALIDATE_SECRET=your_secret
 
 # 문의 폼 메일 발송 (app/api/contact/route.ts, nodemailer)
 # 받는 주소는 환경 변수가 아니라 lib/site.ts 의 CONTACT_EMAIL
+# ⚠️ Production 에 아직 없음 → 문의 폼 500 (위 '데이터' 절 참조)
 SMTP_HOST=smtp.gmail.com   # 기본값
 SMTP_PORT=587              # 기본값
 SMTP_USER=your_smtp_user
@@ -203,7 +227,12 @@ SMTP_PASS=your_smtp_password
 ## 테스트
 
 - Jest + Testing Library, `__tests__/` 와 `*.test.tsx`
-- 커버리지 목표: `jest.config.js` 의 threshold 참조
+- 커버리지 목표: `jest.config.js` 의 threshold 참조. 전체 커버리지가 원래부터
+  임계값에 못 미쳐 `npm run test:ci`(`--coverage`)는 실패한다 — 회귀 확인은
+  `npm run test` 로 하고, 커버리지 실패를 내 변경 탓으로 읽지 않는다
+- 문구·경로 규칙 테스트 다수는 소스 파일을 읽어 문자열을 확인한다. 포매터가 긴
+  줄을 나누므로 여러 단어 문구는 공백을 하나로 모아 비교한다
+  (`footer-copyright.test.ts` 참조)
 - Airtable 호출은 mock
 - E2E·시각 회귀 테스트는 아직 없다. 레이아웃 변경은 실제 브라우저로 320·768·
   1024·1440 폭에서 가로 넘침과 CLS(layout-shift `sources`)를 확인한다.

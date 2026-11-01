@@ -18,10 +18,10 @@ colors:
 typography:
   display:
     fontFamily: "Noto Serif KR, serif"
-    fontSize: "clamp(4.5rem, 14vw, 10rem)"
+    fontSize: "clamp(3rem, 11vw, 6.5rem)"
     fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "0.08em"
+    lineHeight: 1.05
+    letterSpacing: "0.04em"
   headline:
     fontFamily: "Noto Serif KR, serif"
     fontSize: "3rem"
@@ -124,8 +124,7 @@ components:
 
 따뜻한 먹(sumi)과 한지 위에 인장 같은 금빛 하나. 무채색은 모두 같은 따뜻한
 축(색상각 약 25–40°, 채도 낮음)에 있어 작품이 놓인 한지와 이어진다. 값은
-`app/globals.css` 의 HSL 토큰이 원본이며(ASCA Ink System 동기화 시 이 토큰을
-다시 매핑한다), 시맨틱 토큰(`background`, `foreground`, `muted`, `border`,
+`app/globals.css` 의 HSL 토큰이 원본이며, 시맨틱 토큰(`background`, `foreground`, `muted`, `border`,
 `ink`, `gold`)으로만 쓴다.
 
 ### Primary
@@ -176,8 +175,11 @@ components:
 본문을 조용히 받친다. 같은 Noto 계열이라 한글 자형의 골격이 맞는다.
 
 ### Hierarchy
-- **Display** (700, clamp(4.5rem, 14vw, 10rem), 1): 전시 제목 「길 道」처럼
-  사이트 전체에 하나뿐인 표제. 글자 사이를 0.08em 벌려 두 글자를 따로 세운다.
+- **Display** (700, clamp(3rem, 11vw, 6.5rem), 1.05, 0.04em): 홈 히어로의
+  작가 이름 "희랑 공경순". 사이트 전체에 하나뿐인 표제다. 이름 여섯 글자가
+  320px 에서도 한 줄에 들어가도록 크기와 자간을 잡았다. 바로 아래 한자 이름
+  "熙勆 孔慶順"은 같은 `h1` 안의 둘째 줄로, 0.32em·400·자간 0.12em·
+  `ink-light` 로 작게 둔다(`lang="zh-Hant"`).
 - **Headline** (400, 3rem / 모바일 1.875rem, 1.3): 섹션 제목(대표 작품, 작가,
   전시)과 페이지 제목. 굵게 쓰지 않는다.
 - **Title** (400, 1.875rem → md 3rem, 1.25): 작품 상세의 작품명.
@@ -249,11 +251,13 @@ UI 는 평평하다. 내비게이션은 반투명 흰 면 + 흐림(backdrop-blur
 조용하고 단단하다. 하나의 주 행동만 먹색 알약으로 둔다.
 - **Shape:** 알약(9999px).
 - **Primary:** 먹색 배경, 흰 글자, 14px 500, 위아래 12px 좌우 24px.
-  "작품 보기", "작품 문의하기".
+  "작품 보기"(홈 히어로), "작품 문의하기"(작품 상세).
 - **Hover / Focus:** hover 는 불투명도 85%. 포커스는 먹색 2px 링 + 배경색
   간격(`focus-art`).
-- **Quiet:** 회색 글자 링크 + 화살표("전시 안내", "작가 소개 더보기").
-  hover 에서 먹색, 화살표가 2px 오른쪽으로.
+- **Quiet:** 회색 글자 링크(+ 섹션 링크는 화살표). "작가 소개"(히어로),
+  "전체 작품 보기", "작가 소개 더보기", "전시 기록 보기", "모든 전시".
+  hover 에서 먹색 + 금빛 밑줄, 화살표가 2px 오른쪽으로.
+- 문구는 [COPY.md](COPY.md) 의 행동 문구 표를 따른다.
 
 ### Chips
 - **Style:** 가는 회색 테두리, 회색 글자, 14px, 알약. 옆에 숫자(작품 수)를
@@ -267,7 +271,8 @@ UI 는 평평하다. 내비게이션은 반투명 흰 면 + 흐림(backdrop-blur
 
 ### Navigation
 - **Style:** 상단 고정, 반투명 흰 면 + 흐림 + 가는 아래선. 왼쪽 로고, 오른쪽
-  메뉴 5개(홈·갤러리·작가·전시·문의) + 테마 토글.
+  메뉴 5개(홈 `/`·갤러리 `/gallery`·작가 `/artist`·전시 `/exhibitions`·
+  문의 `/contact`) + 테마 토글. 메뉴 정의는 `components/art-navigation.tsx`.
 - **States:** 기본 회색 글자, hover·활성은 먹색 글자 + 옅은 종이 배경.
 - **Mobile:** 메뉴 버튼 → 오른쪽에서 열리는 시트(320px).
 
@@ -282,7 +287,15 @@ Esc 로 닫고, 포커스를 가두고, 닫으면 원래 자리로 포커스를 
 
 ### Caption Table
 작품 상세의 정보 표(제작 연도, 크기, 재료 등). 왼쪽 회색 라벨, 오른쪽 먹색
-값, 숫자는 같은 폭 숫자(`tabular-nums`).
+값, 숫자는 같은 폭 숫자(`tabular-nums`). 홈 '전시' 섹션과
+`/exhibitions/gil` 의 전시 정보(기간·장소·주최)도 같은 표 형식이다.
+
+### Exhibition Archive
+`/exhibitions` 의 연도별 전시 이력(`components/exhibitions/exhibitions-archive.tsx`).
+연도를 명조 머리로 두고(md 이상 왼쪽 10rem 칸) 오른쪽에 전시를 가는
+구분선으로 나눈 줄로 쌓는다. 한 줄은 전시 제목 + 회색 보조 줄. 기록 페이지가
+있는 전시만 줄 전체가 링크가 되고 금빛 밑줄 "전시 기록 보기"와 화살표를 단다
+(`EXHIBITION_PAGES`). 카드나 썸네일은 쓰지 않는다.
 
 ## Do's and Don'ts
 

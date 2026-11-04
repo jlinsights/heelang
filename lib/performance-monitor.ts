@@ -5,7 +5,7 @@
  * - 사용자 경험 품질 지표 추적
  */
 
-import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from 'web-vitals'
+import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals'
 
 // 성능 메트릭 타입 정의
 export interface PerformanceMetrics {
@@ -442,7 +442,7 @@ export class PerformanceMonitor {
       }).catch(() => {
         // 에러 발생 시 무시
       })
-    } catch (error) {
+    } catch {
       // 에러 발생 시 무시
     }
   }

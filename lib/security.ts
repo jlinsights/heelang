@@ -42,7 +42,7 @@ export function generateCSPHeader(isDev = false) {
 
   // CSP 문자열 생성
   return Object.entries(cspDirectives)
-    .filter(([_, values]) => values.length > 0)
+    .filter(([, values]) => values.length > 0)
     .map(([directive, values]) => `${directive} ${values.join(' ')}`)
     .join('; ')
 }

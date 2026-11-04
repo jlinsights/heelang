@@ -97,7 +97,7 @@ describe('Image Utils', () => {
     })
 
     it('로컬 이미지는 Next.js 이미지 최적화에 맡기고 원본 경로를 반환한다', () => {
-      const result = generateImageUrl('/image.jpg', 800, 600, 80)
+      const result = generateImageUrl('/image.jpg')
       expect(result).toBe('/image.jpg')
     })
   })

@@ -38,7 +38,7 @@ const sharePlatforms: SharePlatform[] = [
   {
     name: 'Instagram',
     icon: <Instagram className='h-4 w-4' />,
-    shareUrl: (data) => {
+    shareUrl: () => {
       // Instagram은 직접 URL 공유가 제한적이므로 모바일에서는 앱으로,
       // 데스크톱에서는 Instagram 웹으로 리다이렉트하여 수동 게시 유도
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)

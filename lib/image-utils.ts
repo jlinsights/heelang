@@ -116,12 +116,7 @@ export function getImageSizes(
 /**
  * 이미지 URL 생성 함수 (개발환경 고려)
  */
-export function generateImageUrl(
-  src: string,
-  width?: number,
-  height?: number,
-  quality: number = 85
-): string {
+export function generateImageUrl(src: string): string {
   if (src.startsWith('http')) {
     return src // 외부 URL은 그대로 반환
   }

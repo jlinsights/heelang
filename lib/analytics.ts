@@ -8,26 +8,6 @@ interface WebVital {
   entries: PerformanceEntry[]
 }
 
-// Web Vitals 임계값
-const THRESHOLDS = {
-  FCP: { good: 1800, poor: 3000 }, // First Contentful Paint
-  LCP: { good: 2500, poor: 4000 }, // Largest Contentful Paint
-  FID: { good: 100, poor: 300 }, // First Input Delay
-  CLS: { good: 0.1, poor: 0.25 }, // Cumulative Layout Shift
-  TTFB: { good: 800, poor: 1800 }, // Time to First Byte
-  INP: { good: 200, poor: 500 }, // Interaction to Next Paint
-} as const
-
-// 성능 등급 계산
-function getRating(
-  value: number,
-  thresholds: { good: number; poor: number }
-): 'good' | 'needs-improvement' | 'poor' {
-  if (value <= thresholds.good) return 'good'
-  if (value <= thresholds.poor) return 'needs-improvement'
-  return 'poor'
-}
-
 // Web Vitals 리포터
 export function reportWebVitals(metric: WebVital) {
   // 개발 환경에서는 콘솔에 출력
@@ -89,7 +69,7 @@ function sendToAnalytics(metric: WebVital) {
     }).catch(() => {
       // 에러 발생 시 무시 (분석 데이터 전송 실패가 사용자 경험에 영향 주지 않도록)
     })
-  } catch (error) {
+  } catch {
     // 에러 발생 시 무시
   }
 }
@@ -406,7 +386,6 @@ export const trackSession = () => {
 
   const sessionStart = Date.now()
   const referrer = document.referrer
-  const userAgent = navigator.userAgent
   const language = navigator.language
 
   trackEvent(

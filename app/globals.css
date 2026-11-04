@@ -711,13 +711,32 @@
 /* ===========================================
  * 접근성 및 사용성 개선
  * =========================================== */
+/* 모션 감소: 움직임(이동·확대·회전·부드러운 스크롤)만 없애고, 상태가 바뀌었다는
+ * 신호는 남긴다. 색·투명도 전환은 움직임이 아니므로 그대로 두고, 진행 중임을
+ * 알리는 스피너(전송 중)와 스켈레톤 깜빡임(투명도)도 멈추지 않는다.
+ * 키프레임 애니메이션(슬라이드·시트 등장 등)은 끝 상태로 바로 간다. */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: color, background-color, border-color,
+      text-decoration-color, outline-color, fill, stroke, opacity, box-shadow !important;
+  }
+
+  .animate-spin {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  .animate-pulse {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 

@@ -252,7 +252,7 @@ SMTP_PASS=your_smtp_password
 
 - `tailwind.config.ts`, `app/globals.css` — 새 색을 하드코딩하지 말고 시맨틱
   토큰 사용
-- 테마: `components/theme-provider.tsx`
+- 테마: `components/simple-theme-toggle.tsx` (라이트 기본, 고른 값만 `heelang-theme-choice` 에 저장 — 위 접근성 절)
 
 ## 배포
 

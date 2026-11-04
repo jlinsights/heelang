@@ -1,1 +1,1 @@
-🧹 쓰이지 않는 변수·import·주석 처리된 옛 코드 정리 (lint unused-vars 경고 제거, 동작 변화 없음)
+♿ 오프라인 페이지 lucide Image 아이콘을 ImageIcon 으로 바꿔 alt-text 오탐 경고 제거

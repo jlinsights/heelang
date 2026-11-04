@@ -36,10 +36,10 @@ export function ArtworkArtistAside() {
         <blockquote className='mt-4 max-w-2xl border-l-2 border-gold pl-5 font-display leading-relaxed text-foreground/85'>
           {ARTIST_PROFILE.intro}
         </blockquote>
-        <div className='mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm'>
+        <div className='mt-6 flex flex-wrap items-center gap-x-8 gap-y-6 text-sm'>
           <Link
             href='/artist'
-            className='group inline-flex items-center gap-2 text-foreground underline-offset-4 decoration-gold hover:underline focus-art'
+            className='hit-area group inline-flex items-center gap-2 text-foreground underline-offset-4 decoration-gold hover:underline focus-art'
           >
             작가 소개
             <ArrowRight
@@ -51,7 +51,7 @@ export function ArtworkArtistAside() {
             href={BRUSHWAYS.url}
             target='_blank'
             rel='noopener noreferrer'
-            className='inline-flex items-center gap-1.5 text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
+            className='hit-area inline-flex items-center gap-1.5 text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
           >
             {BRUSHWAYS.name}
             <ArrowUpRight className='h-4 w-4' aria-hidden='true' />

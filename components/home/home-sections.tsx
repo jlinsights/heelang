@@ -16,7 +16,7 @@ function TextLink({ href, children }: { href: string; children: string }) {
   return (
     <Link
       href={href}
-      className='group inline-flex items-center gap-2 text-sm text-foreground underline-offset-4 decoration-gold hover:underline focus-art'
+      className='hit-area group inline-flex items-center gap-2 text-sm text-foreground underline-offset-4 decoration-gold hover:underline focus-art'
     >
       {children}
       <ArrowRight
@@ -132,7 +132,7 @@ export function HomeExhibition() {
             </span>{' '}
             기록입니다. 출품작은 갤러리에서 볼 수 있습니다.
           </p>
-          <div className='mt-8 flex flex-col items-start gap-3'>
+          <div className='mt-8 flex flex-col items-start gap-6'>
             <TextLink href='/exhibitions/gil'>전시 기록 보기</TextLink>
             <TextLink href='/exhibitions'>모든 전시</TextLink>
           </div>

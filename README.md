@@ -144,9 +144,8 @@ HEELANG/
 │   ├── gallery/          # 저스티파이드 그리드, 목록, 툴바, 페이지네이션
 │   ├── artwork/          # 라이트박스, useImageRatio
 │   ├── artwork-detail-modal-client.tsx # 작품 상세 본문
-│   ├── optimized-image.tsx # 최적화된 이미지
-│   ├── search-filter.tsx # 검색 필터
-│   └── theme-toggle.tsx  # 테마 토글
+│   ├── art-navigation.tsx # 상단 내비게이션
+│   └── simple-theme-toggle.tsx # 테마 토글 (라이트 기본)
 ├── lib/                  # 유틸리티 및 데이터
 │   ├── artworks.ts       # 작품 데이터 (Airtable + 폴백)
 │   ├── gallery/          # 정렬·필터·이웃 작품·비율 계산, image-ratios.json

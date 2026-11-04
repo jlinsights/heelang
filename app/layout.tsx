@@ -8,9 +8,6 @@ import {
 import type { Metadata } from 'next'
 import { Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
-// import { ThemeProvider } from "@/components/theme-provider"
-// import { ErrorBoundary } from "@/components/error-boundary"
-// import { SkipToContent } from "@/components/simple-skip-link"
 
 // 본문은 한글이 주이므로 한글 글리프를 가진 Noto Sans KR로 고정한다.
 // (Inter는 라틴 전용이라 한글이 OS 기본 서체로 떨어졌다.) 제목의 Noto Serif KR과 같은 계열.

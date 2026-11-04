@@ -43,7 +43,7 @@ export default function ArtworkDetailModalClient({
       >
         <Link
           href='/gallery'
-          className='inline-flex items-center gap-2 hover:text-foreground focus-art'
+          className='hit-area inline-flex items-center gap-2 hover:text-foreground focus-art'
         >
           <ArrowLeft className='h-4 w-4' aria-hidden='true' />
           작품 목록
@@ -246,7 +246,7 @@ function MoreWorks({ artworks }: { artworks: Artwork[] }) {
         </h2>
         <Link
           href='/gallery'
-          className='text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'
+          className='hit-area text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-art'
         >
           전체 보기
         </Link>

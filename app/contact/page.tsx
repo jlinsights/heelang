@@ -121,7 +121,7 @@ export default function ContactPage() {
                 <dd>
                   <a
                     href={`mailto:${CONTACT_EMAIL}`}
-                    className='break-all text-foreground underline-offset-4 hover:underline focus-art'
+                    className='hit-area break-all text-foreground underline-offset-4 hover:underline focus-art'
                   >
                     {CONTACT_EMAIL}
                   </a>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                 <dd className='tabular-nums'>
                   <a
                     href='tel:010-3019-1417'
-                    className='text-foreground underline-offset-4 hover:underline focus-art'
+                    className='hit-area text-foreground underline-offset-4 hover:underline focus-art'
                   >
                     010-3019-1417
                   </a>

@@ -532,6 +532,19 @@
     @apply focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-background;
   }
 
+  /* 글자 링크의 누르는 면적을 위아래로 12px씩 넓힌다(20–22px → 44px 이상).
+   * 보이는 모양과 줄 간격은 그대로다. 위아래로 이어 쌓는 링크는 서로 면적이
+   * 겹치지 않게 간격을 24px 이상 둔다. 이미 absolute 인 요소에는 쓰지 않는다
+   * (position 을 덮어쓴다) — 대신 padding 으로 키운다. */
+  .hit-area {
+    position: relative;
+  }
+  .hit-area::after {
+    content: '';
+    position: absolute;
+    inset: -12px -4px;
+  }
+
   /* ===========================================
    * 반응형 텍스트 크기
    * =========================================== */

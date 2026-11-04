@@ -87,7 +87,7 @@ function ArtworkTile({
               priority={priority}
               onLoad={onImageLoad}
               sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
-              className='object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100'
+              className='object-contain'
             />
           )}
         </div>

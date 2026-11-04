@@ -83,7 +83,7 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
             </Link>
             <Link
               href='/artist'
-              className='text-sm text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
+              className='hit-area text-sm text-muted-foreground underline-offset-4 decoration-gold hover:text-foreground hover:underline focus-art'
             >
               작가 소개
             </Link>
@@ -95,7 +95,7 @@ export function HomeHero({ artwork }: { artwork: Artwork | null }) {
 
       <a
         href='#featured'
-        className='absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-muted-foreground hover:text-foreground focus-art md:block'
+        className='absolute bottom-3 left-1/2 hidden -translate-x-1/2 p-3 text-muted-foreground hover:text-foreground focus-art md:block'
         aria-label='대표 작품으로 이동'
       >
         <ArrowDown className='h-5 w-5' aria-hidden='true' />

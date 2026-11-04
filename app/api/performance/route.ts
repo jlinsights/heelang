@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     const timeframe = searchParams.get('timeframe') || '24h'
     
     // 실제 환경에서는 데이터베이스에서 조회
-    const mockStats = generateMockPerformanceStats(timeframe)
+    const mockStats = generateMockPerformanceStats()
     
     return NextResponse.json({
       success: true,
@@ -189,7 +189,7 @@ function analyzePerformanceData(data: PerformancePayload) {
 }
 
 // 모의 성능 통계 생성 (실제 환경에서는 DB에서 조회)
-function generateMockPerformanceStats(timeframe: string) {
+function generateMockPerformanceStats() {
   return {
     overview: {
       avgLCP: 2150 + Math.random() * 500,

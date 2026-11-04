@@ -33,7 +33,7 @@ class LocalStorageCache {
         return null
       }
       return parsed.data as T
-    } catch (_) {
+    } catch {
       return null
     }
   }
@@ -43,7 +43,7 @@ class LocalStorageCache {
     const entry: CacheEntry = { data, timestamp: Date.now(), duration }
     try {
       window.localStorage.setItem(`heelang_cache_${key}`, JSON.stringify(entry))
-    } catch (_) {}
+    } catch {}
   }
 
   clear() {
@@ -83,7 +83,7 @@ export async function revalidateTagSafe(tag: string) {
   try {
     const { revalidateTag } = await import('next/cache')
     revalidateTag(tag)
-  } catch (_) {
+  } catch {
     // next/cache 불가 환경 (예: 테스트) – 조용히 무시
   }
 }

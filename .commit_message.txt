@@ -1,1 +1,1 @@
-📝 CLAUDE.md·AGENTS.md 에 문의 폼 SMTP 부재, 이름·저작권 표기, 문구 규칙, /api/artist 폴백 삭제, test:ci 커버리지 실패 안내 추가
+♿ 오프라인 페이지 lucide Image 아이콘을 ImageIcon 으로 바꿔 alt-text 오탐 경고 제거

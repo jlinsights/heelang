@@ -27,119 +27,7 @@ interface AirtableRecordLike {
   createdTime?: string
 }
 
-// Airtable 설정
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID
-
-// 캐시 설정
-const CACHE_DURATION = 5 * 60 * 1000 // 5분
-// const cache = new Map<string, { data: any; timestamp: number }>(); // replaced by global cache
-
-// 로컬 스토리지 캐시 (클라이언트 사이드에서만 사용)
-class LocalStorageCache {
-  private isClient = typeof window !== 'undefined'
-
-  set(key: string, data: unknown, duration: number = CACHE_DURATION): void {
-    if (!this.isClient) return
-
-    const item = {
-      data,
-      timestamp: Date.now(),
-      duration,
-    }
-
-    try {
-      localStorage.setItem(`airtable_${key}`, JSON.stringify(item))
-    } catch (error) {
-      console.warn('Failed to save to localStorage:', error)
-    }
-  }
-
-  get(key: string): unknown {
-    if (!this.isClient) return null
-
-    try {
-      const item = localStorage.getItem(`airtable_${key}`)
-      if (!item) return null
-
-      const parsed = JSON.parse(item)
-      const now = Date.now()
-
-      if (now - parsed.timestamp > parsed.duration) {
-        localStorage.removeItem(`airtable_${key}`)
-        return null
-      }
-
-      return parsed.data
-    } catch (error) {
-      console.warn('Failed to read from localStorage:', error)
-      return null
-    }
-  }
-}
-
-const localCache = new LocalStorageCache()
-
-/**
- * 안전한 Airtable 인스턴스 생성 (재시도 로직 포함)
- */
-/*
-async function createAirtableBase() {
-  if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-    console.error("❌ Airtable 환경 변수가 설정되지 않았습니다.");
-    console.error("다음 환경 변수를 .env.local 파일에 설정해주세요:");
-    console.error("AIRTABLE_API_KEY=your_api_key");
-    console.error("AIRTABLE_BASE_ID=your_base_id");
-    console.warn("🔄 Fallback 데이터를 사용합니다.");
-    return null;
-  }
-
-  const maxRetries = 2;
-  let lastError: Error | null = null;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      // 동적 import로 Airtable 로드 (서버/클라이언트 호환성)
-      const { default: Airtable } = await import("airtable");
-
-      // Airtable 인스턴스 생성
-      const airtable = new Airtable({
-        apiKey: AIRTABLE_API_KEY,
-        requestTimeout: 5000, // 5초로 증가
-        // 연결 안정성을 위한 추가 설정
-        endpointUrl: "https://api.airtable.com",
-      });
-
-      const base = airtable.base(AIRTABLE_BASE_ID);
-
-      // 연결 테스트 (간단한 요청으로 확인)
-      console.log(`🔄 Airtable 연결 시도 ${attempt}/${maxRetries}`);
-
-      return base;
-    } catch (error) {
-      lastError = error as Error;
-      console.warn(
-        `❌ Airtable 연결 시도 ${attempt}/${maxRetries} 실패:`,
-        error
-      );
-
-      if (attempt < maxRetries) {
-        // 재시도 전 잠시 대기 (exponential backoff)
-        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 3000);
-        console.log(`⏳ ${delay}ms 후 재시도...`);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
-  }
-
-  console.error("❌ 모든 재시도 후 Airtable 연결 실패:", lastError);
-  console.warn("🔄 Fallback 데이터를 사용합니다.");
-  return null;
-}
-
-/**
- * 헬퍼 함수들
- */
+// 헬퍼 함수들
 
 // 필드 값을 우선순위에 따라 가져오는 함수
 function getFieldValue(
@@ -221,19 +109,6 @@ const ARTWORK_FIELD_MAP: Record<string, string[]> = {
   available: ['available', 'Available', '판매여부'],
 }
 
-const ARTIST_FIELD_MAP: Record<string, string[]> = {
-  name: ['name', 'Name', '작가명', '작가 이름'],
-  bio: ['bio', 'Bio', 'biography', 'Biography', '소개', '작가 소개'],
-  statement: [
-    'statement',
-    'Statement',
-    'artistStatement',
-    'ArtistStatement',
-    '작가노트',
-    '작가 노트',
-  ],
-}
-
 function pickField<T = AirtableFieldValue>(
   fields: AirtableFields,
   map: Record<string, string[]>,
@@ -246,20 +121,6 @@ function getCachedData<T>(key: string): T | null {
   // unified cache helper
   return getCachedDataGlobal<T>(key)
 }
-
-// Legacy implementation removed
-/*
-  // 메모리 캐시 확인
-  const memoryCache = cache.get(key);
-  if (memoryCache && Date.now() - memoryCache.timestamp < CACHE_DURATION) {
-    return memoryCache.data;
-  }
-
-  // 로컬 스토리지 캐시 확인
-  return localCache.get(key);
-}
-
-*/
 
 function setCachedData(key: string, data: unknown): void {
   return setCachedDataGlobal(key, data)
@@ -492,16 +353,6 @@ export async function fetchArtistFromAirtable(): Promise<Artist | null> {
 
     const getBio = () =>
       getString('bio', 'Bio', 'biography', 'Biography', '소개', '작가 소개')
-
-    const getStatement = () =>
-      getString(
-        'statement',
-        'Statement',
-        'artistStatement',
-        'Artist Statement',
-        '작가 노트',
-        '작가의 말'
-      )
 
     const getEmail = () => {
       return getString('email', 'Email', '이메일', '연락처')

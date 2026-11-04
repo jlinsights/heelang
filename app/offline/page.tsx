@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { WifiOff, RefreshCw, Home, Image } from 'lucide-react'
+import { WifiOff, RefreshCw, Home, ImageIcon } from 'lucide-react'
 
 
 export default function OfflinePage() {
@@ -52,7 +52,7 @@ export default function OfflinePage() {
               className="w-full"
             >
               <Link href="/gallery">
-                <Image className="w-4 h-4 mr-2" />
+                <ImageIcon className="w-4 h-4 mr-2" />
                 갤러리 보기
               </Link>
             </Button>

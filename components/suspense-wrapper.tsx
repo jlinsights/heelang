@@ -64,7 +64,6 @@ export function ArtworkLoadingFallback() {
 export function SuspenseWrapper({
   children,
   fallback,
-  name,
 }: SuspenseWrapperProps) {
   const defaultFallback = <LoadingSpinner />
 

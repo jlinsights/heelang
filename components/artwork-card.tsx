@@ -122,22 +122,6 @@ export function ArtworkCard({
   )
 }
 
-// 카테고리 라벨 변환 함수
-function getCategoryLabel(category: string): string {
-  const categoryLabels: Record<string, string> = {
-    treasure: '문방사우',
-    calligraphy: '서예',
-    painting: '회화',
-    mixed: '혼합매체',
-    installation: '설치',
-    sculpture: '조각',
-    digital: '디지털',
-    photography: '사진',
-  }
-
-  return categoryLabels[category] || category
-}
-
 // 작품 그리드 컴포넌트
 interface ArtworkGridProps {
   artworks: Artwork[]

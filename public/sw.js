@@ -1,18 +1,17 @@
-// 서비스 워커 버전
-const CACHE_NAME = 'calligraphy-catalog-v1.0.0'
-const STATIC_CACHE = 'static-v1.0.0'
-const IMAGES_CACHE = 'images-v1.0.0'
-const API_CACHE = 'api-v1.0.0'
+// 서비스 워커 버전 — 캐시 내용·전략을 바꾸면 올린다. 이름이 바뀐 옛 캐시는
+// activate 에서 지워진다(옛 버전이 내주던 낡은 CSS·HTML 도 함께 사라진다).
+const VERSION = 'v1.1.0'
+const STATIC_CACHE = `static-${VERSION}`
+const IMAGES_CACHE = `images-${VERSION}`
+const API_CACHE = `api-${VERSION}`
 
-// 캐시할 정적 자원들
-const STATIC_FILES = [
-  '/',
-  '/gallery',
-  '/manifest.json',
-  '/globals.css',
-  // 오프라인 페이지
-  '/offline'
-]
+// 연결이 끊겼을 때 보여 줄 페이지. 설치는 이 파일을 캐시해야만 성공한다.
+const OFFLINE_URL = '/offline'
+
+// 함께 미리 담아 두면 좋은 것들. 하나가 실패해도 설치를 막지 않는다.
+// (예전 목록에 있던 globals.css 는 존재하지 않는 주소(404)라 cache.addAll 이
+// 통째로 실패했고, 그래서 오프라인 페이지도 캐시되지 않았다.)
+const OPTIONAL_PRECACHE = ['/', '/gallery', '/manifest.json']
 
 // 이미지 파일 확장자
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg']
@@ -22,19 +21,15 @@ self.addEventListener('install', (event) => {
   console.log('📦 Service Worker: Installing...')
   
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('📦 Service Worker: Caching static files')
-        return cache.addAll(STATIC_FILES)
-      })
-      .then(() => {
-        console.log('📦 Service Worker: Installation complete')
-        // 즉시 활성화
-        return self.skipWaiting()
-      })
-      .catch((error) => {
-        console.error('📦 Service Worker: Installation failed', error)
-      })
+    (async () => {
+      const cache = await caches.open(STATIC_CACHE)
+      // 오프라인 페이지는 필수 — 실패하면 설치가 실패하고 옛 워커가 계속 일한다
+      await cache.add(OFFLINE_URL)
+      // 나머지는 되는 것만 담는다
+      await Promise.allSettled(OPTIONAL_PRECACHE.map((url) => cache.add(url)))
+      // 즉시 활성화
+      await self.skipWaiting()
+    })()
   )
 })
 
@@ -112,8 +107,21 @@ function isStaticAsset(request) {
 
 // 페이지 요청 확인
 function isPageRequest(request) {
+  const accept = request.headers.get('accept') || ''
   return request.mode === 'navigate' ||
-         (request.method === 'GET' && request.headers.get('accept').includes('text/html'))
+         (request.method === 'GET' && accept.includes('text/html'))
+}
+
+// 캐시에 없는 페이지를 연결 없이 열었을 때의 응답.
+// cache.match() 는 Promise 라 `match() || 대체응답` 은 늘 Promise 쪽을 고른다 —
+// 그래서 예전에는 대체 응답이 한 번도 쓰이지 않았다. 결과를 기다린 뒤 고른다.
+async function offlineResponse() {
+  const cache = await caches.open(STATIC_CACHE)
+  const cached = await cache.match(OFFLINE_URL)
+  return cached || new Response('<!doctype html><meta charset="utf-8"><title>인터넷 연결 없음</title><p>인터넷 연결이 없습니다. 연결을 확인한 뒤 다시 시도해 주세요.</p>', {
+    status: 503,
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  })
 }
 
 // Cache First 전략 (캐시 우선)
@@ -144,18 +152,14 @@ async function cacheFirstStrategy(request, cacheName) {
     // 이미지 요청 실패 시 placeholder 반환
     if (isImageRequest(request)) {
       return new Response(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" fill="currentColor"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af">이미지를 로드할 수 없습니다</text></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" fill="currentColor"><rect width="100%" height="100%" fill="#f3f0ea"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#6b6560">이미지를 로드할 수 없습니다</text></svg>',
         { headers: { 'Content-Type': 'image/svg+xml' } }
       )
     }
     
     // 페이지 요청 실패 시 오프라인 페이지
     if (isPageRequest(request)) {
-      const cache = await caches.open(STATIC_CACHE)
-      return cache.match('/offline') || new Response('오프라인 상태입니다', {
-        status: 503,
-        headers: { 'Content-Type': 'text/html; charset=utf-8' }
-      })
+      return offlineResponse()
     }
     
     throw error
@@ -189,10 +193,7 @@ async function networkFirstStrategy(request, cacheName) {
     
     // 캐시에도 없으면 오프라인 페이지
     if (isPageRequest(request)) {
-      return cache.match('/offline') || new Response('오프라인 상태입니다', {
-        status: 503,
-        headers: { 'Content-Type': 'text/html; charset=utf-8' }
-      })
+      return offlineResponse()
     }
     
     throw error

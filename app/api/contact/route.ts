@@ -54,37 +54,42 @@ export async function POST(request: NextRequest) {
       from: `"희랑 갤러리 문의" <${process.env.SMTP_USER}>`,
       to: CONTACT_EMAIL,
       subject: `[희랑 갤러리 문의] ${parsed.subject}`,
+      // 사이트 색(DESIGN.md)과 같은 값. 메일 앱은 CSS 변수를 못 읽어 값을 그대로 쓴다.
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+        <div style="font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #fdfcfa; color: #1c1917; line-height: 1.7;">
+          <h2 style="font-family: 'Noto Serif KR', 'AppleMyungjo', serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 2px solid #b8892c;">
             희랑 갤러리 문의
           </h2>
-          
-          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #495057; margin-top: 0;">문의자 정보</h3>
-            <p><strong>이름:</strong> ${validatedData.name}</p>
-            <p><strong>이메일:</strong> ${validatedData.email}</p>
+
+          <table role="presentation" style="width: 100%; border-collapse: collapse; border-top: 1px solid #e7e3dc; font-size: 16px;">
+            <tr>
+              <td style="width: 88px; padding: 10px 0; color: #6b6560; border-bottom: 1px solid #e7e3dc; vertical-align: top;">이름</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e7e3dc;">${validatedData.name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 0; color: #6b6560; border-bottom: 1px solid #e7e3dc; vertical-align: top;">이메일</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e7e3dc;">${validatedData.email}</td>
+            </tr>
             ${
               validatedData.phone
-                ? `<p><strong>전화번호:</strong> ${validatedData.phone}</p>`
+                ? `<tr>
+              <td style="padding: 10px 0; color: #6b6560; border-bottom: 1px solid #e7e3dc; vertical-align: top;">전화번호</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e7e3dc;">${validatedData.phone}</td>
+            </tr>`
                 : ''
             }
-          </div>
-          
-          <div style="background-color: #ffffff; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px;">
-            <h3 style="color: #495057; margin-top: 0;">문의 내용</h3>
-            <p><strong>제목:</strong> ${validatedData.subject}</p>
-            <div style="margin-top: 15px;">
-              <strong>내용:</strong>
-              <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px; white-space: pre-wrap;">
-                ${validatedData.message}
-              </div>
-            </div>
-          </div>
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 14px;">
-            <p>이 메시지는 희랑 갤러리 웹사이트의 문의 폼을 통해 전송되었습니다.</p>
-            <p>전송 시간: ${new Date().toLocaleString('ko-KR', {
+            <tr>
+              <td style="padding: 10px 0; color: #6b6560; border-bottom: 1px solid #e7e3dc; vertical-align: top;">제목</td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e7e3dc;">${validatedData.subject}</td>
+            </tr>
+          </table>
+
+          <p style="margin: 24px 0 8px; font-size: 13px; color: #6b6560;">문의 내용</p>
+          <div style="background-color: #f7f4ef; padding: 16px; border-radius: 12px; white-space: pre-wrap; font-size: 16px;">${validatedData.message}</div>
+
+          <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #e7e3dc; color: #6b6560; font-size: 13px;">
+            <p style="margin: 0;">이 메시지는 희랑 갤러리 웹사이트의 문의 폼을 통해 전송되었습니다.</p>
+            <p style="margin: 4px 0 0;">전송 시간: ${new Date().toLocaleString('ko-KR', {
               timeZone: 'Asia/Seoul',
             })}</p>
           </div>

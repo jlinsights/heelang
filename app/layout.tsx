@@ -240,7 +240,7 @@ export default function RootLayout({
         <ClientLayout>
           <a
             href='#content'
-            className='sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-foreground focus:px-5 focus:py-3 focus:text-sm focus:text-background'
+            className='sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-foreground focus:px-5 focus:py-3 focus:text-sm focus:text-background focus-art'
           >
             본문으로 건너뛰기
           </a>

@@ -55,7 +55,7 @@ export function SimpleThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className='w-9 h-9 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200'
+      className='w-9 h-9 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200 focus-art'
       aria-label='테마 변경'
       type='button'
     >

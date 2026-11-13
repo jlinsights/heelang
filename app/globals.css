@@ -257,7 +257,7 @@
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 4px;
+    border-radius: 9999px;
     transition: background 0.2s ease;
   }
 
@@ -372,25 +372,6 @@
 
   .section-padding-sm {
     @apply py-8 md:py-12 lg:py-16;
-  }
-
-  /* ===========================================
-   * 예술적 텍스트 효과
-   * =========================================== */
-  .text-shadow-soft {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .text-shadow-medium {
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .text-shadow-strong {
-    text-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-  }
-
-  .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
   }
 
   /* ===========================================

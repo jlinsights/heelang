@@ -46,7 +46,7 @@ export function SimpleThemeToggle() {
   // 마운트될 때까지 아무것도 렌더링하지 않음 (hydration 에러 방지)
   if (!mounted) {
     return (
-      <div className='w-9 h-9 flex items-center justify-center'>
+      <div className='w-11 h-11 flex items-center justify-center'>
         {/* 빈 공간 유지 */}
       </div>
     )
@@ -55,7 +55,7 @@ export function SimpleThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className='w-9 h-9 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200 focus-art'
+      className='w-11 h-11 flex items-center justify-center rounded-md text-ink-light hover:text-ink hover:bg-ink/5 transition-colors duration-200 focus-art'
       aria-label='테마 변경'
       type='button'
     >

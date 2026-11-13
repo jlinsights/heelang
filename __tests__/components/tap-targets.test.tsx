@@ -30,6 +30,24 @@ describe('글자 링크의 누르는 면적', () => {
     )
   })
 
+  it('「길 道」 전시 기록의 전시 목록·작가 소개·전화·이메일 링크', () => {
+    const src = readFileSync(
+      path.join(process.cwd(), 'app/exhibitions/gil/page.tsx'),
+      'utf8'
+    )
+    for (const marker of [
+      "href='/exhibitions'",
+      "href='/artist'",
+      'href={`tel:',
+      'href={`mailto:',
+    ]) {
+      const at = src.indexOf(marker)
+      expect(at).toBeGreaterThan(-1)
+      const tag = src.slice(at, src.indexOf('>', at))
+      expect(tag).toMatch(/className='[^']*\bhit-area\b/)
+    }
+  })
+
   it('문의 페이지의 이메일·전화 링크', () => {
     render(<ContactPage />)
     for (const link of screen.getAllByRole('link')) {

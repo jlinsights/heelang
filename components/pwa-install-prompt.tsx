@@ -1,15 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Download, X, Smartphone, Monitor } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -20,126 +12,81 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
 }
 
+const DECLINED_KEY = 'pwa-install-declined'
+
+/**
+ * 브라우저가 앱 설치를 제안할 때(Chrome·Android 의 beforeinstallprompt)만
+ * 화면 아래에 한 줄짜리 안내를 띄운다. iOS Safari 는 이 이벤트를 보내지 않아
+ * 여기서는 아무것도 띄우지 않는다.
+ *
+ * 작품을 가리지 않게 낮고 평평하게(그림자 없음, 가는 선) 둔다 — 깊이는 작품에만
+ * 있다(DESIGN.md). 닫으면 다시 묻지 않으므로 "나중에" 같은 말을 쓰지 않는다.
+ */
 export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null)
-  const [showPrompt, setShowPrompt] = useState(false)
-  const [isIOS, setIsIOS] = useState(false)
-  const [isStandalone, setIsStandalone] = useState(false)
 
   useEffect(() => {
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent)
-    setIsIOS(isIOSDevice)
-
-    const isInStandaloneMode =
+    const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as Navigator & { standalone?: boolean }).standalone ===
         true
 
-    setIsStandalone(isInStandaloneMode)
-
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
+      if (isStandalone || localStorage.getItem(DECLINED_KEY)) return
       setDeferredPrompt(e as BeforeInstallPromptEvent)
-
-      const hasDeclined = localStorage.getItem('pwa-install-declined')
-      if (!hasDeclined && !isInStandaloneMode) {
-        setShowPrompt(true)
-      }
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-
-    return () => {
+    return () =>
       window.removeEventListener(
         'beforeinstallprompt',
         handleBeforeInstallPrompt
       )
-    }
   }, [])
+
+  const decline = () => {
+    localStorage.setItem(DECLINED_KEY, 'true')
+    setDeferredPrompt(null)
+  }
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
-
-    deferredPrompt.prompt()
-    const choiceResult = await deferredPrompt.userChoice
-
-    if (choiceResult.outcome === 'accepted') {
-      console.log('✅ PWA 설치 승인됨')
+    await deferredPrompt.prompt()
+    const { outcome } = await deferredPrompt.userChoice
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null)
     } else {
-      console.log('❌ PWA 설치 거부됨')
-      localStorage.setItem('pwa-install-declined', 'true')
+      decline()
     }
-
-    setDeferredPrompt(null)
-    setShowPrompt(false)
   }
 
-  const handleDismiss = () => {
-    setShowPrompt(false)
-    localStorage.setItem('pwa-install-declined', 'true')
-  }
-
-  if (isStandalone || (!deferredPrompt && !isIOS) || !showPrompt) {
-    return null
-  }
+  if (!deferredPrompt) return null
 
   return (
-    <Card className='fixed bottom-4 left-4 right-4 z-50 max-w-sm mx-auto shadow-2xl border-2 border-ink/20 bg-paper'>
-      <CardHeader className='pb-3'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-2'>
-            {isIOS ? (
-              <Smartphone className='h-5 w-5 text-ink/60' aria-hidden='true' />
-            ) : (
-              <Monitor className='h-5 w-5 text-ink/60' aria-hidden='true' />
-            )}
-            <CardTitle className='text-lg'>앱 설치</CardTitle>
-          </div>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={handleDismiss}
-            aria-label='설치 안내 닫기'
-            // 누르는 면적 44px. 음수 여백으로 머리 줄 높이·오른쪽 정렬은 그대로 둔다
-            className='-my-2.5 -mr-2.5 h-11 w-11 p-0'
-          >
-            <X className='h-4 w-4' aria-hidden='true' />
-          </Button>
-        </div>
-        <CardDescription>
-          {isIOS
-            ? '홈 화면에 추가하여 앱처럼 사용하세요'
-            : '설치하면 더 빠르고 편리하게 작품을 감상할 수 있습니다'}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className='pt-0'>
-        {isIOS ? (
-          <div className='space-y-3'>
-            <p className='text-sm text-ink/70'>
-              Safari에서 공유 버튼 → &ldquo;홈 화면에 추가&rdquo;를 선택하세요
-            </p>
-            <Button
-              onClick={handleDismiss}
-              variant='outline'
-              className='w-full'
-            >
-              확인
-            </Button>
-          </div>
-        ) : (
-          <div className='flex gap-2'>
-            <Button onClick={handleInstall} className='flex-1'>
-              <Download className='h-4 w-4 mr-2' aria-hidden='true' />
-              설치
-            </Button>
-            <Button onClick={handleDismiss} variant='outline'>
-              나중에
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <aside
+      aria-label='앱 설치 안내'
+      className='fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 mx-auto flex max-w-md items-center gap-2 rounded-xl border border-border bg-background py-1.5 pl-4 pr-1.5 text-sm'
+    >
+      <p className='flex-1 text-muted-foreground'>
+        홈 화면에 앱으로 설치할 수 있습니다.
+      </p>
+      <button
+        type='button'
+        onClick={handleInstall}
+        className='h-11 shrink-0 rounded-full bg-foreground px-5 font-medium text-background hover:opacity-85 focus-art'
+      >
+        설치
+      </button>
+      <button
+        type='button'
+        onClick={decline}
+        aria-label='설치 안내 닫기'
+        className='flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground focus-art'
+      >
+        <X className='h-4 w-4' aria-hidden='true' />
+      </button>
+    </aside>
   )
 }

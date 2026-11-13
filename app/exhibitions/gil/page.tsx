@@ -88,7 +88,7 @@ export default function ExhibitionPage() {
         >
           <Link
             href='/exhibitions'
-            className='inline-flex items-center gap-1.5 hover:text-foreground focus-art'
+            className='hit-area inline-flex items-center gap-1.5 hover:text-foreground focus-art'
           >
             <ArrowLeft className='h-4 w-4' aria-hidden='true' />
             전시 목록
@@ -155,30 +155,35 @@ export default function ExhibitionPage() {
               ))}
               <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
                 <dt className='text-muted-foreground'>작가</dt>
-                <dd className='space-y-1 text-foreground tabular-nums'>
-                  <p>
-                    {exhibitionInfo.artist.name}
-                    <span className='text-muted-foreground'>
-                      {' '}
-                      · {exhibitionInfo.artist.title}
-                    </span>
-                  </p>
-                  <p>
-                    <a
-                      href={`tel:${exhibitionInfo.artist.phone}`}
-                      className='hover:underline underline-offset-4 focus-art'
-                    >
-                      {exhibitionInfo.artist.phone}
-                    </a>
-                  </p>
-                  <p>
-                    <a
-                      href={`mailto:${exhibitionInfo.artist.email}`}
-                      className='break-all hover:underline underline-offset-4 focus-art'
-                    >
-                      {exhibitionInfo.artist.email}
-                    </a>
-                  </p>
+                <dd className='text-foreground'>
+                  {exhibitionInfo.artist.name}
+                  <span className='text-muted-foreground'>
+                    {' '}
+                    · {exhibitionInfo.artist.title}
+                  </span>
+                </dd>
+              </div>
+              {/* 전화·이메일은 줄을 나눠, 넓힌 누르는 면적(hit-area)이 서로 겹치지 않게 한다 */}
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>전화</dt>
+                <dd className='tabular-nums'>
+                  <a
+                    href={`tel:${exhibitionInfo.artist.phone}`}
+                    className='hit-area text-foreground underline-offset-4 hover:underline focus-art'
+                  >
+                    {exhibitionInfo.artist.phone}
+                  </a>
+                </dd>
+              </div>
+              <div className='grid grid-cols-[5.5rem_1fr] gap-4 py-3'>
+                <dt className='text-muted-foreground'>이메일</dt>
+                <dd>
+                  <a
+                    href={`mailto:${exhibitionInfo.artist.email}`}
+                    className='hit-area break-all text-foreground underline-offset-4 hover:underline focus-art'
+                  >
+                    {exhibitionInfo.artist.email}
+                  </a>
                 </dd>
               </div>
             </dl>
@@ -193,7 +198,7 @@ export default function ExhibitionPage() {
               </Link>
               <Link
                 href='/artist'
-                className='group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground focus-art'
+                className='hit-area group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground focus-art'
               >
                 작가 소개
                 <ArrowRight

@@ -34,16 +34,19 @@ export function ClientLayout({ children }: ClientLayoutProps) {
               <ServiceWorkerRegistration />
               <PWAInstallPrompt />
 
-              {/* 성능 모니터링 플로팅 버튼 (개발 환경에서만 표시) */}
-              <PerformanceFloatingButton
-                onClick={() => setShowPerformanceDashboard(true)}
-              />
-
-              {/* 성능 모니터링 대시보드 */}
-              <PerformanceDashboard
-                isVisible={showPerformanceDashboard}
-                onClose={() => setShowPerformanceDashboard(false)}
-              />
+              {/* 성능 모니터링(개발 환경 전용). 버튼이 운영에서 null 을 돌려줘도
+                  5초마다 점수를 읽는 타이머는 돌았으므로, 아예 렌더하지 않는다. */}
+              {process.env.NODE_ENV === 'development' && (
+                <>
+                  <PerformanceFloatingButton
+                    onClick={() => setShowPerformanceDashboard(true)}
+                  />
+                  <PerformanceDashboard
+                    isVisible={showPerformanceDashboard}
+                    onClose={() => setShowPerformanceDashboard(false)}
+                  />
+                </>
+              )}
             </>
           )}
         </div>

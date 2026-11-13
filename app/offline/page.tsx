@@ -13,7 +13,7 @@ import { WifiOff, RefreshCw, Home, ImageIcon } from 'lucide-react'
 export default function OfflinePage() {
   return (
     <div className='min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-paper via-paper-light to-paper'>
-      <Card className='w-full max-w-md text-center shadow-xl border-ink/10'>
+      <Card className='w-full max-w-md text-center shadow-none border-border'>
         <CardHeader className='space-y-4'>
           <div className='mx-auto w-16 h-16 bg-ink/5 rounded-full flex items-center justify-center'>
             <WifiOff className='w-8 h-8 text-ink/40' />

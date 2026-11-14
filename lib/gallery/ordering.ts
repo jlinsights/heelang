@@ -129,3 +129,15 @@ export function ratioFromArtwork(
     DEFAULT_RATIO
   )
 }
+
+/**
+ * 홈 대표작. featured 표시된 작품을 앞에서부터 limit 개, 하나도 없으면 앞에서부터 limit 개.
+ * 원본 배열은 바꾸지 않는다.
+ */
+export function pickFeatured(
+  artworks: readonly Artwork[],
+  limit: number
+): Artwork[] {
+  const featured = artworks.filter((artwork) => artwork.featured)
+  return (featured.length > 0 ? featured : artworks).slice(0, limit)
+}

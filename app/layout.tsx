@@ -19,10 +19,12 @@ const notoSansKR = Noto_Sans_KR({
   fallback: ['Apple SD Gothic Neo', 'Malgun Gothic', 'system-ui', 'sans-serif'],
 })
 
+// 가변 서체로 받는다. 굵기마다 따로 받으면 한글 조각(unicode-range) 파일이 굵기 수만큼
+// 늘어나, 휴대폰에서 서체 해석에 메인 스레드가 수 초 묶였다(Lighthouse TBT 5.4s).
+// 본문 Noto Sans KR 처럼 조각 하나가 모든 굵기를 담는다.
 const notoSerifKR = Noto_Serif_KR({
   subsets: ['latin'],
   variable: '--font-noto-serif-kr',
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: true,
   fallback: ['serif', 'Times New Roman'],

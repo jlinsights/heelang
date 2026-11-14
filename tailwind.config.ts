@@ -128,7 +128,7 @@ const config: Config = {
   		},
   		fontFamily: {
   			display: ['var(--font-noto-serif-kr)', 'Noto Serif KR', 'serif'],
-  			body: ['var(--font-noto-sans-kr)', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
+  			body: ['Apple SD Gothic Neo', 'Noto Sans KR', 'Noto Sans CJK KR', 'Malgun Gothic', 'system-ui', 'sans-serif'],
   			mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
   			calligraphy: ['var(--font-noto-serif-kr)', 'Noto Serif KR', 'serif']
   		},

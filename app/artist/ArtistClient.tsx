@@ -104,7 +104,7 @@ export default function ArtistClient({ artist }: ArtistClientProps) {
           {/* 왼쪽: 프로필 섹션 */}
           <div className='space-y-6'>
             {/* 프로필 이미지: 모바일에서는 작게, 데스크탑에서는 크게 보이도록 반응형 Tailwind 클래스 적용 */}
-            <div className='relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden bg-muted'>
+            <div className='relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden bg-muted lg:mx-0'>
               <Image
                 src={
                   artist.profileImageUrl || '/Images/Artist/artist-large.jpg'

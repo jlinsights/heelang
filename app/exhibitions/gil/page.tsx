@@ -98,7 +98,10 @@ export default function ExhibitionPage() {
           <div>
             <p className='text-eyebrow'>Exhibition</p>
             <h1 className='mt-3 font-display text-4xl md:text-6xl text-foreground'>
-              「{exhibitionInfo.title} {exhibitionInfo.hanja}」
+              {/* 「 는 전각 문장부호라 글자 상자 왼쪽 절반이 비어, 제목이 위 라벨보다
+                  반 글자 들어가 보인다. 첫 괄호만 반 글자 내어 단다. */}
+              <span className='-ml-[0.5em]'>「</span>
+              {exhibitionInfo.title} {exhibitionInfo.hanja}」
               <span className='ml-3 align-middle text-eyebrow'>
                 {exhibitionInfo.titleEn}
               </span>

@@ -258,7 +258,7 @@
       "refersTo": "button-primary",
       "description": "먹색 알약. 화면당 주 행동 하나.",
       "html": "<button class=\"ds-btn-primary\">작품 보기 <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;background:hsl(var(--foreground));color:hsl(var(--background));border:0;border-radius:9999px;padding:12px 24px;font:500 14px/1.6 'Noto Sans KR',sans-serif;cursor:pointer;transition:opacity .2s} .ds-btn-primary:hover{opacity:.85} .ds-btn-primary:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;background:hsl(var(--foreground));color:hsl(var(--background));border:0;border-radius:9999px;padding:12px 24px;font:500 14px/1.6 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;cursor:pointer;transition:opacity .2s} .ds-btn-primary:hover{opacity:.85} .ds-btn-primary:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
     },
     {
       "name": "Quiet Link",
@@ -266,7 +266,7 @@
       "refersTo": "button-quiet",
       "description": "회색 글자 + 화살표 보조 링크.",
       "html": "<a class=\"ds-link-quiet\" href=\"#\">작가 소개 더보기 <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
-      "css": ".ds-link-quiet{display:inline-flex;align-items:center;gap:6px;color:hsl(var(--muted-foreground));font:400 14px/1.6 'Noto Sans KR',sans-serif;text-decoration:none;transition:color .2s} .ds-link-quiet svg{transition:transform .2s} .ds-link-quiet:hover{color:hsl(var(--foreground))} .ds-link-quiet:hover svg{transform:translateX(2px)} .ds-link-quiet:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));border-radius:4px}"
+      "css": ".ds-link-quiet{display:inline-flex;align-items:center;gap:6px;color:hsl(var(--muted-foreground));font:400 14px/1.6 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;text-decoration:none;transition:color .2s} .ds-link-quiet svg{transition:transform .2s} .ds-link-quiet:hover{color:hsl(var(--foreground))} .ds-link-quiet:hover svg{transform:translateX(2px)} .ds-link-quiet:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));border-radius:4px}"
     },
     {
       "name": "Filter Chip",
@@ -274,21 +274,21 @@
       "refersTo": "chip",
       "description": "갤러리 분류 필터. 선택 시 먹색 채움.",
       "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">전체 <span>37</span></button><button class=\"ds-chip\" aria-pressed=\"false\">서예 <span>21</span></button></div>",
-      "css": ".ds-chips{display:flex;gap:8px} .ds-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));border-radius:9999px;padding:6px 14px;font:400 14px/1.6 'Noto Sans KR',sans-serif;cursor:pointer;transition:color .2s,border-color .2s} .ds-chip span{font-size:13px;opacity:.6;font-variant-numeric:tabular-nums} .ds-chip:hover{color:hsl(var(--foreground));border-color:hsl(var(--foreground)/.4)} .ds-chip[aria-pressed=true]{background:hsl(var(--foreground));border-color:hsl(var(--foreground));color:hsl(var(--background))} .ds-chip:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+      "css": ".ds-chips{display:flex;gap:8px} .ds-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));border-radius:9999px;padding:6px 14px;font:400 14px/1.6 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;cursor:pointer;transition:color .2s,border-color .2s} .ds-chip span{font-size:13px;opacity:.6;font-variant-numeric:tabular-nums} .ds-chip:hover{color:hsl(var(--foreground));border-color:hsl(var(--foreground)/.4)} .ds-chip[aria-pressed=true]{background:hsl(var(--foreground));border-color:hsl(var(--foreground));color:hsl(var(--background))} .ds-chip:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
     },
     {
       "name": "Navigation",
       "kind": "nav",
       "description": "반투명 흰 상단 바, 회색 메뉴, 활성은 먹색+옅은 종이 배경.",
       "html": "<nav class=\"ds-nav\" aria-label=\"주 메뉴\"><span class=\"ds-nav-logo\">희랑</span><a href=\"#\" aria-current=\"page\">홈</a><a href=\"#\">갤러리</a><a href=\"#\">작가</a><a href=\"#\">전시</a><a href=\"#\">문의</a></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;gap:4px;padding:16px 24px;background:hsl(var(--background)/.95);backdrop-filter:blur(24px);border-bottom:1px solid hsl(var(--border)/.5)} .ds-nav-logo{font:400 20px 'Noto Serif KR',serif;color:hsl(var(--foreground));margin-right:auto} .ds-nav a{padding:8px 16px;border-radius:8px;color:hsl(var(--ink-light));font:500 14px 'Noto Sans KR',sans-serif;text-decoration:none;transition:background .3s,color .3s} .ds-nav a:hover,.ds-nav a[aria-current=page]{color:hsl(var(--ink));background:hsl(var(--paper-warm))} .ds-nav a:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+      "css": ".ds-nav{display:flex;align-items:center;gap:4px;padding:16px 24px;background:hsl(var(--background)/.95);backdrop-filter:blur(24px);border-bottom:1px solid hsl(var(--border)/.5)} .ds-nav-logo{font:400 20px 'Noto Serif KR',serif;color:hsl(var(--foreground));margin-right:auto} .ds-nav a{padding:8px 16px;border-radius:8px;color:hsl(var(--ink-light));font:500 14px 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;text-decoration:none;transition:background .3s,color .3s} .ds-nav a:hover,.ds-nav a[aria-current=page]{color:hsl(var(--ink));background:hsl(var(--paper-warm))} .ds-nav a:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
     },
     {
       "name": "Section Heading",
       "kind": "custom",
       "description": "라틴 대문자 머리표 + 명조 400 제목 + 금빛 짧은 선.",
       "html": "<header class=\"ds-section\"><p class=\"ds-eyebrow\">Featured Works</p><h2>대표 작품</h2><div class=\"ds-seal\"></div></header>",
-      "css": ".ds-eyebrow{font:400 13px/1.55 'Noto Sans KR',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:hsl(var(--muted-foreground));margin:0} .ds-section h2{font:400 48px/1.3 'Noto Serif KR',serif;letter-spacing:-.01em;color:hsl(var(--foreground));margin:12px 0 0} .ds-seal{width:64px;height:1px;background:hsl(var(--gold));margin-top:24px}"
+      "css": ".ds-eyebrow{font:400 13px/1.55 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:hsl(var(--muted-foreground));margin:0} .ds-section h2{font:400 48px/1.3 'Noto Serif KR',serif;letter-spacing:-.01em;color:hsl(var(--foreground));margin:12px 0 0} .ds-seal{width:64px;height:1px;background:hsl(var(--gold));margin-top:24px}"
     },
     {
       "name": "Artwork Tile",
@@ -296,7 +296,7 @@
       "refersTo": "artwork-tile",
       "description": "실제 비율 상자, 직각, 아래 캡션. 이미지 확대 없음.",
       "html": "<a class=\"ds-tile\" href=\"#\"><div class=\"ds-tile-img\"></div><p class=\"ds-tile-title\">윤동주 시인 - 눈 감고 간다</p><p class=\"ds-tile-meta\">2023 · 화선지에 먹</p></a>",
-      "css": ".ds-tile{display:block;width:140px;text-decoration:none;border-radius:2px} .ds-tile-img{aspect-ratio:1/3.2;background:linear-gradient(hsl(var(--muted)),hsl(var(--paper-cream)));} .ds-tile-title{font:400 16px/1.7 'Noto Serif KR',serif;color:hsl(var(--foreground));margin:12px 0 0;transition:color .2s} .ds-tile-meta{font:400 13px/1.55 'Noto Sans KR',sans-serif;color:hsl(var(--muted-foreground));margin:2px 0 0} .ds-tile:hover .ds-tile-title{color:hsl(var(--muted-foreground))} .ds-tile:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
+      "css": ".ds-tile{display:block;width:140px;text-decoration:none;border-radius:2px} .ds-tile-img{aspect-ratio:1/3.2;background:linear-gradient(hsl(var(--muted)),hsl(var(--paper-cream)));} .ds-tile-title{font:400 16px/1.7 'Noto Serif KR',serif;color:hsl(var(--foreground));margin:12px 0 0;transition:color .2s} .ds-tile-meta{font:400 13px/1.55 'Apple SD Gothic Neo','Noto Sans CJK KR','Malgun Gothic',sans-serif;color:hsl(var(--muted-foreground));margin:2px 0 0} .ds-tile:hover .ds-tile-title{color:hsl(var(--muted-foreground))} .ds-tile:focus-visible{outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ink));}"
     },
     {
       "name": "Lightbox Close",
@@ -312,7 +312,7 @@
     "overview": "이 사이트는 조용한 전시실이다. 흰 벽(종이색 배경) 위에 먹빛 글자가 놓이고,\n작품은 족자든 횡액이든 원래 비율 그대로 걸린다. 인터페이스는 관람객과 작품\n사이에서 한 걸음 물러선다. 장식은 작품이 하고, 화면은 캡션·여백·정렬로만\n말한다.\n\n밀도는 낮다. 한 화면에 하나의 주인공(작품 또는 제목)을 두고, 나머지는 작은\n회색 캡션과 넓은 여백으로 받친다. 색은 거의 흑백이며, 금빛은 낙관(인장)처럼\n드물게 찍힌다. 깊이는 작품에만 있다 — 벽에서 살짝 떠 있는 족자처럼 작품만\n그림자를 갖고, UI 면은 평평하다.\n\n라이트(흰 벽)가 기본이고 다크(밤의 전시실)는 선택이다. 다크는 같은 역할의\n색을 뒤집은 것이며, 별도의 세계가 아니다.",
     "keyCharacteristics": [
       "작품은 자르지 않는다 — 항상 원래 비율, `object-contain`",
-      "명조(Noto Serif KR) 제목 + 고딕(Noto Sans KR) 본문, 같은 Noto 계열",
+      "명조(Noto Serif KR, 웹 서체) 제목 + 기기 한글 고딕 본문(애플 Apple SD Gothic Neo, 안드로이드 Noto Sans CJK, 윈도 맑은 고딕)",
       "거의 흑백, 금빛은 가는 선과 표식에만",
       "평평한 UI, 그림자는 작품에만",
       "버튼·칩은 알약 모양, 작품 타일은 직각"

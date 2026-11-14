@@ -6,22 +6,15 @@ import {
   SITE_TITLE_TEMPLATE,
 } from '@/lib/site'
 import type { Metadata } from 'next'
-import { Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
+import { Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
 
-// 본문은 한글이 주이므로 한글 글리프를 가진 Noto Sans KR로 고정한다.
-// (Inter는 라틴 전용이라 한글이 OS 기본 서체로 떨어졌다.) 제목의 Noto Serif KR과 같은 계열.
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  variable: '--font-noto-sans-kr',
-  display: 'swap',
-  preload: true,
-  fallback: ['Apple SD Gothic Neo', 'Malgun Gothic', 'system-ui', 'sans-serif'],
-})
+// 본문은 웹 서체를 받지 않고 기기의 한글 고딕을 쓴다(tailwind fontFamily.body).
+// 안드로이드 시스템 한글 서체가 Noto Sans CJK(같은 디자인), 애플은 Apple SD Gothic Neo 다.
+// 웹 서체 두 벌이 페이지마다 750KB–1.2MB 라 휴대폰 첫 방문이 느렸다. 제목 명조만 받는다.
 
-// 가변 서체로 받는다. 굵기마다 따로 받으면 한글 조각(unicode-range) 파일이 굵기 수만큼
-// 늘어나, 휴대폰에서 서체 해석에 메인 스레드가 수 초 묶였다(Lighthouse TBT 5.4s).
-// 본문 Noto Sans KR 처럼 조각 하나가 모든 굵기를 담는다.
+// 제목 명조는 가변 서체로 받는다. 한글 조각(unicode-range) 파일 하나가 모든 굵기를 담아,
+// 굵기마다 따로 받을 때보다 파일 수가 줄어든다.
 const notoSerifKR = Noto_Serif_KR({
   subsets: ['latin'],
   variable: '--font-noto-serif-kr',
@@ -236,7 +229,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${notoSansKR.variable} ${notoSerifKR.variable}`}
+        className={notoSerifKR.variable}
         suppressHydrationWarning
       >
         <ClientLayout>

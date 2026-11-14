@@ -35,19 +35,19 @@ typography:
     lineHeight: 1.25
     letterSpacing: "-0.01em"
   body:
-    fontFamily: "Noto Sans KR, Apple SD Gothic Neo, Malgun Gothic, sans-serif"
+    fontFamily: "Apple SD Gothic Neo, Noto Sans KR, Noto Sans CJK KR, Malgun Gothic, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.7
     letterSpacing: "normal"
   label:
-    fontFamily: "Noto Sans KR, sans-serif"
+    fontFamily: "Apple SD Gothic Neo, Noto Sans CJK KR, Malgun Gothic, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 400
     lineHeight: 1.55
     letterSpacing: "0.24em"
   label-ko:
-    fontFamily: "Noto Sans KR, sans-serif"
+    fontFamily: "Apple SD Gothic Neo, Noto Sans CJK KR, Malgun Gothic, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 500
     lineHeight: 1.55
@@ -115,7 +115,7 @@ components:
 
 **Key Characteristics:**
 - 작품은 자르지 않는다 — 항상 원래 비율, `object-contain`
-- 명조(Noto Serif KR) 제목 + 고딕(Noto Sans KR) 본문, 같은 Noto 계열
+- 명조(Noto Serif KR, 웹 서체) 제목 + 기기 한글 고딕 본문(애플 Apple SD Gothic Neo, 안드로이드 Noto Sans CJK, 윈도 맑은 고딕)
 - 거의 흑백, 금빛은 가는 선과 표식에만
 - 평평한 UI, 그림자는 작품에만
 - 버튼·칩은 알약 모양, 작품 타일은 직각
@@ -169,10 +169,11 @@ components:
 ## Typography
 
 **Display Font:** Noto Serif KR (with serif)
-**Body Font:** Noto Sans KR (with Apple SD Gothic Neo, Malgun Gothic)
+**Body Font:** 기기 한글 고딕 — Apple SD Gothic Neo · Noto Sans CJK KR · Malgun Gothic. 웹 서체로 받지 않는다(휴대폰 첫 방문 속도, 2026-11 결정)
 
 **Character:** 명조는 붓의 끝맺음을 닮은 목소리로 제목만 맡고, 고딕은 캡션과
-본문을 조용히 받친다. 같은 Noto 계열이라 한글 자형의 골격이 맞는다.
+본문을 조용히 받친다. 고딕은 기기 서체라 기기마다 조금 다르다(안드로이드는 같은
+Noto 계열, 애플은 Apple SD Gothic Neo, 윈도는 맑은 고딕).
 
 ### Hierarchy
 - **Display** (700, clamp(3rem, 11vw, 6.5rem), 1.05, 0.04em): 홈 히어로의

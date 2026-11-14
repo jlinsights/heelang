@@ -29,7 +29,7 @@ interface GalleryToolbarProps {
 }
 
 const chipBase =
-  'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm transition-colors focus-art'
+  'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm transition-colors focus-art touch:min-h-11'
 const chipIdle =
   'border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground'
 const chipActive = 'border-foreground bg-foreground text-background'
@@ -81,7 +81,7 @@ export function GalleryToolbar(props: GalleryToolbarProps) {
               onChange={(event) =>
                 props.onSortChange(event.target.value as SortKey)
               }
-              className='rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground focus-art'
+              className='min-h-11 rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground focus-art'
             >
               {props.sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>

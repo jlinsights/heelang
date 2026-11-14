@@ -45,6 +45,8 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // 손가락으로 누르는 기기(pointer: coarse)에서만 누르는 면적을 44px 로 키운다
+      screens: { touch: { raw: '(pointer: coarse)' } },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

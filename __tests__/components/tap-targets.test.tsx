@@ -63,3 +63,34 @@ describe('글자 링크의 누르는 면적', () => {
     ).toHaveLength(2)
   })
 })
+
+// 갤러리 칩·정렬, 테마 토글, 공유 버튼, 문의 입력칸은 휴대폰에서 31–40px 였다.
+// 정렬·토글·입력칸은 어디서나 44px, 칩·공유 버튼은 손가락 기기(pointer: coarse)에서만 키운다.
+describe('작은 컨트롤의 누르는 높이', () => {
+  const read = (file: string) =>
+    readFileSync(path.join(process.cwd(), file), 'utf8')
+
+  it('touch 변형은 pointer: coarse 에 걸린다', () => {
+    expect(read('tailwind.config.ts')).toMatch(
+      /touch:\s*{\s*raw:\s*'\(pointer: coarse\)'\s*}/
+    )
+  })
+
+  it('갤러리 칩은 손가락 기기에서 44px, 정렬은 어디서나 44px', () => {
+    const src = read('components/gallery/gallery-toolbar.tsx')
+    expect(src).toMatch(/const chipBase =\s*'[^']*\btouch:min-h-11\b/)
+    expect(src).toMatch(/<select[\s\S]*?className='[^']*\bmin-h-11\b/)
+  })
+
+  it('테마 토글과 입력칸은 44px', () => {
+    expect(read('components/simple-theme-toggle.tsx')).not.toMatch(/\bh-9\b/)
+    expect(read('components/simple-theme-toggle.tsx')).toMatch(/\bw-11 h-11\b/)
+    expect(read('components/ui/input.tsx')).toMatch(/'flex h-11 /)
+  })
+
+  it('공유하기 버튼은 손가락 기기에서 44px', () => {
+    expect(read('components/artwork-detail-client.tsx')).toMatch(
+      /className='[^']*\btouch:h-11\b/
+    )
+  })
+})

@@ -61,6 +61,7 @@ export function ArtworkDetailClient({ title, slug }: ArtworkDetailClientProps) {
       <Button
         variant='outline'
         size='sm'
+        className='touch:h-11 touch:px-4'
         onClick={handleShare}
         disabled={!mounted}
       >

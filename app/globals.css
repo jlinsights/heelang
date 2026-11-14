@@ -520,10 +520,16 @@
   .hit-area {
     position: relative;
   }
+  /* 높이를 글자 줄 상자에 12px 씩 더하는 것만으로 두면 서체에 따라 결과가 바뀐다
+   * (기기 고딕으로 바꾸자 17px 줄 상자 + 24px = 41px). 그래서 최소 44px 를 직접 건다. */
   .hit-area::after {
     content: '';
     position: absolute;
-    inset: -12px -4px;
+    left: -4px;
+    right: -4px;
+    top: 50%;
+    height: max(calc(100% + 24px), 44px);
+    transform: translateY(-50%);
   }
 
   /* ===========================================

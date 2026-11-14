@@ -12,12 +12,15 @@ jest.mock('@/components/art-navigation', () => ({
 // 20–22px 높이의 글자 링크는 hit-area 로 누르는 면적을 44px 이상으로 넓힌다
 // (WCAG 2.5.8, 휴대폰 44px 권장). 실제 면적은 브라우저에서 elementFromPoint 로 확인했다.
 describe('글자 링크의 누르는 면적', () => {
-  it('hit-area 가 위아래로 12px 씩 넓힌다', () => {
+  it('hit-area 는 서체와 상관없이 누르는 높이를 44px 이상으로 만든다', () => {
     const css = readFileSync(
       path.join(process.cwd(), 'app/globals.css'),
       'utf8'
     )
-    expect(css).toMatch(/\.hit-area::after\s*{[^}]*inset:\s*-12px/)
+    const rule = css.match(/\.hit-area::after\s*{([^}]*)}/)?.[1] ?? ''
+    expect(rule).toMatch(/height:\s*max\(calc\(100% \+ 24px\),\s*44px\)/)
+    expect(rule).toMatch(/top:\s*50%/)
+    expect(rule).toMatch(/transform:\s*translateY\(-50%\)/)
   })
 
   it('작품 상세의 작가 소개·브러시웨이즈 링크', () => {

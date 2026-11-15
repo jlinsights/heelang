@@ -58,7 +58,7 @@ node scripts/image-ratios.js # 작품 이미지 픽셀 비율 → lib/gallery/im
   `foreground`, `muted`, `border`, `ink`, `gold`, `font-display`)만 쓴다 — 토큰만
   바꿔 일괄 재스타일링할 수 있게. 새 색을 만들지 않고, `gold` 는 1–2px 선·밑줄에만
   쓴다(`DESIGN.md`)
-- **State**: React hooks, zustand v5 (`lib/store/ui-store.ts`)
+- **State**: React hooks (전역 상태 저장소 없음)
 - **CMS**: Airtable (`Artworks`, `Artist` 테이블)
 - **Images**: `public/Images/` 로컬 파일 + next/image, sharp
 - **Deploy**: Vercel, ISR (`revalidateTag('artworks')`)
@@ -87,7 +87,7 @@ HEELANG/
 │   ├── artwork/             # artwork-lightbox, use-image-ratio
 │   ├── artwork-detail-modal-client.tsx # 작품 상세 본문(이미지 무대 + 캡션 표 + 다른 작품)
 │   ├── art-navigation.tsx   # 상단 내비게이션 (NavigationSpacer 와 함께)
-│   └── ui/                  # shadcn/ui
+│   └── ui/                  # shadcn/ui 중 쓰는 8개만 (button·input·sheet 등). 새 부품은 필요할 때 shadcn CLI 로 추가
 ├── lib/
 │   ├── airtable.ts          # Airtable → Artwork 매핑
 │   ├── artworks.ts          # getArtworks() + fallbackArtworksData
@@ -164,9 +164,6 @@ HEELANG/
 404 다(실제로 작가 사진이 운영에서 깨져 있었다). 폴더는 `public/Images/`. 또
 `&`·공백이 든 파일명은 next/image 최적화기가 거부한다(로고가 alt 텍스트만
 보였다). `__tests__/lib/public-asset-paths.test.ts` 가 둘 다 검사한다.
-
-⚠️ **zustand v5**: 객체를 반환하는 selector 는 `useShallow` 로 감싸야 한다.
-아니면 매 렌더 새 객체 → 무한 렌더 루프.
 
 ⚠️ **하위 페이지의 `metadata.openGraph` 는 루트와 합쳐지지 않고 통째로
 바뀐다.** 하위 페이지에서 `openGraph` 를 쓰면 `siteName` 등을 다시 적어야 한다.

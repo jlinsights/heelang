@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils'
-import { validateEmail, validateSlug, sanitizeInput } from '@/lib/security'
 import {
   generateImageUrl,
   getImageSizes,
@@ -20,61 +19,6 @@ describe('Utils', () => {
       expect(cn('base', true && 'active', false && 'inactive')).toBe(
         'base active'
       )
-    })
-  })
-})
-
-describe('Security Utils', () => {
-  describe('validateEmail', () => {
-    it('유효한 이메일을 올바르게 검증한다', () => {
-      expect(validateEmail('test@example.com')).toBe(true)
-      expect(validateEmail('user.name+tag@domain.co.kr')).toBe(true)
-    })
-
-    it('유효하지 않은 이메일을 거부한다', () => {
-      expect(validateEmail('invalid-email')).toBe(false)
-      expect(validateEmail('@domain.com')).toBe(false)
-      expect(validateEmail('test@')).toBe(false)
-      expect(validateEmail('')).toBe(false)
-    })
-
-    it('너무 긴 이메일을 거부한다', () => {
-      const longEmail = 'a'.repeat(250) + '@example.com'
-      expect(validateEmail(longEmail)).toBe(false)
-    })
-  })
-
-  describe('validateSlug', () => {
-    it('유효한 슬러그를 올바르게 검증한다', () => {
-      expect(validateSlug('valid-slug')).toBe(true)
-      expect(validateSlug('slug123')).toBe(true)
-      expect(validateSlug('simple')).toBe(true)
-    })
-
-    it('유효하지 않은 슬러그를 거부한다', () => {
-      expect(validateSlug('Invalid Slug')).toBe(false) // 공백
-      expect(validateSlug('invalid_slug')).toBe(false) // 언더스코어
-      expect(validateSlug('UPPERCASE')).toBe(false) // 대문자
-      expect(validateSlug('한글슬러그')).toBe(false) // 한글
-    })
-  })
-
-  describe('sanitizeInput', () => {
-    it('위험한 HTML 태그를 제거한다', () => {
-      expect(sanitizeInput('<script>alert("hack")</script>')).toBe(
-        'alert("hack")'
-      )
-      expect(sanitizeInput('Hello <b>World</b>')).toBe('Hello World')
-    })
-
-    it('앞뒤 공백을 제거한다', () => {
-      expect(sanitizeInput('  hello world  ')).toBe('hello world')
-    })
-
-    it('너무 긴 입력을 제한한다', () => {
-      const longInput = 'a'.repeat(1500)
-      const result = sanitizeInput(longInput)
-      expect(result.length).toBe(1000)
     })
   })
 })

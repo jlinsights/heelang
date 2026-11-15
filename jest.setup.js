@@ -45,58 +45,7 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }))
 
-// Mock next-intl
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key) => key,
-  useLocale: () => 'ko',
-  useMessages: () => ({}),
-}))
-
-// Mock next-intl/server
-jest.mock('next-intl/server', () => ({
-  getTranslations: () => (key) => key,
-  getMessages: () => Promise.resolve({}),
-}))
-
 // Airtable 모킹은 개별 테스트 파일에서 처리
-
-// Mock Zustand persist middleware
-jest.mock('zustand/middleware', () => ({
-  devtools: (fn) => fn,
-  persist: (fn, options) => fn,
-}))
-
-// Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: 'div',
-    section: 'section',
-    article: 'article',
-    aside: 'aside',
-    header: 'header',
-    footer: 'footer',
-    main: 'main',
-    nav: 'nav',
-    img: 'img',
-    button: 'button',
-    a: 'a',
-    span: 'span',
-    h1: 'h1',
-    h2: 'h2',
-    h3: 'h3',
-    h4: 'h4',
-    h5: 'h5',
-    h6: 'h6',
-    p: 'p',
-  },
-  AnimatePresence: ({ children }) => children,
-  useAnimation: () => ({
-    start: jest.fn(),
-    stop: jest.fn(),
-    set: jest.fn(),
-  }),
-  useInView: () => true,
-}))
 
 // Mock next/font
 jest.mock('next/font/google', () => ({

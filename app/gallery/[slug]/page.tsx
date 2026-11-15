@@ -3,35 +3,16 @@ import { getNeighbors } from '@/lib/gallery/ordering'
 import { notFound } from 'next/navigation'
 import ClientEntry from './ClientEntry'
 
-// generateStaticParams 함수 - 빌드 시점에 모든 유효한 slug 생성
+// 빌드 시점에 slug 가 있는 작품 페이지를 모두 만든다
 export async function generateStaticParams() {
   try {
-    console.log('🔧 generateStaticParams: Starting...')
-
-    // Airtable에서 모든 작품 데이터 가져오기
     const { getArtworks } = await import('@/lib/artworks')
     const artworks = await getArtworks()
-
-    console.log(`🔧 generateStaticParams: Found ${artworks.length} artworks`)
-
-    // 유효한 slug만 필터링
-    const validSlugs = artworks
+    return artworks
       .filter((artwork) => artwork.slug && artwork.slug.trim() !== '')
-      .map((artwork) => ({
-        slug: artwork.slug,
-      }))
-
-    console.log(
-      `🔧 generateStaticParams: Generated ${validSlugs.length} static params`
-    )
-    console.log(
-      '🔧 generateStaticParams: Slugs:',
-      validSlugs.map((p) => p.slug)
-    )
-
-    return validSlugs
+      .map((artwork) => ({ slug: artwork.slug }))
   } catch (error) {
-    console.error('🚨 generateStaticParams error:', error)
+    console.error('generateStaticParams error:', error)
     return []
   }
 }

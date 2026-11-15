@@ -55,7 +55,7 @@ const customJestConfig = {
   
   // 변환할 파일 제외
   transformIgnorePatterns: [
-    '/node_modules/(?!(.*\\.mjs$|lucide-react|@radix-ui|zustand|embla-carousel-react))',
+    '/node_modules/(?!(.*\\.mjs$|lucide-react|@radix-ui))',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   

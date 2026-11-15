@@ -85,6 +85,7 @@ function ArtworkTile({
               alt={`희랑 공경순, 「${artwork.title}」`}
               fill
               priority={priority}
+              fetchPriority={priority ? 'high' : undefined}
               onLoad={onImageLoad}
               sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
               className='object-contain'

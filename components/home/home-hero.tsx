@@ -136,6 +136,7 @@ function HeroFigure({ artwork }: { artwork: Artwork }) {
               alt={`희랑 공경순, 「${artwork.title}」`}
               fill
               priority
+              fetchPriority='high'
               sizes='(max-width: 768px) 80vw, 40vw'
               onLoad={onImageLoad}
               className='object-contain'

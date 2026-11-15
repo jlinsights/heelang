@@ -70,6 +70,7 @@ export default function ArtworkDetailModalClient({
                 alt={`희랑 공경순, 「${artwork.title}」`}
                 fill
                 priority
+                fetchPriority='high'
                 sizes='(max-width: 1024px) 90vw, 55vw'
                 onLoad={onImageLoad}
                 className='object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.25)]'

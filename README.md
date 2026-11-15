@@ -96,7 +96,7 @@
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: Radix UI + shadcn/ui
-- **State Management**: React 19 Hooks + zustand (UI 상태)
+- **State Management**: React 19 Hooks
 - **Images**: next/image, sharp (최적화·비율 측정 스크립트)
 - **Deployment**: Vercel
 - **Testing**: Jest + Testing Library
@@ -139,7 +139,7 @@ HEELANG/
 │   ├── contact/           # 연락처
 │   └── offline/           # 오프라인 페이지
 ├── components/            # 재사용 컴포넌트
-│   ├── ui/               # shadcn/ui 컴포넌트
+│   ├── ui/               # shadcn/ui 컴포넌트 (쓰는 8개만)
 │   ├── home/             # 홈 히어로·대표 작품·작가·전시 섹션
 │   ├── gallery/          # 저스티파이드 그리드, 목록, 툴바, 페이지네이션
 │   ├── artwork/          # 라이트박스, useImageRatio

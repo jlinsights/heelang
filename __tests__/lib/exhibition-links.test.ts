@@ -16,7 +16,6 @@ const LINK_FILES = [
   'components/art-navigation.tsx',
   'components/home/home-hero.tsx',
   'components/home/home-sections.tsx',
-  'lib/constants.ts',
   'app/layout.tsx',
 ]
 
@@ -36,7 +35,6 @@ describe('전시 페이지 주소', () => {
     expect(read('components/art-navigation.tsx')).toMatch(
       /href: '\/exhibitions',/
     )
-    expect(read('lib/constants.ts')).toMatch(/href: '\/exhibitions' \}/)
   })
 
   // 히어로는 작가가 주인공이라 전시 링크를 두지 않는다 — 홈 '전시' 섹션이 맡는다.

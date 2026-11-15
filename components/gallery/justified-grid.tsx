@@ -95,8 +95,17 @@ function ArtworkTile({
           <p className='font-display text-sm md:text-base text-foreground leading-snug line-clamp-2 break-keep underline-offset-4 decoration-gold group-hover:underline'>
             {artwork.title}
           </p>
-          <p className='text-xs text-muted-foreground line-clamp-1'>
-            {[artwork.year, artwork.medium].filter(Boolean).join(' · ')}
+          {/* 긴 두루마리는 휴대폰에서 칸이 40–80px 로 좁아, 한 줄로 자르면 "2022 · ···" 만
+              남았다. 연도는 한 덩어리로 두고 재료는 다음 줄로 넘겨 두 줄까지 보여 준다. */}
+          <p className='text-xs text-muted-foreground line-clamp-2 break-keep'>
+            {artwork.year && (
+              <span className='whitespace-nowrap'>
+                {artwork.year}
+                {artwork.medium ? ' · ' : ''}
+              </span>
+            )}
+            {artwork.medium && <wbr />}
+            {artwork.medium}
           </p>
         </div>
       </Link>
